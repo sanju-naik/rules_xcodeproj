@@ -91,7 +91,7 @@ if [[ $for_fixture -eq 1 ]]; then
 
   # Copy over generated generator
   output_base_hash=$(/sbin/md5 -q -s "${execution_root%/*/*}")
-  readonly src_generator_package_directory="/tmp/rules_xcodeproj/generated_v2/$output_base_hash/generator/$generator_package_name"
+  readonly src_generator_package_directory="/var/tmp/rules_xcodeproj/generated_v2/$output_base_hash/generator/$generator_package_name"
   readonly dest_generator_package_directory="$project_dir/generated"
   readonly dest_generator_package="${dest_generator_package_directory:?}/$generator_name"
   rm -rf "$dest_generator_package"
@@ -231,14 +231,18 @@ plutil -remove BuildSystemType "$workspace_settings" > /dev/null || true
 # Prevent Xcode from prompting the user to autocreate schemes for all targets
 plutil -replace IDEWorkspaceSharedSettings_AutocreateContextsIfNeeded -bool false "$workspace_settings"
 
+# Create Index Build execution root (`$INDEXING_PROJECT_DIR__YES`)
+readonly workspace_name="${execution_root##*/}"
+readonly output_base="${execution_root%/*/*}"
+readonly indexbuild_exec_root="$output_base/rules_xcodeproj.noindex/indexbuild_output_base/execroot/$workspace_name"
+mkdir -p "$indexbuild_exec_root"
+
 # Create folder structure in bazel-out to work around Xcode red generated files
 if [[ -f "$dest/rules_xcodeproj/generated.xcfilelist" ]]; then
   cd "$BUILD_WORKSPACE_DIRECTORY"
 
-  readonly workspace_name="${execution_root##*/}"
-  readonly output_base="${execution_root%/*/*}"
-  readonly nested_output_base="$output_base/rules_xcodeproj.noindex/build_output_base"
-  readonly bazel_out="$nested_output_base/execroot/$workspace_name/bazel-out"
+  readonly nested_build_output_base="$output_base/rules_xcodeproj.noindex/build_output_base"
+  readonly bazel_out="$nested_build_output_base/execroot/$workspace_name/bazel-out"
 
   # Create directory structure in bazel-out
   cd "$bazel_out"

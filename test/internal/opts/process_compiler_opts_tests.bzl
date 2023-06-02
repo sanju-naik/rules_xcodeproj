@@ -20,23 +20,24 @@ def _process_compiler_opts_test_impl(ctx):
         _,
         _,
         _,
+        _,
         c_has_fortify_source,
         cxx_has_fortify_source,
-        clang_opts,
     ) = process_compiler_opts(
         actions = None,
         name = "process_compiler_opts_tests",
-        generator_name = "process_compiler_opts_tests_generator",
         conlyopts = conlyopts,
         conly_args = [],
         cxxopts = cxxopts,
         cxx_args = [],
         swiftcopts = swiftcopts,
+        swift_args = [],
         build_mode = ctx.attr.build_mode,
         cpp_fragment = _cpp_fragment_stub(ctx.attr.cpp_fragment),
         package_bin_dir = ctx.attr.package_bin_dir,
         build_settings = build_settings,
         cc_compiler_params_processor = None,
+        swift_compiler_params_processor = None,
     )
     string_build_settings = stringify_dict(build_settings)
 
@@ -71,13 +72,6 @@ def _process_compiler_opts_test_impl(ctx):
         "cxx_has_fortify_source",
     )
 
-    asserts.equals(
-        env,
-        ctx.attr.expected_clang_opts,
-        clang_opts,
-        "clang_opts",
-    )
-
     return unittest.end(env)
 
 process_compiler_opts_test = unittest.make(
@@ -89,7 +83,6 @@ process_compiler_opts_test = unittest.make(
         "expected_build_settings": attr.string_dict(mandatory = True),
         "expected_c_has_fortify_source": attr.bool(mandatory = True),
         "expected_cxx_has_fortify_source": attr.bool(mandatory = True),
-        "expected_clang_opts": attr.string_list(mandatory = True),
         "cpp_fragment": attr.string_dict(mandatory = False),
         "package_bin_dir": attr.string(mandatory = True),
         "swiftcopts": attr.string_list(mandatory = True),
@@ -125,7 +118,6 @@ def process_compiler_opts_test_suite(name):
             expected_build_settings = {},
             expected_c_has_fortify_source = False,
             expected_cxx_has_fortify_source = False,
-            expected_clang_opts = [],
             conlyopts = [],
             cxxopts = [],
             swiftcopts = [],
@@ -144,7 +136,6 @@ def process_compiler_opts_test_suite(name):
             expected_build_settings = stringify_dict(expected_build_settings),
             expected_c_has_fortify_source = expected_c_has_fortify_source,
             expected_cxx_has_fortify_source = expected_cxx_has_fortify_source,
-            expected_clang_opts = expected_clang_opts,
             timeout = "short",
         )
 
@@ -158,9 +149,6 @@ def process_compiler_opts_test_suite(name):
             "arm64-apple-ios15.0-simulator",
             "-sdk",
             "__BAZEL_XCODE_SDKROOT__",
-            "-F__BAZEL_XCODE_DEVELOPER_DIR__/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks",
-            "-F__BAZEL_XCODE_SDKROOT__/Developer/Library/Frameworks",
-            "-I__BAZEL_XCODE_DEVELOPER_DIR__/Platforms/iPhoneSimulator.platform/Developer/usr/lib",
             "-emit-object",
             "-output-file-map",
             "bazel-out/ios-sim_arm64-min15.0-applebin_ios-ios_sim_arm64-fastbuild-ST-4e6c2a19403f/bin/examples/ExampleUITests/ExampleUITests.library.output_file_map.json",
@@ -205,20 +193,6 @@ def process_compiler_opts_test_suite(name):
             "-Fsomewhere",
             "examples/xcode_like/ExampleUITests/ExampleUITests.swift",
             "examples/xcode_like/ExampleUITests/ExampleUITestsLaunchTests.swift",
-        ],
-        expected_build_settings = {
-            "ENABLE_TESTABILITY": "True",
-        },
-        expected_clang_opts = [
-            "-iquote$(PROJECT_DIR)",
-            "-iquote$(PROJECT_DIR)/bazel-out/ios-sim_arm64-min15.0-applebin_ios-ios_sim_arm64-fastbuild-ST-4e6c2a19403f/bin",
-            "-fmodule-map-file=/abs/path",
-            "-I/abs/path",
-            "-iquote/abs/path",
-            "-isystem/abs/path",
-            "-O0",
-            "-DDEBUG=1",
-            "-F$(PROJECT_DIR)/somewhere",
         ],
     )
 
@@ -230,9 +204,6 @@ def process_compiler_opts_test_suite(name):
             "arm64-apple-ios15.0-simulator",
             "-sdk",
             "__BAZEL_XCODE_SDKROOT__",
-            "-F__BAZEL_XCODE_DEVELOPER_DIR__/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks",
-            "-F__BAZEL_XCODE_SDKROOT__/Developer/Library/Frameworks",
-            "-I__BAZEL_XCODE_DEVELOPER_DIR__/Platforms/iPhoneSimulator.platform/Developer/usr/lib",
             "-emit-object",
             "-output-file-map",
             "bazel-out/ios-sim_arm64-min15.0-applebin_ios-ios_sim_arm64-fastbuild-ST-4e6c2a19403f/bin/examples/ExampleUITests/ExampleUITests.library.output_file_map.json",
@@ -277,20 +248,6 @@ def process_compiler_opts_test_suite(name):
             "-Fsomewhere",
             "examples/xcode_like/ExampleUITests/ExampleUITests.swift",
             "examples/xcode_like/ExampleUITests/ExampleUITestsLaunchTests.swift",
-        ],
-        expected_build_settings = {
-            "ENABLE_TESTABILITY": "True",
-        },
-        expected_clang_opts = [
-            "-iquote$(PROJECT_DIR)",
-            "-iquote$(PROJECT_DIR)/bazel-out/ios-sim_arm64-min15.0-applebin_ios-ios_sim_arm64-fastbuild-ST-4e6c2a19403f/bin",
-            "-fmodule-map-file=/abs/path",
-            "-I/abs/path",
-            "-iquote/abs/path",
-            "-isystem/abs/path",
-            "-O0",
-            "-DDEBUG=1",
-            "-F$(PROJECT_DIR)/somewhere",
         ],
     )
 
@@ -316,7 +273,6 @@ def process_compiler_opts_test_suite(name):
             "-miphoneos-version-min=9.0",
             "-passthrough",
             "-mtvos-version-min=12.1",
-            "-I__BAZEL_XCODE_SOMETHING_/path",
             "-mwatchos-simulator-version-min=10.1",
             "-passthrough",
             "-mwatchos-version-min=9.2",
@@ -369,10 +325,6 @@ def process_compiler_opts_test_suite(name):
             "-import-underlying-module",
             "-emit-object",
             "-enable-batch-mode",
-            "-vfsoverlay",
-            "/Some/Path.yaml",
-            "-vfsoverlay",
-            "relative/Path.yaml",
             "-passthrough",
             "-gline-tables-only",
             "-sdk",
@@ -380,28 +332,14 @@ def process_compiler_opts_test_suite(name):
             "-module-name",
             "name",
             "-passthrough",
-            "-I__BAZEL_XCODE_SOMETHING_/path",
             "-num-threads",
             "6",
             "-passthrough",
-            "-Ibazel-out/...",
             "-parse-as-library",
             "-passthrough",
             "-parse-as-library",
-            "-Xfrontend",
-            "-vfsoverlay",
-            "-Xfrontend",
-            "/Some/Path.yaml",
-            "-Xfrontend",
-            "-vfsoverlay",
-            "-Xfrontend",
-            "relative/Path.yaml",
             "-keep-me=something.swift",
             "reject-me.swift",
-            "-Xfrontend",
-            "-vfsoverlay/Some/Path.yaml",
-            "-Xfrontend",
-            "-vfsoverlayrelative/Path.yaml",
             "-target",
             "ios",
             "-Xcc",
@@ -410,10 +348,6 @@ def process_compiler_opts_test_suite(name):
             "-a=bazel-out/hi",
             "-Xwrapped-swift",
             "-passthrough",
-        ],
-        expected_clang_opts = [
-            "-weird",
-            "-a=bazel-out/hi",
         ],
     )
 
@@ -429,7 +363,6 @@ def process_compiler_opts_test_suite(name):
             "-miphoneos-version-min=9.0",
             "-passthrough",
             "-mtvos-version-min=12.1",
-            "-I__BAZEL_XCODE_SOMETHING_/path",
             "-mwatchos-simulator-version-min=10.1",
             "-passthrough",
             "-mwatchos-version-min=9.2",
@@ -489,7 +422,6 @@ def process_compiler_opts_test_suite(name):
             "-module-name",
             "name",
             "-passthrough",
-            "-I__BAZEL_XCODE_SOMETHING_/path",
             "-num-threads",
             "6",
             "-passthrough",
@@ -512,12 +444,269 @@ def process_compiler_opts_test_suite(name):
             "-Xwrapped-swift",
             "-passthrough",
         ],
-        expected_clang_opts = [
-            "-weird",
-            "-a=bazel-out/hi",
-            "-iquote",
-            "$(PROJECT_DIR)/relative/path",
+    )
+
+    # -I
+
+    _add_test(
+        name = "{}_swift_I_paths_bazel".format(name),
+        build_mode = "bazel",
+        swiftcopts = [
+            # -I
+            "-I__BAZEL_XCODE_SOMETHING_/path",
+            "-I__BAZEL_XCODE_DEVELOPER_DIR__/Platforms/iPhoneSimulator.platform/Developer/usr/lib",
+            "-I",
+            "__BAZEL_XCODE_DEVELOPER_DIR__/Platforms/iPhoneSimulator.platform/Developer/usr/lib",
+            "-Irelative/path",
+            "-Ibazel-out/relative/path",
+            "-Iexternal/relative/path",
+            "-I/absolute/path",
+            "-I.",
+            "-I",
+            "relative/path",
+            "-I",
+            "bazel-out/relative/path",
+            "-I",
+            "external/relative/path",
+            "-I",
+            "/absolute/path",
+            "-I",
+            ".",
         ],
+        expected_build_settings = {
+            "OTHER_SWIFT_FLAGS": """\
+-I__BAZEL_XCODE_SOMETHING_/path \
+-I$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/usr/lib \
+-I \
+$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/usr/lib \
+-I$(SRCROOT)/relative/path \
+-I$(BAZEL_OUT)/relative/path \
+-I$(BAZEL_EXTERNAL)/relative/path \
+-I/absolute/path \
+-I$(PROJECT_DIR) \
+-I \
+$(SRCROOT)/relative/path \
+-I \
+$(BAZEL_OUT)/relative/path \
+-I \
+$(BAZEL_EXTERNAL)/relative/path \
+-I \
+/absolute/path \
+-I \
+$(PROJECT_DIR)\
+""",
+        },
+    )
+
+    _add_test(
+        name = "{}_swift_I_paths_xcode".format(name),
+        build_mode = "xcode",
+        swiftcopts = [
+            # -I
+            "-I__BAZEL_XCODE_SOMETHING_/path",
+            "-I__BAZEL_XCODE_DEVELOPER_DIR__/Platforms/iPhoneSimulator.platform/Developer/usr/lib",
+            "-I",
+            "__BAZEL_XCODE_DEVELOPER_DIR__/Platforms/iPhoneSimulator.platform/Developer/usr/lib",
+            "-Irelative/path",
+            "-Ibazel-out/relative/path",
+            "-Iexternal/relative/path",
+            "-I/absolute/path",
+            "-I.",
+            "-I",
+            "relative/path",
+            "-I",
+            "bazel-out/relative/path",
+            "-I",
+            "external/relative/path",
+            "-I",
+            "/absolute/path",
+            "-I",
+            ".",
+        ],
+    )
+
+    # -F, -explicit-swift-module-map-file, and -vfsoverlay
+
+    _add_test(
+        name = "{}_swift_other_paths".format(name),
+        build_mode = "bazel",
+        swiftcopts = [
+            # -explicit-swift-module-map-file
+            "-explicit-swift-module-map-file",
+            "/Some/Path.json",
+            "-explicit-swift-module-map-file",
+            "relative/Path.json",
+            "-explicit-swift-module-map-file",
+            "bazel-out/relative/Path.json",
+            "-explicit-swift-module-map-file",
+            "external/relative/Path.json",
+            "-Xfrontend",
+            "-explicit-swift-module-map-file",
+            "-Xfrontend",
+            "/Some/Path.json",
+            "-Xfrontend",
+            "-explicit-swift-module-map-file",
+            "-Xfrontend",
+            "relative/Path.json",
+            "-Xfrontend",
+            "-explicit-swift-module-map-file",
+            "-Xfrontend",
+            "bazel-out/relative/Path.json",
+            "-Xfrontend",
+            "-explicit-swift-module-map-file",
+            "-Xfrontend",
+            "external/relative/Path.json",
+
+            # -vfsoverlay
+            "-vfsoverlay",
+            "/Some/Path.yaml",
+            "-vfsoverlay",
+            "relative/Path.yaml",
+            "-vfsoverlay",
+            "bazel-out/relative/Path.yaml",
+            "-vfsoverlay",
+            "external/relative/Path.yaml",
+            "-Xfrontend",
+            "-vfsoverlay",
+            "-Xfrontend",
+            "/Some/Path.yaml",
+            "-Xfrontend",
+            "-vfsoverlay",
+            "-Xfrontend",
+            "relative/Path.yaml",
+            "-Xfrontend",
+            "-vfsoverlay",
+            "-Xfrontend",
+            "bazel-out/relative/Path.yaml",
+            "-Xfrontend",
+            "-vfsoverlay",
+            "-Xfrontend",
+            "external/relative/Path.yaml",
+            "-Xfrontend",
+            "-vfsoverlay/Some/Path.yaml",
+            "-Xfrontend",
+            "-vfsoverlayrelative/Path.yaml",
+            "-Xfrontend",
+            "-vfsoverlaybazel-out/relative/Path.yaml",
+            "-Xfrontend",
+            "-vfsoverlayexternal/relative/Path.yaml",
+            "-Xfrontend",
+            "-vfsoverlay=/Some/Path.yaml",
+            "-Xfrontend",
+            "-vfsoverlay=relative/Path.yaml",
+            "-Xfrontend",
+            "-vfsoverlay=bazel-out/relative/Path.yaml",
+            "-Xfrontend",
+            "-vfsoverlay=external/relative/Path.yaml",
+
+            # -F
+            "-F__BAZEL_XCODE_SOMETHING_/path",
+            "-F__BAZEL_XCODE_DEVELOPER_DIR__/Platforms/iPhoneSimulator.platform/Developer/usr/lib",
+            "-F",
+            "__BAZEL_XCODE_DEVELOPER_DIR__/Platforms/iPhoneSimulator.platform/Developer/usr/lib",
+            "-Frelative/path",
+            "-Fbazel-out/relative/path",
+            "-Fexternal/relative/path",
+            "-F/absolute/path",
+            "-F.",
+            "-F",
+            "relative/path",
+            "-F",
+            "bazel-out/relative/path",
+            "-F",
+            "external/relative/path",
+            "-F",
+            "/absolute/path",
+            "-F",
+            ".",
+        ],
+        expected_build_settings = {
+            "OTHER_SWIFT_FLAGS": """\
+-explicit-swift-module-map-file \
+/Some/Path.json \
+-explicit-swift-module-map-file \
+$(SRCROOT)/relative/Path.json \
+-explicit-swift-module-map-file \
+$(BAZEL_OUT)/relative/Path.json \
+-explicit-swift-module-map-file \
+$(BAZEL_EXTERNAL)/relative/Path.json \
+-Xfrontend \
+-explicit-swift-module-map-file \
+-Xfrontend \
+/Some/Path.json \
+-Xfrontend \
+-explicit-swift-module-map-file \
+-Xfrontend \
+$(SRCROOT)/relative/Path.json \
+-Xfrontend \
+-explicit-swift-module-map-file \
+-Xfrontend \
+$(BAZEL_OUT)/relative/Path.json \
+-Xfrontend \
+-explicit-swift-module-map-file \
+-Xfrontend \
+$(BAZEL_EXTERNAL)/relative/Path.json \
+-vfsoverlay \
+/Some/Path.yaml \
+-vfsoverlay \
+$(SRCROOT)/relative/Path.yaml \
+-vfsoverlay \
+$(BAZEL_OUT)/relative/Path.yaml \
+-vfsoverlay \
+$(BAZEL_EXTERNAL)/relative/Path.yaml \
+-Xfrontend \
+-vfsoverlay \
+-Xfrontend \
+/Some/Path.yaml \
+-Xfrontend \
+-vfsoverlay \
+-Xfrontend \
+$(SRCROOT)/relative/Path.yaml \
+-Xfrontend \
+-vfsoverlay \
+-Xfrontend \
+$(BAZEL_OUT)/relative/Path.yaml \
+-Xfrontend \
+-vfsoverlay \
+-Xfrontend \
+$(BAZEL_EXTERNAL)/relative/Path.yaml \
+-Xfrontend \
+-vfsoverlay/Some/Path.yaml \
+-Xfrontend \
+-vfsoverlay$(SRCROOT)/relative/Path.yaml \
+-Xfrontend \
+-vfsoverlay$(BAZEL_OUT)/relative/Path.yaml \
+-Xfrontend \
+-vfsoverlay$(BAZEL_EXTERNAL)/relative/Path.yaml \
+-Xfrontend \
+-vfsoverlay/Some/Path.yaml \
+-Xfrontend \
+-vfsoverlay$(SRCROOT)/relative/Path.yaml \
+-Xfrontend \
+-vfsoverlay$(BAZEL_OUT)/relative/Path.yaml \
+-Xfrontend \
+-vfsoverlay$(BAZEL_EXTERNAL)/relative/Path.yaml \
+-F__BAZEL_XCODE_SOMETHING_/path \
+-F$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/usr/lib \
+-F \
+$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/usr/lib \
+-F$(SRCROOT)/relative/path \
+-F$(BAZEL_OUT)/relative/path \
+-F$(BAZEL_EXTERNAL)/relative/path \
+-F/absolute/path \
+-F$(PROJECT_DIR) \
+-F \
+$(SRCROOT)/relative/path \
+-F \
+$(BAZEL_OUT)/relative/path \
+-F \
+$(BAZEL_EXTERNAL)/relative/path \
+-F \
+/absolute/path \
+-F \
+$(PROJECT_DIR)\
+""",
+        },
     )
 
     # -D_FORTIFY_SOURCE=1
@@ -648,27 +837,6 @@ def process_compiler_opts_test_suite(name):
         },
     )
 
-    ## ENABLE_STRICT_OBJC_MSGSEND
-
-    _add_test(
-        name = "{}_enable_strict_objc_msgsend".format(name),
-        conlyopts = ["-DOBJC_OLD_DISPATCH_PROTOTYPES=1"],
-        expected_build_settings = {
-            "DEBUG_INFORMATION_FORMAT": "",
-            "ENABLE_STRICT_OBJC_MSGSEND": "False",
-        },
-    )
-
-    ## ENABLE_TESTABILITY
-
-    _add_test(
-        name = "{}_swift_option-enable-testing".format(name),
-        swiftcopts = ["-enable-testing"],
-        expected_build_settings = {
-            "ENABLE_TESTABILITY": "True",
-        },
-    )
-
     ## SWIFT_COMPILATION_MODE
 
     _add_test(
@@ -728,52 +896,6 @@ def process_compiler_opts_test_suite(name):
         },
     )
 
-    ## SWIFT_OPTIMIZATION_LEVEL
-
-    _add_test(
-        name = "{}_multiple_swift_optimization_levels".format(name),
-        swiftcopts = [
-            "-Osize",
-            "-Onone",
-            "-O",
-        ],
-        expected_build_settings = {
-            "SWIFT_OPTIMIZATION_LEVEL": "-O",
-        },
-    )
-
-    _add_test(
-        name = "{}_swift_option-Onone".format(name),
-        swiftcopts = ["-Onone"],
-        expected_build_settings = {},
-    )
-
-    _add_test(
-        name = "{}_swift_option-O".format(name),
-        swiftcopts = ["-O"],
-        expected_build_settings = {
-            "SWIFT_OPTIMIZATION_LEVEL": "-O",
-        },
-    )
-
-    _add_test(
-        name = "{}_swift_option-Osize".format(name),
-        swiftcopts = ["-Osize"],
-        expected_build_settings = {
-            "SWIFT_OPTIMIZATION_LEVEL": "-Osize",
-        },
-    )
-
-    ## SWIFT_STRICT_CONCURRENCY
-
-    _add_test(
-        name = "{}_swift_option-strict-concurrency".format(name),
-        swiftcopts = ["-strict-concurrency=targeted"],
-        expected_build_settings = {
-            "SWIFT_STRICT_CONCURRENCY": "targeted",
-        },
-    )
-
     ## SWIFT_VERSION
 
     _add_test(
@@ -819,11 +941,6 @@ def process_compiler_opts_test_suite(name):
             "-iquote4/5",
             "-Xcc",
             "-isystems5/s6",
-        ],
-        expected_clang_opts = [
-            "-I$(PROJECT_DIR)/c/d/e",
-            "-iquote$(PROJECT_DIR)/4/5",
-            "-isystem$(PROJECT_DIR)/s5/s6",
         ],
     )
 

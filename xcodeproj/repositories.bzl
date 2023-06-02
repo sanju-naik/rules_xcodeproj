@@ -74,7 +74,7 @@ package_group(
     # Ensure that this repository is unique per output base
     output_base_hash = output_base_hash_result.stdout.strip()
     repository_ctx.symlink(
-        "/tmp/rules_xcodeproj/generated_v2/{}/generator".format(output_base_hash),
+        "/var/tmp/rules_xcodeproj/generated_v2/{}/generator".format(output_base_hash),
         "generator",
     )
 
@@ -166,6 +166,31 @@ native_binary(
 
     _maybe(
         http_archive,
+        name = "com_github_apple_swift_argument_parser",
+        build_file_content = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "ArgumentParserToolInfo",
+    srcs = glob(["Sources/ArgumentParserToolInfo/**/*.swift"]),
+    visibility = ["//visibility:public"],
+)
+
+swift_library(
+    name = "ArgumentParser",
+    srcs = glob(["Sources/ArgumentParser/**/*.swift"]),
+    visibility = ["//visibility:public"],
+    deps = [":ArgumentParserToolInfo"],
+)
+""",
+        sha256 = "44782ba7180f924f72661b8f457c268929ccd20441eac17301f18eff3b91ce0c",
+        strip_prefix = "swift-argument-parser-1.2.2",
+        url = "https://github.com/apple/swift-argument-parser/archive/refs/tags/1.2.2.tar.gz",
+        ignore_version_differences = ignore_version_differences,
+    )
+
+    _maybe(
+        http_archive,
         name = "com_github_kylef_pathkit",
         build_file_content = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
@@ -220,6 +245,9 @@ objc_library(
     visibility = ["//visibility:public"],
 )
 """,
+        patches = [
+            Label("//third_party/com_github_michaeleisel_jjliso8601dateformatter:include_fix.patch"),
+        ],
         sha256 = "6fe15f251f100f3df057c2802a50765387674fde9c922375683682b5ba37eef0",
         strip_prefix = "JJLISO8601DateFormatter-0.1.6",
         url = "https://github.com/michaeleisel/JJLISO8601DateFormatter/archive/refs/tags/0.1.6.tar.gz",
@@ -246,6 +274,9 @@ objc_library(
     visibility = ["//visibility:public"],
 )
 """,
+        patches = [
+            Label("//third_party/com_github_michaeleisel_zippyjsoncfamily:include_fix.patch"),
+        ],
         sha256 = "b215927ada8403e1b056d39450c6a7b59122eca4b0c7fc5beb5f0b5fea2acd72",
         strip_prefix = "ZippyJSONCFamily-1.2.9",
         url = "https://github.com/michaeleisel/ZippyJSONCFamily/archive/refs/tags/1.2.9.tar.gz",
@@ -364,7 +395,7 @@ swift_library(
 """,
         patches = [
             # Custom for our tests
-            "//third_party/com_github_pointfreeco_swift_custom_dump:type_name.patch",
+            Label("//third_party/com_github_pointfreeco_swift_custom_dump:type_name.patch"),
         ],
         sha256 = "a45e8f275794960651043623e23abb8365f0455b4ad5976bc56a4fa00c5efb31",
         strip_prefix = "swift-custom-dump-0.5.0",

@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import sys
-from typing import Iterator, List
+from typing import Iterator, List, Optional
 
 
 # C and C++ compiler flags that we don't want to propagate to Xcode.
@@ -45,34 +45,27 @@ _CC_SKIP_OPTS = {
     "DEBUG_PREFIX_MAP_PWD": 1,
 }
 
+_NEEDS_PROJECT_DIR = {
+    "-ivfsoverlay": None,
+    "--config": None,
+}
 
-def _inner_process_cc_opts(opt, previous_opt):
+
+def _inner_process_cc_opts(opt: str, previous_opt: Optional[str]) -> str:
     # Short-circuit opts that are too short for our checks
     if len(opt) < 2:
         return opt
 
-    if previous_opt == "-ivfsoverlay" or previous_opt == "--config":
-        if opt[0] != "/":
-            return "$(CURRENT_EXECUTION_ROOT)/" + opt
-        return opt
-
-    if opt[0] != "-":
-        return opt
-    opt_character = opt[1]
-
-    if opt_character == "D":
-        value = opt[2:]
-        if value.startswith("OBJC_OLD_DISPATCH_PROTOTYPES"):
-            # `ENABLE_STRICT_OBJC_MSGSEND` is set in `opts.bzl``
-            return None
-        return opt
-
     # -ivfsoverlay and --config doesn't apply `-working_directory=`, so we
     # need to prefix it ourselves
+    if previous_opt in _NEEDS_PROJECT_DIR:
+        if opt[0] != "/":
+            return "$(PROJECT_DIR)/" + opt
+        return opt
     if opt.startswith("-ivfsoverlay"):
         value = opt[12:]
         if not value.startswith("/"):
-            return "-ivfsoverlay" + "$(CURRENT_EXECUTION_ROOT)/" + value
+            return "-ivfsoverlay" + "$(PROJECT_DIR)/" + value
         return opt
 
     return opt
@@ -122,8 +115,9 @@ def process_args(params_paths: List[str], parse_args) -> List[str]:
             # Use Xcode set `SDKROOT`
             opt = opt.replace("__BAZEL_XCODE_SDKROOT__", "$(SDKROOT)")
 
-            # Quote the option if it contains spaces or build setting variables
-            if " " in opt or ("$(" in opt and ")" in opt):
+            # Quote the option if it contains spaces, quotes, or build setting
+            # variables
+            if " " in opt or "\"" in opt or ("$(" in opt and ")" in opt):
                 opt = f"'{opt}'"
 
             processed_opts.append(opt)

@@ -1,8 +1,8 @@
 [
-    "//tools/generator/test:tests.__internal__.__test_bundle applebin_macos-darwin_x86_64-dbg-STABLE-3",
+    "//tools/generators/legacy/test:tests.__internal__.__test_bundle applebin_macos-darwin_x86_64-dbg-STABLE-3",
     {
-        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/tools/generator/test/tests.library.rules_xcodeproj.xcodeproj_bwx.swift.compile.params",
-        "1": "bazel-out/applebin_macos-darwin_x86_64-dbg-STABLE-3/bin/tools/generator/test",
+        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/tools/generators/legacy/test/tests.library.rules_xcodeproj.swift.compile.params",
+        "1": "bazel-out/applebin_macos-darwin_x86_64-dbg-STABLE-3/bin/tools/generators/legacy/test",
         "2": {
             "a": "x86_64",
             "m": "12.0",
@@ -10,103 +10,102 @@
         },
         "3": [
             {
-                "i": "//tools/generator/test:tests.library macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
+                "i": "//tools/generators/legacy/test:tests.library macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
                 "n": "tests.library"
             }
         ],
-        "6": "bazel-out/darwin_x86_64-dbg-STABLE-0/bin/external/rules_xcodeproj_generated/generator/test/fixtures/generator/xcodeproj_bwx/xcodeproj_bwx-params/tests.10.link.params",
+        "6": "bazel-out/darwin_x86_64-dbg-STABLE-0/bin/external/rules_xcodeproj_generated/generator/test/fixtures/generator/xcodeproj_bwx/xcodeproj_bwx-params/tests.13.link.params",
         "b": {
             "CODE_SIGN_STYLE": "Manual",
-            "ENABLE_TESTABILITY": true,
-            "INFOPLIST_FILE": "$(BAZEL_OUT)/applebin_macos-darwin_x86_64-dbg-STABLE-3/bin/tools/generator/test/rules_xcodeproj/tests.__internal__.__test_bundle/Info.plist",
-            "PREVIEWS_SWIFT_INCLUDE_PATH__": "",
-            "PREVIEWS_SWIFT_INCLUDE_PATH__NO": "",
-            "PREVIEWS_SWIFT_INCLUDE_PATH__YES": "$(BUILD_DIR)/bazel-out/applebin_macos-darwin_x86_64-dbg-STABLE-3/bin/tools/generator/test",
+            "INFOPLIST_FILE": "$(BAZEL_OUT)/applebin_macos-darwin_x86_64-dbg-STABLE-3/bin/tools/generators/legacy/test/rules_xcodeproj/tests.__internal__.__test_bundle/Info.plist",
+            "OTHER_SWIFT_FLAGS": "-F$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+            "PREVIEWS_SWIFT_INCLUDE__": "",
+            "PREVIEWS_SWIFT_INCLUDE__NO": "",
+            "PREVIEWS_SWIFT_INCLUDE__YES": "-I $(BUILD_DIR)/bazel-out/applebin_macos-darwin_x86_64-dbg-STABLE-3/bin/tools/generators/legacy/test",
             "PRODUCT_BUNDLE_IDENTIFIER": "com.bazelbuild.rulesapple.Tests",
             "PRODUCT_MODULE_NAME": "tests",
-            "SWIFT_INCLUDE_PATHS": "$(PREVIEWS_SWIFT_INCLUDE_PATH__$(ENABLE_PREVIEWS)) $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_apple_swift_collections $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_kylef_pathkit $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_michaeleisel_zippyjson bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_tadija_aexml $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_tuist_xcodeproj $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/tools/generator $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_pointfreeco_xctest_dynamic_overlay $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_pointfreeco_swift_custom_dump"
+            "SWIFT_INCLUDE_PATHS": "$(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_apple_swift_argument_parser $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/tools/generators/lib/GeneratorCommon $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_apple_swift_collections $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_kylef_pathkit $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_michaeleisel_zippyjson bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_tadija_aexml $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_tuist_xcodeproj $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/tools/generators/legacy $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_pointfreeco_xctest_dynamic_overlay $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_pointfreeco_swift_custom_dump"
         },
         "c": "applebin_macos-darwin_x86_64-dbg-STABLE-3",
         "d": [
-            "//tools/generator:generator.library macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
+            "//tools/generators/legacy:generator.library macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
+            "//tools/generators/lib/GeneratorCommon:GeneratorCommon macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
             "@com_github_pointfreeco_swift_custom_dump//:CustomDump macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1"
         ],
         "i": {
             "s": [
-                "tools/generator/test/AddTargetsTests.swift",
-                "tools/generator/test/Array+ExtensionsTests.swift",
-                "tools/generator/test/BazelLabel+TestExtensions.swift",
-                "tools/generator/test/BazelLabelTests.swift",
-                "tools/generator/test/BuildSettingConditionalTests.swift",
-                "tools/generator/test/ConsolidateTargetsTests.swift",
-                "tools/generator/test/ConsolidatedTargetExtensionsTests.swift",
-                "tools/generator/test/ConsolidatedTargetTests.swift",
-                "tools/generator/test/CreateAutogeneratedXCSchemesTests.swift",
-                "tools/generator/test/CreateCustomXCSchemesTests.swift",
-                "tools/generator/test/CreateFilesAndGroupsTests.swift",
-                "tools/generator/test/CreateProductsTest.swift",
-                "tools/generator/test/CreateProjectTests.swift",
-                "tools/generator/test/CreateXCSharedDataTests.swift",
-                "tools/generator/test/CreateXCUserDataTests.swift",
-                "tools/generator/test/CreateXcodeProjTests.swift",
-                "tools/generator/test/DefaultLoggerTests.swift",
-                "tools/generator/test/Dictionary+ExtensionTests.swift",
-                "tools/generator/test/DirectoriesTests.swift",
-                "tools/generator/test/DisambiguateTargetsTests.swift",
-                "tools/generator/test/Fixtures.swift",
-                "tools/generator/test/GeneratorTests.swift",
-                "tools/generator/test/Optional+ExtensionsTests.swift",
-                "tools/generator/test/PBXProductTypeExtensionsTests.swift",
-                "tools/generator/test/PBXProj+Testing.swift",
-                "tools/generator/test/PBXTarget+ExtensionsTests.swift",
-                "tools/generator/test/Platform+ExtensionsTests.swift",
-                "tools/generator/test/PopulateMainGroupTests.swift",
-                "tools/generator/test/SemanticVersionTests.swift",
-                "tools/generator/test/SetTargetConfigurationsTests.swift",
-                "tools/generator/test/SetTargetDependenciesTests.swift",
-                "tools/generator/test/Target+Testing.swift",
-                "tools/generator/test/TargetIDConsolidatedTargetKeyDictionary+ExtensionsTests.swift",
-                "tools/generator/test/TargetIDTargetDictionary+ExtensionsTests.swift",
-                "tools/generator/test/XCScheme+ExtensionsTests.swift",
-                "tools/generator/test/XCSchemeEnvironmentVariablesExtensionsTests.swift",
-                "tools/generator/test/XCSchemeInfo+BuildActionInfoTests.swift",
-                "tools/generator/test/XCSchemeInfo+BuildTargetInfoTests.swift",
-                "tools/generator/test/XCSchemeInfo+HostInfoTests.swift",
-                "tools/generator/test/XCSchemeInfo+LaunchActionInfoTests.swift",
-                "tools/generator/test/XCSchemeInfo+PrePostActionInfoTests.swift",
-                "tools/generator/test/XCSchemeInfo+ProfileActionInfoTests.swift",
-                "tools/generator/test/XCSchemeInfo+TargetInfoTests.swift",
-                "tools/generator/test/XCSchemeInfo+TestActionInfoTests.swift",
-                "tools/generator/test/XCSchemeInfoTests.swift",
-                "tools/generator/test/XcodeProj+CustomDump.swift",
-                "tools/generator/test/XcodeScheme+BuildForTests.swift",
-                "tools/generator/test/XcodeScheme+ExtensionsTests.swift",
-                "tools/generator/test/XcodeSchemeTests.swift"
+                "tools/generators/legacy/test/AddTargetsTests.swift",
+                "tools/generators/legacy/test/Array+ExtensionsTests.swift",
+                "tools/generators/legacy/test/BazelLabel+TestExtensions.swift",
+                "tools/generators/legacy/test/BazelLabelTests.swift",
+                "tools/generators/legacy/test/BuildSettingConditionalTests.swift",
+                "tools/generators/legacy/test/ConsolidateTargetsTests.swift",
+                "tools/generators/legacy/test/ConsolidatedTargetExtensionsTests.swift",
+                "tools/generators/legacy/test/ConsolidatedTargetTests.swift",
+                "tools/generators/legacy/test/CreateAutogeneratedXCSchemesTests.swift",
+                "tools/generators/legacy/test/CreateCustomXCSchemesTests.swift",
+                "tools/generators/legacy/test/CreateFilesAndGroupsTests.swift",
+                "tools/generators/legacy/test/CreateProductsTest.swift",
+                "tools/generators/legacy/test/CreateProjectTests.swift",
+                "tools/generators/legacy/test/CreateXCSharedDataTests.swift",
+                "tools/generators/legacy/test/CreateXCUserDataTests.swift",
+                "tools/generators/legacy/test/CreateXcodeProjTests.swift",
+                "tools/generators/legacy/test/Dictionary+ExtensionTests.swift",
+                "tools/generators/legacy/test/DirectoriesTests.swift",
+                "tools/generators/legacy/test/DisambiguateTargetsTests.swift",
+                "tools/generators/legacy/test/Fixtures.swift",
+                "tools/generators/legacy/test/GeneratorTests.swift",
+                "tools/generators/legacy/test/Optional+ExtensionsTests.swift",
+                "tools/generators/legacy/test/PBXProductTypeExtensionsTests.swift",
+                "tools/generators/legacy/test/PBXProj+Testing.swift",
+                "tools/generators/legacy/test/PBXTarget+ExtensionsTests.swift",
+                "tools/generators/legacy/test/Platform+ExtensionsTests.swift",
+                "tools/generators/legacy/test/PopulateMainGroupTests.swift",
+                "tools/generators/legacy/test/SetTargetConfigurationsTests.swift",
+                "tools/generators/legacy/test/SetTargetDependenciesTests.swift",
+                "tools/generators/legacy/test/Target+Testing.swift",
+                "tools/generators/legacy/test/TargetIDConsolidatedTargetKeyDictionary+ExtensionsTests.swift",
+                "tools/generators/legacy/test/TargetIDTargetDictionary+ExtensionsTests.swift",
+                "tools/generators/legacy/test/XCScheme+ExtensionsTests.swift",
+                "tools/generators/legacy/test/XCSchemeEnvironmentVariablesExtensionsTests.swift",
+                "tools/generators/legacy/test/XCSchemeInfo+BuildActionInfoTests.swift",
+                "tools/generators/legacy/test/XCSchemeInfo+BuildTargetInfoTests.swift",
+                "tools/generators/legacy/test/XCSchemeInfo+HostInfoTests.swift",
+                "tools/generators/legacy/test/XCSchemeInfo+LaunchActionInfoTests.swift",
+                "tools/generators/legacy/test/XCSchemeInfo+PrePostActionInfoTests.swift",
+                "tools/generators/legacy/test/XCSchemeInfo+ProfileActionInfoTests.swift",
+                "tools/generators/legacy/test/XCSchemeInfo+TargetInfoTests.swift",
+                "tools/generators/legacy/test/XCSchemeInfo+TestActionInfoTests.swift",
+                "tools/generators/legacy/test/XCSchemeInfoTests.swift",
+                "tools/generators/legacy/test/XcodeProj+CustomDump.swift",
+                "tools/generators/legacy/test/XcodeScheme+BuildForTests.swift",
+                "tools/generators/legacy/test/XcodeScheme+ExtensionsTests.swift",
+                "tools/generators/legacy/test/XcodeSchemeTests.swift"
             ]
         },
-        "l": "//tools/generator/test:tests",
+        "l": "//tools/generators/legacy/test:tests",
         "m": true,
         "n": "tests",
         "o": {
             "p": "tests.xctest",
             "s": {
-                "m": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/tools/generator/test/tests.swiftmodule"
+                "m": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/tools/generators/legacy/test/tests.swiftmodule"
             }
         },
         "p": {
             "a": [
-                "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/tools/generator/test/libtests.library.a"
+                "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/tools/generators/legacy/test/libtests.library.a"
             ],
             "e": "tests",
             "n": "tests",
-            "p": "bazel-out/applebin_macos-darwin_x86_64-dbg-STABLE-3/bin/tools/generator/test/tests.__internal__.__test_bundle_archive-root/tests.xctest",
+            "p": "bazel-out/applebin_macos-darwin_x86_64-dbg-STABLE-3/bin/tools/generators/legacy/test/tests.__internal__.__test_bundle_archive-root/tests.xctest",
             "t": "com.apple.product-type.bundle.unit-test"
         }
     },
-    "//tools/generator/test:tests.__internal__.__test_bundle applebin_macos-darwin_x86_64-opt-STABLE-4",
+    "//tools/generators/legacy/test:tests.__internal__.__test_bundle applebin_macos-darwin_x86_64-opt-STABLE-4",
     {
-        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/tools/generator/test/tests.library.rules_xcodeproj.xcodeproj_bwx.swift.compile.params",
-        "1": "bazel-out/applebin_macos-darwin_x86_64-opt-STABLE-4/bin/tools/generator/test",
+        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/tools/generators/legacy/test/tests.library.rules_xcodeproj.swift.compile.params",
+        "1": "bazel-out/applebin_macos-darwin_x86_64-opt-STABLE-4/bin/tools/generators/legacy/test",
         "2": {
             "a": "x86_64",
             "m": "12.0",
@@ -114,97 +113,96 @@
         },
         "3": [
             {
-                "i": "//tools/generator/test:tests.library macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2",
+                "i": "//tools/generators/legacy/test:tests.library macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2",
                 "n": "tests.library"
             }
         ],
-        "6": "bazel-out/darwin_x86_64-dbg-STABLE-0/bin/external/rules_xcodeproj_generated/generator/test/fixtures/generator/xcodeproj_bwx/xcodeproj_bwx-params/tests.20.link.params",
+        "6": "bazel-out/darwin_x86_64-dbg-STABLE-0/bin/external/rules_xcodeproj_generated/generator/test/fixtures/generator/xcodeproj_bwx/xcodeproj_bwx-params/tests.26.link.params",
         "b": {
             "CODE_SIGN_STYLE": "Manual",
             "DEBUG_INFORMATION_FORMAT": "dwarf-with-dsym",
-            "INFOPLIST_FILE": "$(BAZEL_OUT)/applebin_macos-darwin_x86_64-opt-STABLE-4/bin/tools/generator/test/rules_xcodeproj/tests.__internal__.__test_bundle/Info.plist",
-            "PREVIEWS_SWIFT_INCLUDE_PATH__": "",
-            "PREVIEWS_SWIFT_INCLUDE_PATH__NO": "",
-            "PREVIEWS_SWIFT_INCLUDE_PATH__YES": "$(BUILD_DIR)/bazel-out/applebin_macos-darwin_x86_64-opt-STABLE-4/bin/tools/generator/test",
+            "INFOPLIST_FILE": "$(BAZEL_OUT)/applebin_macos-darwin_x86_64-opt-STABLE-4/bin/tools/generators/legacy/test/rules_xcodeproj/tests.__internal__.__test_bundle/Info.plist",
+            "OTHER_SWIFT_FLAGS": "-F$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+            "PREVIEWS_SWIFT_INCLUDE__": "",
+            "PREVIEWS_SWIFT_INCLUDE__NO": "",
+            "PREVIEWS_SWIFT_INCLUDE__YES": "-I $(BUILD_DIR)/bazel-out/applebin_macos-darwin_x86_64-opt-STABLE-4/bin/tools/generators/legacy/test",
             "PRODUCT_BUNDLE_IDENTIFIER": "com.bazelbuild.rulesapple.Tests",
             "PRODUCT_MODULE_NAME": "tests",
             "SWIFT_COMPILATION_MODE": "wholemodule",
-            "SWIFT_INCLUDE_PATHS": "$(PREVIEWS_SWIFT_INCLUDE_PATH__$(ENABLE_PREVIEWS)) $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_apple_swift_collections $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_kylef_pathkit $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_michaeleisel_zippyjson bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_tadija_aexml $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_tuist_xcodeproj $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/tools/generator",
-            "SWIFT_OPTIMIZATION_LEVEL": "-O"
+            "SWIFT_INCLUDE_PATHS": "$(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_apple_swift_argument_parser $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/tools/generators/lib/GeneratorCommon $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_apple_swift_collections $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_kylef_pathkit $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_michaeleisel_zippyjson bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_tadija_aexml $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_tuist_xcodeproj $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/tools/generators/legacy"
         },
         "c": "applebin_macos-darwin_x86_64-opt-STABLE-4",
         "d": [
-            "//tools/generator:generator.library macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2"
+            "//tools/generators/legacy:generator.library macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2",
+            "//tools/generators/lib/GeneratorCommon:GeneratorCommon macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2"
         ],
         "i": {
             "s": [
-                "tools/generator/test/AddTargetsTests.swift",
-                "tools/generator/test/Array+ExtensionsTests.swift",
-                "tools/generator/test/BazelLabel+TestExtensions.swift",
-                "tools/generator/test/BazelLabelTests.swift",
-                "tools/generator/test/BuildSettingConditionalTests.swift",
-                "tools/generator/test/ConsolidateTargetsTests.swift",
-                "tools/generator/test/ConsolidatedTargetExtensionsTests.swift",
-                "tools/generator/test/ConsolidatedTargetTests.swift",
-                "tools/generator/test/CreateAutogeneratedXCSchemesTests.swift",
-                "tools/generator/test/CreateCustomXCSchemesTests.swift",
-                "tools/generator/test/CreateFilesAndGroupsTests.swift",
-                "tools/generator/test/CreateProductsTest.swift",
-                "tools/generator/test/CreateProjectTests.swift",
-                "tools/generator/test/CreateXCSharedDataTests.swift",
-                "tools/generator/test/CreateXCUserDataTests.swift",
-                "tools/generator/test/CreateXcodeProjTests.swift",
-                "tools/generator/test/DefaultLoggerTests.swift",
-                "tools/generator/test/Dictionary+ExtensionTests.swift",
-                "tools/generator/test/DirectoriesTests.swift",
-                "tools/generator/test/DisambiguateTargetsTests.swift",
-                "tools/generator/test/Fixtures.swift",
-                "tools/generator/test/GeneratorTests.swift",
-                "tools/generator/test/Optional+ExtensionsTests.swift",
-                "tools/generator/test/PBXProductTypeExtensionsTests.swift",
-                "tools/generator/test/PBXProj+Testing.swift",
-                "tools/generator/test/PBXTarget+ExtensionsTests.swift",
-                "tools/generator/test/Platform+ExtensionsTests.swift",
-                "tools/generator/test/PopulateMainGroupTests.swift",
-                "tools/generator/test/SemanticVersionTests.swift",
-                "tools/generator/test/SetTargetConfigurationsTests.swift",
-                "tools/generator/test/SetTargetDependenciesTests.swift",
-                "tools/generator/test/Target+Testing.swift",
-                "tools/generator/test/TargetIDConsolidatedTargetKeyDictionary+ExtensionsTests.swift",
-                "tools/generator/test/TargetIDTargetDictionary+ExtensionsTests.swift",
-                "tools/generator/test/XCScheme+ExtensionsTests.swift",
-                "tools/generator/test/XCSchemeEnvironmentVariablesExtensionsTests.swift",
-                "tools/generator/test/XCSchemeInfo+BuildActionInfoTests.swift",
-                "tools/generator/test/XCSchemeInfo+BuildTargetInfoTests.swift",
-                "tools/generator/test/XCSchemeInfo+HostInfoTests.swift",
-                "tools/generator/test/XCSchemeInfo+LaunchActionInfoTests.swift",
-                "tools/generator/test/XCSchemeInfo+PrePostActionInfoTests.swift",
-                "tools/generator/test/XCSchemeInfo+ProfileActionInfoTests.swift",
-                "tools/generator/test/XCSchemeInfo+TargetInfoTests.swift",
-                "tools/generator/test/XCSchemeInfo+TestActionInfoTests.swift",
-                "tools/generator/test/XCSchemeInfoTests.swift",
-                "tools/generator/test/XcodeProj+CustomDump.swift",
-                "tools/generator/test/XcodeScheme+BuildForTests.swift",
-                "tools/generator/test/XcodeScheme+ExtensionsTests.swift",
-                "tools/generator/test/XcodeSchemeTests.swift"
+                "tools/generators/legacy/test/AddTargetsTests.swift",
+                "tools/generators/legacy/test/Array+ExtensionsTests.swift",
+                "tools/generators/legacy/test/BazelLabel+TestExtensions.swift",
+                "tools/generators/legacy/test/BazelLabelTests.swift",
+                "tools/generators/legacy/test/BuildSettingConditionalTests.swift",
+                "tools/generators/legacy/test/ConsolidateTargetsTests.swift",
+                "tools/generators/legacy/test/ConsolidatedTargetExtensionsTests.swift",
+                "tools/generators/legacy/test/ConsolidatedTargetTests.swift",
+                "tools/generators/legacy/test/CreateAutogeneratedXCSchemesTests.swift",
+                "tools/generators/legacy/test/CreateCustomXCSchemesTests.swift",
+                "tools/generators/legacy/test/CreateFilesAndGroupsTests.swift",
+                "tools/generators/legacy/test/CreateProductsTest.swift",
+                "tools/generators/legacy/test/CreateProjectTests.swift",
+                "tools/generators/legacy/test/CreateXCSharedDataTests.swift",
+                "tools/generators/legacy/test/CreateXCUserDataTests.swift",
+                "tools/generators/legacy/test/CreateXcodeProjTests.swift",
+                "tools/generators/legacy/test/Dictionary+ExtensionTests.swift",
+                "tools/generators/legacy/test/DirectoriesTests.swift",
+                "tools/generators/legacy/test/DisambiguateTargetsTests.swift",
+                "tools/generators/legacy/test/Fixtures.swift",
+                "tools/generators/legacy/test/GeneratorTests.swift",
+                "tools/generators/legacy/test/Optional+ExtensionsTests.swift",
+                "tools/generators/legacy/test/PBXProductTypeExtensionsTests.swift",
+                "tools/generators/legacy/test/PBXProj+Testing.swift",
+                "tools/generators/legacy/test/PBXTarget+ExtensionsTests.swift",
+                "tools/generators/legacy/test/Platform+ExtensionsTests.swift",
+                "tools/generators/legacy/test/PopulateMainGroupTests.swift",
+                "tools/generators/legacy/test/SetTargetConfigurationsTests.swift",
+                "tools/generators/legacy/test/SetTargetDependenciesTests.swift",
+                "tools/generators/legacy/test/Target+Testing.swift",
+                "tools/generators/legacy/test/TargetIDConsolidatedTargetKeyDictionary+ExtensionsTests.swift",
+                "tools/generators/legacy/test/TargetIDTargetDictionary+ExtensionsTests.swift",
+                "tools/generators/legacy/test/XCScheme+ExtensionsTests.swift",
+                "tools/generators/legacy/test/XCSchemeEnvironmentVariablesExtensionsTests.swift",
+                "tools/generators/legacy/test/XCSchemeInfo+BuildActionInfoTests.swift",
+                "tools/generators/legacy/test/XCSchemeInfo+BuildTargetInfoTests.swift",
+                "tools/generators/legacy/test/XCSchemeInfo+HostInfoTests.swift",
+                "tools/generators/legacy/test/XCSchemeInfo+LaunchActionInfoTests.swift",
+                "tools/generators/legacy/test/XCSchemeInfo+PrePostActionInfoTests.swift",
+                "tools/generators/legacy/test/XCSchemeInfo+ProfileActionInfoTests.swift",
+                "tools/generators/legacy/test/XCSchemeInfo+TargetInfoTests.swift",
+                "tools/generators/legacy/test/XCSchemeInfo+TestActionInfoTests.swift",
+                "tools/generators/legacy/test/XCSchemeInfoTests.swift",
+                "tools/generators/legacy/test/XcodeProj+CustomDump.swift",
+                "tools/generators/legacy/test/XcodeScheme+BuildForTests.swift",
+                "tools/generators/legacy/test/XcodeScheme+ExtensionsTests.swift",
+                "tools/generators/legacy/test/XcodeSchemeTests.swift"
             ]
         },
-        "l": "//tools/generator/test:tests",
+        "l": "//tools/generators/legacy/test:tests",
         "m": true,
         "n": "tests",
         "o": {
             "p": "tests.xctest",
             "s": {
-                "m": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/tools/generator/test/tests.swiftmodule"
+                "m": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/tools/generators/legacy/test/tests.swiftmodule"
             }
         },
         "p": {
             "a": [
-                "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/tools/generator/test/libtests.library.a"
+                "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/tools/generators/legacy/test/libtests.library.a"
             ],
             "e": "tests",
             "n": "tests",
-            "p": "bazel-out/applebin_macos-darwin_x86_64-opt-STABLE-4/bin/tools/generator/test/tests.__internal__.__test_bundle_archive-root/tests.xctest",
+            "p": "bazel-out/applebin_macos-darwin_x86_64-opt-STABLE-4/bin/tools/generators/legacy/test/tests.__internal__.__test_bundle_archive-root/tests.xctest",
             "t": "com.apple.product-type.bundle.unit-test"
         },
         "x": [
@@ -212,20 +210,20 @@
             "Release"
         ]
     },
-    "//tools/generator:generator applebin_macos-darwin_x86_64-dbg-STABLE-3",
+    "//tools/generators/legacy:generator applebin_macos-darwin_x86_64-dbg-STABLE-3",
     {
-        "1": "bazel-out/applebin_macos-darwin_x86_64-dbg-STABLE-3/bin/tools/generator",
+        "1": "bazel-out/applebin_macos-darwin_x86_64-dbg-STABLE-3/bin/tools/generators/legacy",
         "2": {
             "a": "x86_64",
             "m": "12.0",
             "v": "macosx"
         },
-        "6": "bazel-out/darwin_x86_64-dbg-STABLE-0/bin/external/rules_xcodeproj_generated/generator/test/fixtures/generator/xcodeproj_bwx/xcodeproj_bwx-params/generator.7.link.params",
+        "6": "bazel-out/darwin_x86_64-dbg-STABLE-0/bin/external/rules_xcodeproj_generated/generator/test/fixtures/generator/xcodeproj_bwx/xcodeproj_bwx-params/generator.10.link.params",
         "c": "applebin_macos-darwin_x86_64-dbg-STABLE-3",
         "d": [
-            "//tools/generator:generator.library macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1"
+            "//tools/generators/legacy:generator.library macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1"
         ],
-        "l": "//tools/generator:generator",
+        "l": "//tools/generators/legacy:generator",
         "n": "generator",
         "o": {
             "p": "generator_codesigned"
@@ -233,27 +231,27 @@
         "p": {
             "e": "generator",
             "n": "generator",
-            "p": "bazel-out/applebin_macos-darwin_x86_64-dbg-STABLE-3/bin/tools/generator/generator",
+            "p": "bazel-out/applebin_macos-darwin_x86_64-dbg-STABLE-3/bin/tools/generators/legacy/generator",
             "t": "com.apple.product-type.tool"
         }
     },
-    "//tools/generator:generator applebin_macos-darwin_x86_64-opt-STABLE-4",
+    "//tools/generators/legacy:generator applebin_macos-darwin_x86_64-opt-STABLE-4",
     {
-        "1": "bazel-out/applebin_macos-darwin_x86_64-opt-STABLE-4/bin/tools/generator",
+        "1": "bazel-out/applebin_macos-darwin_x86_64-opt-STABLE-4/bin/tools/generators/legacy",
         "2": {
             "a": "x86_64",
             "m": "12.0",
             "v": "macosx"
         },
-        "6": "bazel-out/darwin_x86_64-dbg-STABLE-0/bin/external/rules_xcodeproj_generated/generator/test/fixtures/generator/xcodeproj_bwx/xcodeproj_bwx-params/generator.19.link.params",
+        "6": "bazel-out/darwin_x86_64-dbg-STABLE-0/bin/external/rules_xcodeproj_generated/generator/test/fixtures/generator/xcodeproj_bwx/xcodeproj_bwx-params/generator.25.link.params",
         "b": {
             "DEBUG_INFORMATION_FORMAT": "dwarf-with-dsym"
         },
         "c": "applebin_macos-darwin_x86_64-opt-STABLE-4",
         "d": [
-            "//tools/generator:generator.library macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2"
+            "//tools/generators/legacy:generator.library macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2"
         ],
-        "l": "//tools/generator:generator",
+        "l": "//tools/generators/legacy:generator",
         "n": "generator",
         "o": {
             "p": "generator_codesigned"
@@ -261,7 +259,7 @@
         "p": {
             "e": "generator",
             "n": "generator",
-            "p": "bazel-out/applebin_macos-darwin_x86_64-opt-STABLE-4/bin/tools/generator/generator",
+            "p": "bazel-out/applebin_macos-darwin_x86_64-opt-STABLE-4/bin/tools/generators/legacy/generator",
             "t": "com.apple.product-type.tool"
         },
         "x": [
@@ -269,22 +267,22 @@
             "Release"
         ]
     },
-    "//tools/generator:generator.library macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
+    "//tools/generators/legacy:generator.library macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
     {
-        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/tools/generator/generator.library.rules_xcodeproj.xcodeproj_bwx.swift.compile.params",
-        "1": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/tools/generator",
+        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/tools/generators/legacy/generator.library.rules_xcodeproj.swift.compile.params",
+        "1": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/tools/generators/legacy",
         "2": {
             "a": "x86_64",
             "m": "12.0",
             "v": "macosx"
         },
         "b": {
-            "ENABLE_TESTABILITY": true,
             "PRODUCT_MODULE_NAME": "generator",
-            "SWIFT_INCLUDE_PATHS": "$(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_apple_swift_collections $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_kylef_pathkit $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_michaeleisel_zippyjson bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_tadija_aexml $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_tuist_xcodeproj"
+            "SWIFT_INCLUDE_PATHS": "$(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_apple_swift_argument_parser $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/tools/generators/lib/GeneratorCommon $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_apple_swift_collections $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_kylef_pathkit $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_michaeleisel_zippyjson bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_tadija_aexml $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_tuist_xcodeproj"
         },
         "c": "macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
         "d": [
+            "//tools/generators/lib/GeneratorCommon:GeneratorCommon macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
             "@com_github_apple_swift_collections//:OrderedCollections macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
             "@com_github_kylef_pathkit//:PathKit macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
             "@com_github_michaeleisel_zippyjson//:ZippyJSON macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
@@ -292,95 +290,92 @@
         ],
         "i": {
             "s": [
-                "tools/generator/src/BuildSettingConditional.swift",
-                "tools/generator/src/DTO/BazelLabel.swift",
-                "tools/generator/src/DTO/BuildMode.swift",
-                "tools/generator/src/DTO/BuildSetting.swift",
-                "tools/generator/src/DTO/Directories.swift",
-                "tools/generator/src/DTO/ExtensionPointIdentifier.swift",
-                "tools/generator/src/DTO/FilePath.swift",
-                "tools/generator/src/DTO/Inputs.swift",
-                "tools/generator/src/DTO/LinkerInputs.swift",
-                "tools/generator/src/DTO/Outputs.swift",
-                "tools/generator/src/DTO/Platform.swift",
-                "tools/generator/src/DTO/Product.swift",
-                "tools/generator/src/DTO/Project.swift",
-                "tools/generator/src/DTO/SchemeAutogenerationMode.swift",
-                "tools/generator/src/DTO/Target.swift",
-                "tools/generator/src/DTO/TargetID.swift",
-                "tools/generator/src/DTO/XCCurrentVersion.swift",
-                "tools/generator/src/DTO/XcodeScheme.swift",
-                "tools/generator/src/Errors.swift",
-                "tools/generator/src/Extensions/Array+Extensions.swift",
-                "tools/generator/src/Extensions/Dictionary+Extensions.swift",
-                "tools/generator/src/Extensions/Optional+Extensions.swift",
-                "tools/generator/src/Extensions/PBXGroup+Extensions.swift",
-                "tools/generator/src/Extensions/PBXProductType+Extensions.swift",
-                "tools/generator/src/Extensions/PBXTarget+Extensions.swift",
-                "tools/generator/src/Extensions/Path+Extensions.swift",
-                "tools/generator/src/Extensions/Platform+Extensions.swift",
-                "tools/generator/src/Extensions/Sorting.swift",
-                "tools/generator/src/Extensions/TargetIDConsolidatedTargetKeyDictionary+Extensions.swift",
-                "tools/generator/src/Extensions/TargetIDTargetDictionary+Extensions.swift",
-                "tools/generator/src/Extensions/XCScheme+Extensions.swift",
-                "tools/generator/src/Extensions/XCSchemeEnvironmentVariables+Extensions.swift",
-                "tools/generator/src/Extensions/XcodeScheme+Extensions.swift",
-                "tools/generator/src/Generator/AddBazelDependenciesTarget.swift",
-                "tools/generator/src/Generator/AddTargets.swift",
-                "tools/generator/src/Generator/CalculateXcodeGeneratedFiles.swift",
-                "tools/generator/src/Generator/ConsolidateTargets.swift",
-                "tools/generator/src/Generator/CreateAutogeneratedXCSchemes.swift",
-                "tools/generator/src/Generator/CreateCustomXCSchemes.swift",
-                "tools/generator/src/Generator/CreateFilesAndGroups.swift",
-                "tools/generator/src/Generator/CreateProducts.swift",
-                "tools/generator/src/Generator/CreateProject.swift",
-                "tools/generator/src/Generator/CreateXCSharedData.swift",
-                "tools/generator/src/Generator/CreateXCUserData.swift",
-                "tools/generator/src/Generator/CreateXcodeProj.swift",
-                "tools/generator/src/Generator/DisambiguateTargets.swift",
-                "tools/generator/src/Generator/Environment.swift",
-                "tools/generator/src/Generator/Generator.swift",
-                "tools/generator/src/Generator/Main.swift",
-                "tools/generator/src/Generator/PopulateMainGroup.swift",
-                "tools/generator/src/Generator/SemanticVersion.swift",
-                "tools/generator/src/Generator/SetAdditionalProjectConfiguration.swift",
-                "tools/generator/src/Generator/SetTargetConfigurations.swift",
-                "tools/generator/src/Generator/SetTargetDependencies.swift",
-                "tools/generator/src/Generator/TargetResolver.swift",
-                "tools/generator/src/Generator/WriteXcodeProj.swift",
-                "tools/generator/src/Generator/XCSchemeInfo+BuildActionInfo.swift",
-                "tools/generator/src/Generator/XCSchemeInfo+BuildTargetInfo.swift",
-                "tools/generator/src/Generator/XCSchemeInfo+DiagnosticsInfo.swift",
-                "tools/generator/src/Generator/XCSchemeInfo+HostInfo.swift",
-                "tools/generator/src/Generator/XCSchemeInfo+LaunchActionInfo.swift",
-                "tools/generator/src/Generator/XCSchemeInfo+OtherActionInfos.swift",
-                "tools/generator/src/Generator/XCSchemeInfo+PrePostActionInfo.swift",
-                "tools/generator/src/Generator/XCSchemeInfo+ProfileActionInfo.swift",
-                "tools/generator/src/Generator/XCSchemeInfo+TargetInfo.swift",
-                "tools/generator/src/Generator/XCSchemeInfo+TestActionInfo.swift",
-                "tools/generator/src/Generator/XCSchemeInfo.swift",
-                "tools/generator/src/Generator/XcodeScheme+BuildFor.swift",
-                "tools/generator/src/Logger.swift"
+                "tools/generators/legacy/src/BuildSettingConditional.swift",
+                "tools/generators/legacy/src/DTO/BazelLabel.swift",
+                "tools/generators/legacy/src/DTO/BuildSetting.swift",
+                "tools/generators/legacy/src/DTO/Directories.swift",
+                "tools/generators/legacy/src/DTO/ExtensionPointIdentifier.swift",
+                "tools/generators/legacy/src/DTO/FilePath.swift",
+                "tools/generators/legacy/src/DTO/Inputs.swift",
+                "tools/generators/legacy/src/DTO/LinkerInputs.swift",
+                "tools/generators/legacy/src/DTO/Outputs.swift",
+                "tools/generators/legacy/src/DTO/Platform.swift",
+                "tools/generators/legacy/src/DTO/Product.swift",
+                "tools/generators/legacy/src/DTO/Project.swift",
+                "tools/generators/legacy/src/DTO/SchemeAutogenerationMode.swift",
+                "tools/generators/legacy/src/DTO/Target.swift",
+                "tools/generators/legacy/src/DTO/TargetID.swift",
+                "tools/generators/legacy/src/DTO/XCCurrentVersion.swift",
+                "tools/generators/legacy/src/DTO/XcodeScheme.swift",
+                "tools/generators/legacy/src/Extensions/Array+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/BuildMode+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/Dictionary+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/Optional+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/PBXGroup+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/PBXProductType+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/PBXTarget+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/Path+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/Platform+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/Sorting.swift",
+                "tools/generators/legacy/src/Extensions/TargetIDConsolidatedTargetKeyDictionary+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/TargetIDTargetDictionary+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/XCScheme+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/XCSchemeEnvironmentVariables+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/XcodeScheme+Extensions.swift",
+                "tools/generators/legacy/src/Generator/AddBazelDependenciesTarget.swift",
+                "tools/generators/legacy/src/Generator/AddTargets.swift",
+                "tools/generators/legacy/src/Generator/CalculateXcodeGeneratedFiles.swift",
+                "tools/generators/legacy/src/Generator/ConsolidateTargets.swift",
+                "tools/generators/legacy/src/Generator/CreateAutogeneratedXCSchemes.swift",
+                "tools/generators/legacy/src/Generator/CreateCustomXCSchemes.swift",
+                "tools/generators/legacy/src/Generator/CreateFilesAndGroups.swift",
+                "tools/generators/legacy/src/Generator/CreateProducts.swift",
+                "tools/generators/legacy/src/Generator/CreateProject.swift",
+                "tools/generators/legacy/src/Generator/CreateXCSharedData.swift",
+                "tools/generators/legacy/src/Generator/CreateXCUserData.swift",
+                "tools/generators/legacy/src/Generator/CreateXcodeProj.swift",
+                "tools/generators/legacy/src/Generator/DisambiguateTargets.swift",
+                "tools/generators/legacy/src/Generator/Environment.swift",
+                "tools/generators/legacy/src/Generator/Generator.swift",
+                "tools/generators/legacy/src/Generator/Main.swift",
+                "tools/generators/legacy/src/Generator/PopulateMainGroup.swift",
+                "tools/generators/legacy/src/Generator/SetAdditionalProjectConfiguration.swift",
+                "tools/generators/legacy/src/Generator/SetTargetConfigurations.swift",
+                "tools/generators/legacy/src/Generator/SetTargetDependencies.swift",
+                "tools/generators/legacy/src/Generator/TargetResolver.swift",
+                "tools/generators/legacy/src/Generator/WriteXcodeProj.swift",
+                "tools/generators/legacy/src/Generator/XCSchemeInfo+BuildActionInfo.swift",
+                "tools/generators/legacy/src/Generator/XCSchemeInfo+BuildTargetInfo.swift",
+                "tools/generators/legacy/src/Generator/XCSchemeInfo+DiagnosticsInfo.swift",
+                "tools/generators/legacy/src/Generator/XCSchemeInfo+HostInfo.swift",
+                "tools/generators/legacy/src/Generator/XCSchemeInfo+LaunchActionInfo.swift",
+                "tools/generators/legacy/src/Generator/XCSchemeInfo+OtherActionInfos.swift",
+                "tools/generators/legacy/src/Generator/XCSchemeInfo+PrePostActionInfo.swift",
+                "tools/generators/legacy/src/Generator/XCSchemeInfo+ProfileActionInfo.swift",
+                "tools/generators/legacy/src/Generator/XCSchemeInfo+TargetInfo.swift",
+                "tools/generators/legacy/src/Generator/XCSchemeInfo+TestActionInfo.swift",
+                "tools/generators/legacy/src/Generator/XCSchemeInfo.swift",
+                "tools/generators/legacy/src/Generator/XcodeScheme+BuildFor.swift"
             ]
         },
-        "l": "//tools/generator:generator.library",
+        "l": "//tools/generators/legacy:generator.library",
         "m": true,
         "n": "generator.library",
         "o": {
             "s": {
-                "m": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/tools/generator/generator.swiftmodule"
+                "m": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/tools/generators/legacy/generator.swiftmodule"
             }
         },
         "p": {
             "n": "generator.library",
-            "p": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/tools/generator/libgenerator.library.a",
+            "p": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/tools/generators/legacy/libgenerator.library.a",
             "t": "com.apple.product-type.library.static"
         }
     },
-    "//tools/generator:generator.library macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2",
+    "//tools/generators/legacy:generator.library macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2",
     {
-        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/tools/generator/generator.library.rules_xcodeproj.xcodeproj_bwx.swift.compile.params",
-        "1": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/tools/generator",
+        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/tools/generators/legacy/generator.library.rules_xcodeproj.swift.compile.params",
+        "1": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/tools/generators/legacy",
         "2": {
             "a": "x86_64",
             "m": "12.0",
@@ -390,11 +385,11 @@
             "DEBUG_INFORMATION_FORMAT": "dwarf-with-dsym",
             "PRODUCT_MODULE_NAME": "generator",
             "SWIFT_COMPILATION_MODE": "wholemodule",
-            "SWIFT_INCLUDE_PATHS": "$(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_apple_swift_collections $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_kylef_pathkit $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_michaeleisel_zippyjson bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_tadija_aexml $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_tuist_xcodeproj",
-            "SWIFT_OPTIMIZATION_LEVEL": "-O"
+            "SWIFT_INCLUDE_PATHS": "$(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_apple_swift_argument_parser $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/tools/generators/lib/GeneratorCommon $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_apple_swift_collections $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_kylef_pathkit $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_michaeleisel_zippyjson bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_tadija_aexml $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_tuist_xcodeproj"
         },
         "c": "macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2",
         "d": [
+            "//tools/generators/lib/GeneratorCommon:GeneratorCommon macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2",
             "@com_github_apple_swift_collections//:OrderedCollections macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2",
             "@com_github_kylef_pathkit//:PathKit macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2",
             "@com_github_michaeleisel_zippyjson//:ZippyJSON macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2",
@@ -402,88 +397,169 @@
         ],
         "i": {
             "s": [
-                "tools/generator/src/BuildSettingConditional.swift",
-                "tools/generator/src/DTO/BazelLabel.swift",
-                "tools/generator/src/DTO/BuildMode.swift",
-                "tools/generator/src/DTO/BuildSetting.swift",
-                "tools/generator/src/DTO/Directories.swift",
-                "tools/generator/src/DTO/ExtensionPointIdentifier.swift",
-                "tools/generator/src/DTO/FilePath.swift",
-                "tools/generator/src/DTO/Inputs.swift",
-                "tools/generator/src/DTO/LinkerInputs.swift",
-                "tools/generator/src/DTO/Outputs.swift",
-                "tools/generator/src/DTO/Platform.swift",
-                "tools/generator/src/DTO/Product.swift",
-                "tools/generator/src/DTO/Project.swift",
-                "tools/generator/src/DTO/SchemeAutogenerationMode.swift",
-                "tools/generator/src/DTO/Target.swift",
-                "tools/generator/src/DTO/TargetID.swift",
-                "tools/generator/src/DTO/XCCurrentVersion.swift",
-                "tools/generator/src/DTO/XcodeScheme.swift",
-                "tools/generator/src/Errors.swift",
-                "tools/generator/src/Extensions/Array+Extensions.swift",
-                "tools/generator/src/Extensions/Dictionary+Extensions.swift",
-                "tools/generator/src/Extensions/Optional+Extensions.swift",
-                "tools/generator/src/Extensions/PBXGroup+Extensions.swift",
-                "tools/generator/src/Extensions/PBXProductType+Extensions.swift",
-                "tools/generator/src/Extensions/PBXTarget+Extensions.swift",
-                "tools/generator/src/Extensions/Path+Extensions.swift",
-                "tools/generator/src/Extensions/Platform+Extensions.swift",
-                "tools/generator/src/Extensions/Sorting.swift",
-                "tools/generator/src/Extensions/TargetIDConsolidatedTargetKeyDictionary+Extensions.swift",
-                "tools/generator/src/Extensions/TargetIDTargetDictionary+Extensions.swift",
-                "tools/generator/src/Extensions/XCScheme+Extensions.swift",
-                "tools/generator/src/Extensions/XCSchemeEnvironmentVariables+Extensions.swift",
-                "tools/generator/src/Extensions/XcodeScheme+Extensions.swift",
-                "tools/generator/src/Generator/AddBazelDependenciesTarget.swift",
-                "tools/generator/src/Generator/AddTargets.swift",
-                "tools/generator/src/Generator/CalculateXcodeGeneratedFiles.swift",
-                "tools/generator/src/Generator/ConsolidateTargets.swift",
-                "tools/generator/src/Generator/CreateAutogeneratedXCSchemes.swift",
-                "tools/generator/src/Generator/CreateCustomXCSchemes.swift",
-                "tools/generator/src/Generator/CreateFilesAndGroups.swift",
-                "tools/generator/src/Generator/CreateProducts.swift",
-                "tools/generator/src/Generator/CreateProject.swift",
-                "tools/generator/src/Generator/CreateXCSharedData.swift",
-                "tools/generator/src/Generator/CreateXCUserData.swift",
-                "tools/generator/src/Generator/CreateXcodeProj.swift",
-                "tools/generator/src/Generator/DisambiguateTargets.swift",
-                "tools/generator/src/Generator/Environment.swift",
-                "tools/generator/src/Generator/Generator.swift",
-                "tools/generator/src/Generator/Main.swift",
-                "tools/generator/src/Generator/PopulateMainGroup.swift",
-                "tools/generator/src/Generator/SemanticVersion.swift",
-                "tools/generator/src/Generator/SetAdditionalProjectConfiguration.swift",
-                "tools/generator/src/Generator/SetTargetConfigurations.swift",
-                "tools/generator/src/Generator/SetTargetDependencies.swift",
-                "tools/generator/src/Generator/TargetResolver.swift",
-                "tools/generator/src/Generator/WriteXcodeProj.swift",
-                "tools/generator/src/Generator/XCSchemeInfo+BuildActionInfo.swift",
-                "tools/generator/src/Generator/XCSchemeInfo+BuildTargetInfo.swift",
-                "tools/generator/src/Generator/XCSchemeInfo+DiagnosticsInfo.swift",
-                "tools/generator/src/Generator/XCSchemeInfo+HostInfo.swift",
-                "tools/generator/src/Generator/XCSchemeInfo+LaunchActionInfo.swift",
-                "tools/generator/src/Generator/XCSchemeInfo+OtherActionInfos.swift",
-                "tools/generator/src/Generator/XCSchemeInfo+PrePostActionInfo.swift",
-                "tools/generator/src/Generator/XCSchemeInfo+ProfileActionInfo.swift",
-                "tools/generator/src/Generator/XCSchemeInfo+TargetInfo.swift",
-                "tools/generator/src/Generator/XCSchemeInfo+TestActionInfo.swift",
-                "tools/generator/src/Generator/XCSchemeInfo.swift",
-                "tools/generator/src/Generator/XcodeScheme+BuildFor.swift",
-                "tools/generator/src/Logger.swift"
+                "tools/generators/legacy/src/BuildSettingConditional.swift",
+                "tools/generators/legacy/src/DTO/BazelLabel.swift",
+                "tools/generators/legacy/src/DTO/BuildSetting.swift",
+                "tools/generators/legacy/src/DTO/Directories.swift",
+                "tools/generators/legacy/src/DTO/ExtensionPointIdentifier.swift",
+                "tools/generators/legacy/src/DTO/FilePath.swift",
+                "tools/generators/legacy/src/DTO/Inputs.swift",
+                "tools/generators/legacy/src/DTO/LinkerInputs.swift",
+                "tools/generators/legacy/src/DTO/Outputs.swift",
+                "tools/generators/legacy/src/DTO/Platform.swift",
+                "tools/generators/legacy/src/DTO/Product.swift",
+                "tools/generators/legacy/src/DTO/Project.swift",
+                "tools/generators/legacy/src/DTO/SchemeAutogenerationMode.swift",
+                "tools/generators/legacy/src/DTO/Target.swift",
+                "tools/generators/legacy/src/DTO/TargetID.swift",
+                "tools/generators/legacy/src/DTO/XCCurrentVersion.swift",
+                "tools/generators/legacy/src/DTO/XcodeScheme.swift",
+                "tools/generators/legacy/src/Extensions/Array+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/BuildMode+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/Dictionary+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/Optional+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/PBXGroup+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/PBXProductType+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/PBXTarget+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/Path+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/Platform+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/Sorting.swift",
+                "tools/generators/legacy/src/Extensions/TargetIDConsolidatedTargetKeyDictionary+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/TargetIDTargetDictionary+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/XCScheme+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/XCSchemeEnvironmentVariables+Extensions.swift",
+                "tools/generators/legacy/src/Extensions/XcodeScheme+Extensions.swift",
+                "tools/generators/legacy/src/Generator/AddBazelDependenciesTarget.swift",
+                "tools/generators/legacy/src/Generator/AddTargets.swift",
+                "tools/generators/legacy/src/Generator/CalculateXcodeGeneratedFiles.swift",
+                "tools/generators/legacy/src/Generator/ConsolidateTargets.swift",
+                "tools/generators/legacy/src/Generator/CreateAutogeneratedXCSchemes.swift",
+                "tools/generators/legacy/src/Generator/CreateCustomXCSchemes.swift",
+                "tools/generators/legacy/src/Generator/CreateFilesAndGroups.swift",
+                "tools/generators/legacy/src/Generator/CreateProducts.swift",
+                "tools/generators/legacy/src/Generator/CreateProject.swift",
+                "tools/generators/legacy/src/Generator/CreateXCSharedData.swift",
+                "tools/generators/legacy/src/Generator/CreateXCUserData.swift",
+                "tools/generators/legacy/src/Generator/CreateXcodeProj.swift",
+                "tools/generators/legacy/src/Generator/DisambiguateTargets.swift",
+                "tools/generators/legacy/src/Generator/Environment.swift",
+                "tools/generators/legacy/src/Generator/Generator.swift",
+                "tools/generators/legacy/src/Generator/Main.swift",
+                "tools/generators/legacy/src/Generator/PopulateMainGroup.swift",
+                "tools/generators/legacy/src/Generator/SetAdditionalProjectConfiguration.swift",
+                "tools/generators/legacy/src/Generator/SetTargetConfigurations.swift",
+                "tools/generators/legacy/src/Generator/SetTargetDependencies.swift",
+                "tools/generators/legacy/src/Generator/TargetResolver.swift",
+                "tools/generators/legacy/src/Generator/WriteXcodeProj.swift",
+                "tools/generators/legacy/src/Generator/XCSchemeInfo+BuildActionInfo.swift",
+                "tools/generators/legacy/src/Generator/XCSchemeInfo+BuildTargetInfo.swift",
+                "tools/generators/legacy/src/Generator/XCSchemeInfo+DiagnosticsInfo.swift",
+                "tools/generators/legacy/src/Generator/XCSchemeInfo+HostInfo.swift",
+                "tools/generators/legacy/src/Generator/XCSchemeInfo+LaunchActionInfo.swift",
+                "tools/generators/legacy/src/Generator/XCSchemeInfo+OtherActionInfos.swift",
+                "tools/generators/legacy/src/Generator/XCSchemeInfo+PrePostActionInfo.swift",
+                "tools/generators/legacy/src/Generator/XCSchemeInfo+ProfileActionInfo.swift",
+                "tools/generators/legacy/src/Generator/XCSchemeInfo+TargetInfo.swift",
+                "tools/generators/legacy/src/Generator/XCSchemeInfo+TestActionInfo.swift",
+                "tools/generators/legacy/src/Generator/XCSchemeInfo.swift",
+                "tools/generators/legacy/src/Generator/XcodeScheme+BuildFor.swift"
             ]
         },
-        "l": "//tools/generator:generator.library",
+        "l": "//tools/generators/legacy:generator.library",
         "m": true,
         "n": "generator.library",
         "o": {
             "s": {
-                "m": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/tools/generator/generator.swiftmodule"
+                "m": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/tools/generators/legacy/generator.swiftmodule"
             }
         },
         "p": {
             "n": "generator.library",
-            "p": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/tools/generator/libgenerator.library.a",
+            "p": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/tools/generators/legacy/libgenerator.library.a",
+            "t": "com.apple.product-type.library.static"
+        },
+        "x": [
+            "Profile",
+            "Release"
+        ]
+    },
+    "//tools/generators/lib/GeneratorCommon:GeneratorCommon macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
+    {
+        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/tools/generators/lib/GeneratorCommon/GeneratorCommon.rules_xcodeproj.swift.compile.params",
+        "1": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/tools/generators/lib/GeneratorCommon",
+        "2": {
+            "a": "x86_64",
+            "m": "12.0",
+            "v": "macosx"
+        },
+        "b": {
+            "PRODUCT_MODULE_NAME": "GeneratorCommon",
+            "SWIFT_INCLUDE_PATHS": "$(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_apple_swift_argument_parser"
+        },
+        "c": "macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
+        "d": [
+            "@com_github_apple_swift_argument_parser//:ArgumentParser macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1"
+        ],
+        "i": {
+            "s": [
+                "tools/generators/lib/GeneratorCommon/src/BuildMode.swift",
+                "tools/generators/lib/GeneratorCommon/src/Errors.swift",
+                "tools/generators/lib/GeneratorCommon/src/Logger.swift",
+                "tools/generators/lib/GeneratorCommon/src/SemanticVersion.swift",
+                "tools/generators/lib/GeneratorCommon/src/String+Extensions.swift"
+            ]
+        },
+        "l": "//tools/generators/lib/GeneratorCommon:GeneratorCommon",
+        "n": "GeneratorCommon",
+        "o": {
+            "s": {
+                "m": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/tools/generators/lib/GeneratorCommon/GeneratorCommon.swiftmodule"
+            }
+        },
+        "p": {
+            "n": "GeneratorCommon",
+            "p": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/tools/generators/lib/GeneratorCommon/libGeneratorCommon.a",
+            "t": "com.apple.product-type.library.static"
+        }
+    },
+    "//tools/generators/lib/GeneratorCommon:GeneratorCommon macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2",
+    {
+        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/tools/generators/lib/GeneratorCommon/GeneratorCommon.rules_xcodeproj.swift.compile.params",
+        "1": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/tools/generators/lib/GeneratorCommon",
+        "2": {
+            "a": "x86_64",
+            "m": "12.0",
+            "v": "macosx"
+        },
+        "b": {
+            "DEBUG_INFORMATION_FORMAT": "dwarf-with-dsym",
+            "PRODUCT_MODULE_NAME": "GeneratorCommon",
+            "SWIFT_COMPILATION_MODE": "wholemodule",
+            "SWIFT_INCLUDE_PATHS": "$(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_apple_swift_argument_parser"
+        },
+        "c": "macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2",
+        "d": [
+            "@com_github_apple_swift_argument_parser//:ArgumentParser macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2"
+        ],
+        "i": {
+            "s": [
+                "tools/generators/lib/GeneratorCommon/src/BuildMode.swift",
+                "tools/generators/lib/GeneratorCommon/src/Errors.swift",
+                "tools/generators/lib/GeneratorCommon/src/Logger.swift",
+                "tools/generators/lib/GeneratorCommon/src/SemanticVersion.swift",
+                "tools/generators/lib/GeneratorCommon/src/String+Extensions.swift"
+            ]
+        },
+        "l": "//tools/generators/lib/GeneratorCommon:GeneratorCommon",
+        "n": "GeneratorCommon",
+        "o": {
+            "s": {
+                "m": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/tools/generators/lib/GeneratorCommon/GeneratorCommon.swiftmodule"
+            }
+        },
+        "p": {
+            "n": "GeneratorCommon",
+            "p": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/tools/generators/lib/GeneratorCommon/libGeneratorCommon.a",
             "t": "com.apple.product-type.library.static"
         },
         "x": [
@@ -493,7 +569,7 @@
     },
     "//tools/swiftc_stub:swiftc applebin_macos-darwin_x86_64-dbg-STABLE-3",
     {
-        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/tools/swiftc_stub/swiftc_stub.library.rules_xcodeproj.xcodeproj_bwx.swift.compile.params",
+        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/tools/swiftc_stub/swiftc_stub.library.rules_xcodeproj.swift.compile.params",
         "1": "bazel-out/applebin_macos-darwin_x86_64-dbg-STABLE-3/bin/tools/swiftc_stub",
         "2": {
             "a": "x86_64",
@@ -506,9 +582,8 @@
                 "n": "swiftc_stub.library"
             }
         ],
-        "6": "bazel-out/darwin_x86_64-dbg-STABLE-0/bin/external/rules_xcodeproj_generated/generator/test/fixtures/generator/xcodeproj_bwx/xcodeproj_bwx-params/swiftc.11.link.params",
+        "6": "bazel-out/darwin_x86_64-dbg-STABLE-0/bin/external/rules_xcodeproj_generated/generator/test/fixtures/generator/xcodeproj_bwx/xcodeproj_bwx-params/swiftc.14.link.params",
         "b": {
-            "ENABLE_TESTABILITY": true,
             "PRODUCT_MODULE_NAME": "tools_swiftc_stub_swiftc_stub_library"
         },
         "c": "applebin_macos-darwin_x86_64-dbg-STABLE-3",
@@ -537,7 +612,7 @@
     },
     "//tools/swiftc_stub:swiftc applebin_macos-darwin_x86_64-opt-STABLE-4",
     {
-        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/tools/swiftc_stub/swiftc_stub.library.rules_xcodeproj.xcodeproj_bwx.swift.compile.params",
+        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/tools/swiftc_stub/swiftc_stub.library.rules_xcodeproj.swift.compile.params",
         "1": "bazel-out/applebin_macos-darwin_x86_64-opt-STABLE-4/bin/tools/swiftc_stub",
         "2": {
             "a": "x86_64",
@@ -550,12 +625,11 @@
                 "n": "swiftc_stub.library"
             }
         ],
-        "6": "bazel-out/darwin_x86_64-dbg-STABLE-0/bin/external/rules_xcodeproj_generated/generator/test/fixtures/generator/xcodeproj_bwx/xcodeproj_bwx-params/swiftc.21.link.params",
+        "6": "bazel-out/darwin_x86_64-dbg-STABLE-0/bin/external/rules_xcodeproj_generated/generator/test/fixtures/generator/xcodeproj_bwx/xcodeproj_bwx-params/swiftc.27.link.params",
         "b": {
             "DEBUG_INFORMATION_FORMAT": "dwarf-with-dsym",
             "PRODUCT_MODULE_NAME": "tools_swiftc_stub_swiftc_stub_library",
-            "SWIFT_COMPILATION_MODE": "wholemodule",
-            "SWIFT_OPTIMIZATION_LEVEL": "-O"
+            "SWIFT_COMPILATION_MODE": "wholemodule"
         },
         "c": "applebin_macos-darwin_x86_64-opt-STABLE-4",
         "i": {
@@ -585,9 +659,233 @@
             "Release"
         ]
     },
+    "@com_github_apple_swift_argument_parser//:ArgumentParser macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
+    {
+        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_apple_swift_argument_parser/ArgumentParser.rules_xcodeproj.swift.compile.params",
+        "1": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_apple_swift_argument_parser",
+        "2": {
+            "a": "x86_64",
+            "m": "12.0",
+            "v": "macosx"
+        },
+        "b": {
+            "PRODUCT_MODULE_NAME": "ArgumentParser",
+            "SWIFT_INCLUDE_PATHS": "$(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_apple_swift_argument_parser"
+        },
+        "c": "macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
+        "d": [
+            "@com_github_apple_swift_argument_parser//:ArgumentParserToolInfo macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1"
+        ],
+        "i": {
+            "s": [
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Completions/BashCompletionsGenerator.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Completions/CompletionsGenerator.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Completions/FishCompletionsGenerator.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Completions/ZshCompletionsGenerator.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Properties/Argument.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Properties/ArgumentHelp.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Properties/ArgumentVisibility.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Properties/CompletionKind.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Properties/Errors.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Properties/Flag.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Properties/NameSpecification.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Properties/Option.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Properties/OptionGroup.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Types/AsyncParsableCommand.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Types/CommandConfiguration.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Types/EnumerableFlag.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Types/ExpressibleByArgument.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Types/ParsableArguments.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Types/ParsableArgumentsValidation.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Types/ParsableCommand.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsing/ArgumentDecoder.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsing/ArgumentDefinition.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsing/ArgumentSet.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsing/CommandParser.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsing/InputKey.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsing/InputOrigin.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsing/Name.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsing/Parsed.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsing/ParsedValues.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsing/ParserError.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsing/SplitArguments.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Usage/DumpHelpGenerator.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Usage/HelpCommand.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Usage/HelpGenerator.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Usage/MessageInfo.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Usage/UsageGenerator.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Utilities/CollectionExtensions.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Utilities/Platform.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Utilities/SequenceExtensions.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Utilities/StringExtensions.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Utilities/Tree.swift"
+            ]
+        },
+        "l": "@com_github_apple_swift_argument_parser//:ArgumentParser",
+        "n": "ArgumentParser",
+        "o": {
+            "s": {
+                "m": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_apple_swift_argument_parser/ArgumentParser.swiftmodule"
+            }
+        },
+        "p": {
+            "n": "ArgumentParser",
+            "p": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_apple_swift_argument_parser/libArgumentParser.a",
+            "t": "com.apple.product-type.library.static"
+        }
+    },
+    "@com_github_apple_swift_argument_parser//:ArgumentParser macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2",
+    {
+        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_apple_swift_argument_parser/ArgumentParser.rules_xcodeproj.swift.compile.params",
+        "1": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_apple_swift_argument_parser",
+        "2": {
+            "a": "x86_64",
+            "m": "12.0",
+            "v": "macosx"
+        },
+        "b": {
+            "DEBUG_INFORMATION_FORMAT": "dwarf-with-dsym",
+            "PRODUCT_MODULE_NAME": "ArgumentParser",
+            "SWIFT_COMPILATION_MODE": "wholemodule",
+            "SWIFT_INCLUDE_PATHS": "$(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_apple_swift_argument_parser"
+        },
+        "c": "macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2",
+        "d": [
+            "@com_github_apple_swift_argument_parser//:ArgumentParserToolInfo macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2"
+        ],
+        "i": {
+            "s": [
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Completions/BashCompletionsGenerator.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Completions/CompletionsGenerator.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Completions/FishCompletionsGenerator.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Completions/ZshCompletionsGenerator.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Properties/Argument.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Properties/ArgumentHelp.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Properties/ArgumentVisibility.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Properties/CompletionKind.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Properties/Errors.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Properties/Flag.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Properties/NameSpecification.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Properties/Option.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Properties/OptionGroup.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Types/AsyncParsableCommand.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Types/CommandConfiguration.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Types/EnumerableFlag.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Types/ExpressibleByArgument.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Types/ParsableArguments.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Types/ParsableArgumentsValidation.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsable Types/ParsableCommand.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsing/ArgumentDecoder.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsing/ArgumentDefinition.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsing/ArgumentSet.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsing/CommandParser.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsing/InputKey.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsing/InputOrigin.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsing/Name.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsing/Parsed.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsing/ParsedValues.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsing/ParserError.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Parsing/SplitArguments.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Usage/DumpHelpGenerator.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Usage/HelpCommand.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Usage/HelpGenerator.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Usage/MessageInfo.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Usage/UsageGenerator.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Utilities/CollectionExtensions.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Utilities/Platform.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Utilities/SequenceExtensions.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Utilities/StringExtensions.swift",
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParser/Utilities/Tree.swift"
+            ]
+        },
+        "l": "@com_github_apple_swift_argument_parser//:ArgumentParser",
+        "n": "ArgumentParser",
+        "o": {
+            "s": {
+                "m": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_apple_swift_argument_parser/ArgumentParser.swiftmodule"
+            }
+        },
+        "p": {
+            "n": "ArgumentParser",
+            "p": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_apple_swift_argument_parser/libArgumentParser.a",
+            "t": "com.apple.product-type.library.static"
+        },
+        "x": [
+            "Profile",
+            "Release"
+        ]
+    },
+    "@com_github_apple_swift_argument_parser//:ArgumentParserToolInfo macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
+    {
+        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_apple_swift_argument_parser/ArgumentParserToolInfo.rules_xcodeproj.swift.compile.params",
+        "1": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_apple_swift_argument_parser",
+        "2": {
+            "a": "x86_64",
+            "m": "12.0",
+            "v": "macosx"
+        },
+        "b": {
+            "PRODUCT_MODULE_NAME": "ArgumentParserToolInfo"
+        },
+        "c": "macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
+        "i": {
+            "s": [
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParserToolInfo/ToolInfo.swift"
+            ]
+        },
+        "l": "@com_github_apple_swift_argument_parser//:ArgumentParserToolInfo",
+        "n": "ArgumentParserToolInfo",
+        "o": {
+            "s": {
+                "m": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_apple_swift_argument_parser/ArgumentParserToolInfo.swiftmodule"
+            }
+        },
+        "p": {
+            "n": "ArgumentParserToolInfo",
+            "p": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_apple_swift_argument_parser/libArgumentParserToolInfo.a",
+            "t": "com.apple.product-type.library.static"
+        }
+    },
+    "@com_github_apple_swift_argument_parser//:ArgumentParserToolInfo macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2",
+    {
+        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_apple_swift_argument_parser/ArgumentParserToolInfo.rules_xcodeproj.swift.compile.params",
+        "1": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_apple_swift_argument_parser",
+        "2": {
+            "a": "x86_64",
+            "m": "12.0",
+            "v": "macosx"
+        },
+        "b": {
+            "DEBUG_INFORMATION_FORMAT": "dwarf-with-dsym",
+            "PRODUCT_MODULE_NAME": "ArgumentParserToolInfo",
+            "SWIFT_COMPILATION_MODE": "wholemodule"
+        },
+        "c": "macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2",
+        "i": {
+            "s": [
+                "external/com_github_apple_swift_argument_parser/Sources/ArgumentParserToolInfo/ToolInfo.swift"
+            ]
+        },
+        "l": "@com_github_apple_swift_argument_parser//:ArgumentParserToolInfo",
+        "n": "ArgumentParserToolInfo",
+        "o": {
+            "s": {
+                "m": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_apple_swift_argument_parser/ArgumentParserToolInfo.swiftmodule"
+            }
+        },
+        "p": {
+            "n": "ArgumentParserToolInfo",
+            "p": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_apple_swift_argument_parser/libArgumentParserToolInfo.a",
+            "t": "com.apple.product-type.library.static"
+        },
+        "x": [
+            "Profile",
+            "Release"
+        ]
+    },
     "@com_github_apple_swift_collections//:OrderedCollections macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
     {
-        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_apple_swift_collections/OrderedCollections.rules_xcodeproj.xcodeproj_bwx.swift.compile.params",
+        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_apple_swift_collections/OrderedCollections.rules_xcodeproj.swift.compile.params",
         "1": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_apple_swift_collections",
         "2": {
             "a": "x86_64",
@@ -595,7 +893,6 @@
             "v": "macosx"
         },
         "b": {
-            "ENABLE_TESTABILITY": true,
             "PRODUCT_MODULE_NAME": "OrderedCollections"
         },
         "c": "macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
@@ -668,7 +965,7 @@
     },
     "@com_github_apple_swift_collections//:OrderedCollections macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2",
     {
-        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_apple_swift_collections/OrderedCollections.rules_xcodeproj.xcodeproj_bwx.swift.compile.params",
+        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_apple_swift_collections/OrderedCollections.rules_xcodeproj.swift.compile.params",
         "1": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_apple_swift_collections",
         "2": {
             "a": "x86_64",
@@ -678,8 +975,7 @@
         "b": {
             "DEBUG_INFORMATION_FORMAT": "dwarf-with-dsym",
             "PRODUCT_MODULE_NAME": "OrderedCollections",
-            "SWIFT_COMPILATION_MODE": "wholemodule",
-            "SWIFT_OPTIMIZATION_LEVEL": "-O"
+            "SWIFT_COMPILATION_MODE": "wholemodule"
         },
         "c": "macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2",
         "i": {
@@ -755,7 +1051,7 @@
     },
     "@com_github_kylef_pathkit//:PathKit macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
     {
-        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_kylef_pathkit/PathKit.rules_xcodeproj.xcodeproj_bwx.swift.compile.params",
+        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_kylef_pathkit/PathKit.rules_xcodeproj.swift.compile.params",
         "1": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_kylef_pathkit",
         "2": {
             "a": "x86_64",
@@ -763,7 +1059,6 @@
             "v": "macosx"
         },
         "b": {
-            "ENABLE_TESTABILITY": true,
             "PRODUCT_MODULE_NAME": "PathKit"
         },
         "c": "macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
@@ -787,7 +1082,7 @@
     },
     "@com_github_kylef_pathkit//:PathKit macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2",
     {
-        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_kylef_pathkit/PathKit.rules_xcodeproj.xcodeproj_bwx.swift.compile.params",
+        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_kylef_pathkit/PathKit.rules_xcodeproj.swift.compile.params",
         "1": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_kylef_pathkit",
         "2": {
             "a": "x86_64",
@@ -797,8 +1092,7 @@
         "b": {
             "DEBUG_INFORMATION_FORMAT": "dwarf-with-dsym",
             "PRODUCT_MODULE_NAME": "PathKit",
-            "SWIFT_COMPILATION_MODE": "wholemodule",
-            "SWIFT_OPTIMIZATION_LEVEL": "-O"
+            "SWIFT_COMPILATION_MODE": "wholemodule"
         },
         "c": "macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2",
         "i": {
@@ -831,7 +1125,7 @@
             "m": "12.0",
             "v": "macosx"
         },
-        "8": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_michaeleisel_jjliso8601dateformatter/JJLISO8601DateFormatter.rules_xcodeproj.xcodeproj_bwx.c.compile.params",
+        "8": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_michaeleisel_jjliso8601dateformatter/JJLISO8601DateFormatter.rules_xcodeproj.c.compile.params",
         "c": "macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
         "f": true,
         "i": {
@@ -861,7 +1155,7 @@
             "m": "12.0",
             "v": "macosx"
         },
-        "8": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_michaeleisel_jjliso8601dateformatter/JJLISO8601DateFormatter.rules_xcodeproj.xcodeproj_bwx.c.compile.params",
+        "8": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_michaeleisel_jjliso8601dateformatter/JJLISO8601DateFormatter.rules_xcodeproj.c.compile.params",
         "b": {
             "DEBUG_INFORMATION_FORMAT": "dwarf-with-dsym"
         },
@@ -892,7 +1186,7 @@
     },
     "@com_github_michaeleisel_zippyjson//:ZippyJSON macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
     {
-        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_michaeleisel_zippyjson/ZippyJSON.rules_xcodeproj.xcodeproj_bwx.swift.compile.params",
+        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_michaeleisel_zippyjson/ZippyJSON.rules_xcodeproj.swift.compile.params",
         "1": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_michaeleisel_zippyjson",
         "2": {
             "a": "x86_64",
@@ -900,7 +1194,6 @@
             "v": "macosx"
         },
         "b": {
-            "ENABLE_TESTABILITY": true,
             "PRODUCT_MODULE_NAME": "ZippyJSON"
         },
         "c": "macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
@@ -929,7 +1222,7 @@
     },
     "@com_github_michaeleisel_zippyjson//:ZippyJSON macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2",
     {
-        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_michaeleisel_zippyjson/ZippyJSON.rules_xcodeproj.xcodeproj_bwx.swift.compile.params",
+        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_michaeleisel_zippyjson/ZippyJSON.rules_xcodeproj.swift.compile.params",
         "1": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_michaeleisel_zippyjson",
         "2": {
             "a": "x86_64",
@@ -939,8 +1232,7 @@
         "b": {
             "DEBUG_INFORMATION_FORMAT": "dwarf-with-dsym",
             "PRODUCT_MODULE_NAME": "ZippyJSON",
-            "SWIFT_COMPILATION_MODE": "wholemodule",
-            "SWIFT_OPTIMIZATION_LEVEL": "-O"
+            "SWIFT_COMPILATION_MODE": "wholemodule"
         },
         "c": "macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2",
         "d": [
@@ -978,7 +1270,7 @@
             "m": "12.0",
             "v": "macosx"
         },
-        "9": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_michaeleisel_zippyjsoncfamily/ZippyJSONCFamily.rules_xcodeproj.xcodeproj_bwx.cxx.compile.params",
+        "9": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_michaeleisel_zippyjsoncfamily/ZippyJSONCFamily.rules_xcodeproj.cxx.compile.params",
         "F": true,
         "c": "macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
         "i": {
@@ -1005,7 +1297,7 @@
             "m": "12.0",
             "v": "macosx"
         },
-        "9": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_michaeleisel_zippyjsoncfamily/ZippyJSONCFamily.rules_xcodeproj.xcodeproj_bwx.cxx.compile.params",
+        "9": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_michaeleisel_zippyjsoncfamily/ZippyJSONCFamily.rules_xcodeproj.cxx.compile.params",
         "F": true,
         "b": {
             "DEBUG_INFORMATION_FORMAT": "dwarf-with-dsym"
@@ -1033,7 +1325,7 @@
     },
     "@com_github_pointfreeco_swift_custom_dump//:CustomDump macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
     {
-        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_pointfreeco_swift_custom_dump/CustomDump.rules_xcodeproj.xcodeproj_bwx.swift.compile.params",
+        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_pointfreeco_swift_custom_dump/CustomDump.rules_xcodeproj.swift.compile.params",
         "1": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_pointfreeco_swift_custom_dump",
         "2": {
             "a": "x86_64",
@@ -1041,7 +1333,6 @@
             "v": "macosx"
         },
         "b": {
-            "ENABLE_TESTABILITY": true,
             "PRODUCT_MODULE_NAME": "CustomDump",
             "SWIFT_INCLUDE_PATHS": "$(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_pointfreeco_xctest_dynamic_overlay"
         },
@@ -1093,7 +1384,7 @@
     },
     "@com_github_pointfreeco_xctest_dynamic_overlay//:XCTestDynamicOverlay macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
     {
-        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_pointfreeco_xctest_dynamic_overlay/XCTestDynamicOverlay.rules_xcodeproj.xcodeproj_bwx.swift.compile.params",
+        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_pointfreeco_xctest_dynamic_overlay/XCTestDynamicOverlay.rules_xcodeproj.swift.compile.params",
         "1": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_pointfreeco_xctest_dynamic_overlay",
         "2": {
             "a": "x86_64",
@@ -1101,7 +1392,6 @@
             "v": "macosx"
         },
         "b": {
-            "ENABLE_TESTABILITY": true,
             "PRODUCT_MODULE_NAME": "XCTestDynamicOverlay"
         },
         "c": "macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
@@ -1125,7 +1415,7 @@
     },
     "@com_github_tuist_xcodeproj//:XcodeProj macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1",
     {
-        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_tuist_xcodeproj/XcodeProj.rules_xcodeproj.xcodeproj_bwx.swift.compile.params",
+        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_tuist_xcodeproj/XcodeProj.rules_xcodeproj.swift.compile.params",
         "1": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_tuist_xcodeproj",
         "2": {
             "a": "x86_64",
@@ -1133,7 +1423,6 @@
             "v": "macosx"
         },
         "b": {
-            "ENABLE_TESTABILITY": true,
             "PRODUCT_MODULE_NAME": "XcodeProj",
             "SWIFT_INCLUDE_PATHS": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_tadija_aexml $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-dbg-STABLE-1/bin/external/com_github_kylef_pathkit"
         },
@@ -1257,7 +1546,7 @@
     },
     "@com_github_tuist_xcodeproj//:XcodeProj macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2",
     {
-        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_tuist_xcodeproj/XcodeProj.rules_xcodeproj.xcodeproj_bwx.swift.compile.params",
+        "0": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_tuist_xcodeproj/XcodeProj.rules_xcodeproj.swift.compile.params",
         "1": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_tuist_xcodeproj",
         "2": {
             "a": "x86_64",
@@ -1268,8 +1557,7 @@
             "DEBUG_INFORMATION_FORMAT": "dwarf-with-dsym",
             "PRODUCT_MODULE_NAME": "XcodeProj",
             "SWIFT_COMPILATION_MODE": "wholemodule",
-            "SWIFT_INCLUDE_PATHS": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_tadija_aexml $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_kylef_pathkit",
-            "SWIFT_OPTIMIZATION_LEVEL": "-O"
+            "SWIFT_INCLUDE_PATHS": "bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_tadija_aexml $(BUILD_DIR)/bazel-out/macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2/bin/external/com_github_kylef_pathkit"
         },
         "c": "macos-x86_64-min12.0-applebin_macos-darwin_x86_64-opt-STABLE-2",
         "d": [

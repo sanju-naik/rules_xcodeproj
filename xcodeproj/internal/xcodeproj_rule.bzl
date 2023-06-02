@@ -461,11 +461,11 @@ targets.
         if xcode_target.product.is_resource_bundle and exclude_resource_bundles:
             # Don't create targets for resource bundles in BwB mode, but still
             # include their files if they aren't unfocused
-            focused_targets_extra_files.append(
-                (xcode_target.label, xcode_target.inputs.resources),
+            focused_targets_extra_files.extend(
+                xcode_target.inputs.resources.to_list(),
             )
-            focused_targets_extra_folders.append(
-                (xcode_target.label, xcode_target.inputs.folder_resources),
+            focused_targets_extra_folders.extend(
+                xcode_target.inputs.folder_resources.to_list(),
             )
             files_only_targets[xcode_target.id] = xcode_target
             continue
@@ -736,6 +736,7 @@ targets.
             build_mode = build_mode,
             bwx_unfocused_dependencies = bwx_unfocused_dependencies,
             excluded_targets = excluded_targets,
+            focused_labels = focused_labels,
             label = label,
             link_params_processor = link_params_processor,
             linker_products_map = linker_products_map,
@@ -743,6 +744,7 @@ targets.
             rule_name = name,
             should_include_outputs = should_include_outputs(build_mode),
             target_merges = target_merges,
+            unfocused_labels = unfocused_labels,
             xcode_configurations = target_xcode_configurations,
             xcode_generated_paths = xcode_generated_paths,
             xcode_generated_paths_file = xcode_generated_paths_file,
@@ -1059,9 +1061,9 @@ def should_include_outputs(build_mode):
 
 # Actions
 
-def _labelless_clang_opts(clangopt_with_label):
-    _, opts = clangopt_with_label
-    return opts
+def _labelless_swift_sub_params(swift_sub_params_with_label):
+    _, swift_sub_params = swift_sub_params_with_label
+    return [file.path for file in swift_sub_params] + [""]
 
 def _non_generated_framework_build_setting_path(path):
     if is_generated_path(path):
@@ -1075,6 +1077,15 @@ def _write_swift_debug_settings(
         name,
         swift_debug_settings_processor,
         xcode_generated_paths_file):
+    inputs = depset(
+        [xcode_generated_paths_file],
+        transitive = [
+            lldb_context._swift_sub_params
+            for config_lldb_contexts in lldb_contexts.values()
+            for lldb_context in config_lldb_contexts.values()
+        ],
+    )
+
     outputs = []
     for (xcode_configuration, config_lldb_contexts) in lldb_contexts.items():
         output = actions.declare_file(
@@ -1101,8 +1112,8 @@ def _write_swift_debug_settings(
             args.add_all(lldb_context._swiftmodules)
             args.add("")
             args.add_all(
-                lldb_context._clang,
-                map_each = _labelless_clang_opts,
+                lldb_context._labelled_swift_sub_params,
+                map_each = _labelless_swift_sub_params,
             )
             args.add("")
 
@@ -1111,8 +1122,12 @@ def _write_swift_debug_settings(
             arguments = [args],
             mnemonic = "SwiftDebugSettings",
             progress_message = "Generating %{output}",
-            inputs = [xcode_generated_paths_file],
+            inputs = inputs,
             outputs = [output],
+            execution_requirements = {
+                # Lots (lots...) of input files, so avoid sandbox for speed
+                "no-sandbox": "1",
+            },
         )
 
     return outputs
@@ -1562,7 +1577,7 @@ configurations: {}""".format(", ".join(xcode_configurations)))
     target_ids_list = write_target_ids_list(
         actions = actions,
         name = name,
-        target_dtos = target_dtos,
+        target_ids = target_dtos.keys(),
     )
 
     extension_infoplists = [
@@ -1931,7 +1946,7 @@ def make_xcodeproj_rule(
         ),
         "_generator": attr.label(
             cfg = "exec",
-            default = Label("//tools/generator:universal_generator"),
+            default = Label("//tools/generators/legacy:universal_generator"),
             executable = True,
         ),
         "_index_import": attr.label(

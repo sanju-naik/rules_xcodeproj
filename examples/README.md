@@ -8,6 +8,9 @@ This directory holds several examples using rules_xcodeproj. To open an example,
 * **integration**
     <br> Contains many targets to exercise all of the [rules_apple](https://github.com/bazelbuild/rules_apple/tree/master/doc) rules, along with various ways of using rules_xcodeproj itself (e.g. multi-platform consolidated targets, SwiftUI Previews, device support, etc.).
 
+* **rules_ios**
+    <br> Contains targets to exercise [rules_ios](https://github.com/bazel-ios/rules_ios) macros and rules.
+
 * **sanitizers**
     <br> Contains targets to test Sanitizers in BwB mode. The main purpose is to make sure sanitizers in BwB mode work and give UI feedback the same way sanitizers do in BwX builds.
 
@@ -25,3 +28,4 @@ latest version on each respective repository.
 - [SwiftLint](https://github.com/realm/SwiftLint/blob/325d0ee1e44a87fc82afeb874b83ceb82f6728cf/BUILD#L113-L142)
 - [SwiftLint Custom Rules demo](https://vimeo.com/820572803) and [code](https://github.com/jpsim/swiftlint-bazel-example)
 - [SwiftUI iOS App with Bazel template](https://github.com/mattrobmattrob/bazel-ios-swiftui-template/blob/666640b796f347b62b8e5878e00c2d2f44c247cc/BUILD.bazel#L9-L18)
+- [Telegram](https://github.com/TelegramMessenger/Telegram-iOS/blob/09a60ba5dfac95f19b443685c56d7ac371cb1d2f/Telegram/BUILD#L2000-L2022)

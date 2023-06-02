@@ -8,13 +8,13 @@ load(
     "AppleBundleInfo",
 )
 load(":automatic_target_info.bzl", "calculate_automatic_target_info")
+load(":bazel_labels.bzl", "bazel_labels")
 load(":compilation_providers.bzl", comp_providers = "compilation_providers")
 load(":input_files.bzl", "input_files")
 load(":library_targets.bzl", "process_library_target")
 load(":lldb_contexts.bzl", "lldb_contexts")
 load(
     ":memory_efficiency.bzl",
-    "EMPTY_LIST",
     "NONE_LIST",
     "memory_efficient_depset",
 )
@@ -73,7 +73,18 @@ _BUILD_TEST_RULES = {
     "watchos_build_test": None,
 }
 
-def _should_skip_target(*, ctx, target):
+_TEST_SUITE_RULES = {
+    "test_suite": None,
+}
+
+skip_type = struct(
+    apple_build_test = "apple_build_test",
+    apple_binary_no_deps = "apple_binary_no_deps",
+    apple_test_bundle = "apple_test_bundle",
+    test_suite = "test_suite",
+)
+
+def _get_skip_type(*, ctx, target):
     """Determines if the given target should be skipped for target generation.
 
     There are some rules, like the test runners for iOS tests, that we want to
@@ -84,18 +95,24 @@ def _should_skip_target(*, ctx, target):
         target: The `Target` to check.
 
     Returns:
-        `True` if `target` should be skipped for target generation.
+        A `skip_type` if `target` should be skipped, otherwise `None`.
     """
     if ctx.rule.kind in _BUILD_TEST_RULES:
-        return True
+        return skip_type.apple_build_test
+
+    if ctx.rule.kind in _TEST_SUITE_RULES:
+        return skip_type.test_suite
 
     if AppleBinaryInfo in target and not hasattr(ctx.rule.attr, "deps"):
-        return True
+        return skip_type.apple_binary_no_deps
 
-    return targets.is_test_bundle(
+    if targets.is_test_bundle(
         target = target,
         deps = getattr(ctx.rule.attr, "deps", None),
-    )
+    ):
+        return skip_type.apple_test_bundle
+
+    return None
 
 def _target_info_fields(
         *,
@@ -201,6 +218,7 @@ def _skip_target(
         *,
         ctx,
         target,
+        target_skip_type,
         deps,
         deps_attrs,
         transitive_infos,
@@ -212,6 +230,7 @@ def _skip_target(
 
     Args:
         ctx: The aspect context.
+        target_skip_type: The `skip_type` for this `target` (see `_get_skip_type`).
         target: The `Target` to skip.
         deps: `Target`s collected from `ctx.attr.deps`.
         deps_attrs: A sequence of attribute names to collect `Target`s from for
@@ -259,6 +278,25 @@ def _skip_target(
         if attr in deps_attrs and info.xcode_target
     ]
 
+    def _target_replacement_label(info):
+        if not info.xcode_target:
+            return target.label
+        if target_skip_type != skip_type.apple_test_bundle:
+            return target.label
+
+        # Normalizes label to ensure this works with and without bzlmod
+        # and then drop the target name because that will be replaced below
+        label_str = bazel_labels.normalize_label(info.xcode_target.label)
+        package_label_str = label_str.split(":")[0]
+
+        # As of https://github.com/bazelbuild/rules_apple/pull/1948
+        # `bundle_name` can be used to name the bundle instead of the
+        # target name. Because of that we use `ctx.rule.attr.generator_name`
+        # here to ensure this is always a real target label.
+        return Label(
+            "{}:{}".format(package_label_str, ctx.rule.attr.generator_name),
+        )
+
     return _target_info_fields(
         args = memory_efficient_depset(
             [
@@ -294,7 +332,6 @@ def _skip_target(
         lldb_context = lldb_contexts.collect(
             id = None,
             is_swift = False,
-            clang_opts = EMPTY_LIST,
             transitive_infos = valid_transitive_infos,
         ),
         mergable_xcode_library_targets = memory_efficient_depset(
@@ -313,7 +350,10 @@ def _skip_target(
         ),
         replacement_labels = memory_efficient_depset(
             [
-                struct(id = info.xcode_target.id, label = target.label)
+                struct(
+                    id = info.xcode_target.id,
+                    label = _target_replacement_label(info),
+                )
                 for info in deps_transitive_infos
             ],
             transitive = [
@@ -548,10 +588,12 @@ def create_xcodeprojinfo(*, ctx, build_mode, target, attrs, transitive_infos):
         target = target,
     )
 
-    if _should_skip_target(ctx = ctx, target = target):
+    target_skip_type = _get_skip_type(ctx = ctx, target = target)
+    if target_skip_type:
         info_fields = _skip_target(
             ctx = ctx,
             target = target,
+            target_skip_type = target_skip_type,
             deps = [
                 dep
                 for attr in automatic_target_info.deps

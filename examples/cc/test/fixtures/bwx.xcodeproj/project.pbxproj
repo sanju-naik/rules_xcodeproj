@@ -11,7 +11,7 @@
 			isa = PBXAggregateTarget;
 			buildConfigurationList = A4C19F2824EAB3EBB5D7EE24 /* Build configuration list for PBXAggregateTarget "BazelDependencies" */;
 			buildPhases = (
-				773C70B69E7F801B38FDC01C /* Generate Files */,
+				C0C8DBC6F0F89C84D3BC5F69 /* Generate Bazel Dependencies */,
 				2FB8CA190C5FD287F83F39E3 /* Create swift_debug_settings.py */,
 			);
 			dependencies = (
@@ -98,24 +98,24 @@
 /* Begin PBXFileReference section */
 		04D0C0E1D77B094DEC4ED63A /* lib3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lib3.h; sourceTree = "<group>"; };
 		10D21E69D7E12FFDA82B1273 /* lib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lib.h; sourceTree = "<group>"; };
-		12AA7DE64111E938B6356A70 /* lib_defines.rules_xcodeproj.xcodeproj_bwx.c.compile.params */ = {isa = PBXFileReference; path = lib_defines.rules_xcodeproj.xcodeproj_bwx.c.compile.params; sourceTree = "<group>"; };
 		18DF90BBBA2BA8D2AF06D94F /* lib2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lib2.h; sourceTree = "<group>"; };
+		1D1FEEEA4291F9300E2F619E /* lib_impl.rules_xcodeproj.c.compile.params */ = {isa = PBXFileReference; path = lib_impl.rules_xcodeproj.c.compile.params; sourceTree = "<group>"; };
 		1F8D330113018E003269E782 /* liblib_impl.a */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; name = liblib_impl.a; path = "bazel-out/darwin_x86_64-dbg-STABLE-1/bin/external/examples_cc_external/liblib_impl.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		22CD6ABBCCB94102CD2DB42D /* lib_impl.rules_xcodeproj.xcodeproj_bwx.c.compile.params */ = {isa = PBXFileReference; path = lib_impl.rules_xcodeproj.xcodeproj_bwx.c.compile.params; sourceTree = "<group>"; };
 		279A0E4737F6910DA83B77C4 /* lib3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lib3.h; sourceTree = "<group>"; };
 		44E6CFE4F6DA4DD1FDA1E2A5 /* impl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = impl.h; sourceTree = "<group>"; };
+		5203423AE8BC927E0CF7887D /* tool.rules_xcodeproj.c.compile.params */ = {isa = PBXFileReference; path = tool.rules_xcodeproj.c.compile.params; sourceTree = "<group>"; };
 		608FC1B03035074235E81C33 /* lib.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lib.c; sourceTree = "<group>"; };
 		655197F36E3561F5EBB2B456 /* lib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lib.h; sourceTree = "<group>"; };
 		68571FA99BB8CAC9AA027C16 /* lib2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lib2.h; sourceTree = "<group>"; };
-		70E35A817C9820FDAB23EB9D /* tool.rules_xcodeproj.xcodeproj_bwx.c.compile.params */ = {isa = PBXFileReference; path = tool.rules_xcodeproj.xcodeproj_bwx.c.compile.params; sourceTree = "<group>"; };
+		6AD94C5350DB9DD7A5DBCC43 /* lib_impl.rules_xcodeproj.c.compile.params */ = {isa = PBXFileReference; path = lib_impl.rules_xcodeproj.c.compile.params; sourceTree = "<group>"; };
 		749ECE521B1B50D3AF8C99A4 /* liblib_defines.a */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; name = liblib_defines.a; path = "bazel-out/darwin_x86_64-dbg-STABLE-1/bin/lib/liblib_defines.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		82E1AC498ACAE9E123276B7A /* BUILD */ = {isa = PBXFileReference; explicitFileType = text.script.python; path = BUILD; sourceTree = "<group>"; };
+		84CA864F970F6A6162856D18 /* lib_impl.rules_xcodeproj.c.compile.params */ = {isa = PBXFileReference; path = lib_impl.rules_xcodeproj.c.compile.params; sourceTree = "<group>"; };
 		93D1D27158A07AD68DCD9F1C /* private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = private.h; sourceTree = "<group>"; };
 		9EA769DDCBCA01C4A4A674AF /* lib.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lib.c; sourceTree = "<group>"; };
 		AE0CF9E68A28C21F8DDA2623 /* lib.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lib.c; sourceTree = "<group>"; };
 		B13DA8B967470B62463A7C36 /* BUILD */ = {isa = PBXFileReference; explicitFileType = text.script.python; path = BUILD; sourceTree = "<group>"; };
 		B6393A8054CC3DB8C2683C2E /* tool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = tool; sourceTree = BUILT_PRODUCTS_DIR; };
-		B80B6F387AA5D70B82CB4CEA /* lib_impl.rules_xcodeproj.xcodeproj_bwx.c.compile.params */ = {isa = PBXFileReference; path = lib_impl.rules_xcodeproj.xcodeproj_bwx.c.compile.params; sourceTree = "<group>"; };
 		BCF94D18F26384B90265A750 /* BUILD */ = {isa = PBXFileReference; explicitFileType = text.script.python; path = BUILD; sourceTree = "<group>"; };
 		C4540894ED64E2ADAFAEF962 /* tool.4.link.params */ = {isa = PBXFileReference; path = tool.4.link.params; sourceTree = "<group>"; };
 		C73161F68ABCBA66C2144108 /* defines.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = defines.c; sourceTree = "<group>"; };
@@ -126,7 +126,7 @@
 		E17E75D090217B10AE0BAF46 /* liblib_impl.a */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; name = liblib_impl.a; path = "bazel-out/darwin_x86_64-dbg-STABLE-1/bin/lib2/liblib_impl.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4625264BB5CC1E80CC94DF2 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		E483854DF5BC316B65784CA2 /* BUILD */ = {isa = PBXFileReference; explicitFileType = text.script.python; path = BUILD; sourceTree = "<group>"; };
-		EA5860193CD40CA7F8CBBC22 /* lib_impl.rules_xcodeproj.xcodeproj_bwx.c.compile.params */ = {isa = PBXFileReference; path = lib_impl.rules_xcodeproj.xcodeproj_bwx.c.compile.params; sourceTree = "<group>"; };
+		FB232FC4F4B31F987D1F0268 /* lib_defines.rules_xcodeproj.c.compile.params */ = {isa = PBXFileReference; path = lib_defines.rules_xcodeproj.c.compile.params; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -190,7 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				D4A1E3398CFC436B4FBC595F /* impl */,
-				12AA7DE64111E938B6356A70 /* lib_defines.rules_xcodeproj.xcodeproj_bwx.c.compile.params */,
+				FB232FC4F4B31F987D1F0268 /* lib_defines.rules_xcodeproj.c.compile.params */,
 			);
 			path = lib;
 			sourceTree = "<group>";
@@ -230,7 +230,7 @@
 		552699DDAB187B0E52A098A7 /* tool */ = {
 			isa = PBXGroup;
 			children = (
-				70E35A817C9820FDAB23EB9D /* tool.rules_xcodeproj.xcodeproj_bwx.c.compile.params */,
+				5203423AE8BC927E0CF7887D /* tool.rules_xcodeproj.c.compile.params */,
 			);
 			path = tool;
 			sourceTree = "<group>";
@@ -396,7 +396,7 @@
 		D1A14E64E6DC524A5947F7F0 /* examples_cc_external */ = {
 			isa = PBXGroup;
 			children = (
-				B80B6F387AA5D70B82CB4CEA /* lib_impl.rules_xcodeproj.xcodeproj_bwx.c.compile.params */,
+				6AD94C5350DB9DD7A5DBCC43 /* lib_impl.rules_xcodeproj.c.compile.params */,
 			);
 			path = examples_cc_external;
 			sourceTree = "<group>";
@@ -412,7 +412,7 @@
 		D4A1E3398CFC436B4FBC595F /* impl */ = {
 			isa = PBXGroup;
 			children = (
-				22CD6ABBCCB94102CD2DB42D /* lib_impl.rules_xcodeproj.xcodeproj_bwx.c.compile.params */,
+				84CA864F970F6A6162856D18 /* lib_impl.rules_xcodeproj.c.compile.params */,
 			);
 			path = impl;
 			sourceTree = "<group>";
@@ -486,7 +486,7 @@
 			isa = PBXGroup;
 			children = (
 				C3144C02CAB17102DE33D499 /* _virtual_includes */,
-				EA5860193CD40CA7F8CBBC22 /* lib_impl.rules_xcodeproj.xcodeproj_bwx.c.compile.params */,
+				1D1FEEEA4291F9300E2F619E /* lib_impl.rules_xcodeproj.c.compile.params */,
 			);
 			path = lib2;
 			sourceTree = "<group>";
@@ -728,7 +728,7 @@
 			shellScript = "set -euo pipefail\n\nperl -pe '\n  s/__BAZEL_XCODE_DEVELOPER_DIR__/\\$(DEVELOPER_DIR)/g;\n  s/__BAZEL_XCODE_SDKROOT__/\\$(SDKROOT)/g;\n  s/\\$(\\()?([a-zA-Z_]\\w*)(?(1)\\))/$ENV{$2}/gx;\n' \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\n\"$BAZEL_INTEGRATION_DIR/create_xcode_overlay.sh\"";
 			showEnvVarsInLog = 0;
 		};
-		773C70B69E7F801B38FDC01C /* Generate Files */ = {
+		C0C8DBC6F0F89C84D3BC5F69 /* Generate Bazel Dependencies */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -736,7 +736,7 @@
 			);
 			inputPaths = (
 			);
-			name = "Generate Files";
+			name = "Generate Bazel Dependencies";
 			outputFileListPaths = (
 				"$(INTERNAL_DIR)/external.xcfilelist",
 				"$(INTERNAL_DIR)/generated.xcfilelist",
@@ -891,7 +891,7 @@
 			buildSettings = {
 				ARCHS = x86_64;
 				ASAN_OTHER_CFLAGS__ = "$(ASAN_OTHER_CFLAGS__NO)";
-				ASAN_OTHER_CFLAGS__NO = "-working-directory=$(PROJECT_DIR) -ivfsoverlay $(DERIVED_FILE_DIR)/xcode-overlay.yaml -ivfsoverlay $(OBJROOT)/bazel-out-overlay.yaml @$(DERIVED_FILE_DIR)/c.compile.params";
+				ASAN_OTHER_CFLAGS__NO = "-working-directory $(PROJECT_DIR) -ivfsoverlay $(DERIVED_FILE_DIR)/xcode-overlay.yaml -ivfsoverlay $(OBJROOT)/bazel-out-overlay.yaml @$(DERIVED_FILE_DIR)/c.compile.params";
 				ASAN_OTHER_CFLAGS__YES = (
 					"$(ASAN_OTHER_CFLAGS__NO)",
 					"-Wno-macro-redefined",
@@ -902,7 +902,7 @@
 				BAZEL_TARGET_ID = "//lib2:lib_impl darwin_x86_64-dbg-STABLE-1";
 				"BAZEL_TARGET_ID[sdk=macosx*]" = "$(BAZEL_TARGET_ID)";
 				COMPILE_TARGET_NAME = lib_impl;
-				C_PARAMS_FILE = "$(CURRENT_EXECUTION_ROOT)/bazel-out/darwin_x86_64-dbg-STABLE-1/bin/lib2/lib_impl.rules_xcodeproj.xcodeproj_bwx.c.compile.params";
+				C_PARAMS_FILE = "$(BAZEL_OUT)/darwin_x86_64-dbg-STABLE-1/bin/lib2/lib_impl.rules_xcodeproj.c.compile.params";
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				OTHER_CFLAGS = "$(ASAN_OTHER_CFLAGS__$(CLANG_ADDRESS_SANITIZER))";
@@ -918,7 +918,7 @@
 			buildSettings = {
 				ARCHS = x86_64;
 				ASAN_OTHER_CFLAGS__ = "$(ASAN_OTHER_CFLAGS__NO)";
-				ASAN_OTHER_CFLAGS__NO = "-working-directory=$(PROJECT_DIR) -ivfsoverlay $(DERIVED_FILE_DIR)/xcode-overlay.yaml -ivfsoverlay $(OBJROOT)/bazel-out-overlay.yaml @$(DERIVED_FILE_DIR)/c.compile.params";
+				ASAN_OTHER_CFLAGS__NO = "-working-directory $(PROJECT_DIR) -ivfsoverlay $(DERIVED_FILE_DIR)/xcode-overlay.yaml -ivfsoverlay $(OBJROOT)/bazel-out-overlay.yaml @$(DERIVED_FILE_DIR)/c.compile.params";
 				ASAN_OTHER_CFLAGS__YES = (
 					"$(ASAN_OTHER_CFLAGS__NO)",
 					"-Wno-macro-redefined",
@@ -929,7 +929,7 @@
 				BAZEL_TARGET_ID = "//lib:lib_defines darwin_x86_64-dbg-STABLE-1";
 				"BAZEL_TARGET_ID[sdk=macosx*]" = "$(BAZEL_TARGET_ID)";
 				COMPILE_TARGET_NAME = lib_defines;
-				C_PARAMS_FILE = "$(CURRENT_EXECUTION_ROOT)/bazel-out/darwin_x86_64-dbg-STABLE-1/bin/lib/lib_defines.rules_xcodeproj.xcodeproj_bwx.c.compile.params";
+				C_PARAMS_FILE = "$(BAZEL_OUT)/darwin_x86_64-dbg-STABLE-1/bin/lib/lib_defines.rules_xcodeproj.c.compile.params";
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				OTHER_CFLAGS = "$(ASAN_OTHER_CFLAGS__$(CLANG_ADDRESS_SANITIZER))";
@@ -975,7 +975,6 @@
 				CLANG_MODULES_AUTOLINK = NO;
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(BAZEL_PACKAGE_BIN_DIR)";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_EXECUTION_ROOT = "$(INDEXING_PROJECT_DIR__$(INDEX_ENABLE_BUILD_ARENA))";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEPLOYMENT_LOCATION = "$(INDEXING_DEPLOYMENT_LOCATION__$(INDEX_ENABLE_BUILD_ARENA)),";
 				DSTROOT = "$(PROJECT_TEMP_DIR)";
@@ -999,7 +998,8 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 				);
 				ONLY_ACTIVE_ARCH = YES;
-				RESOLVED_REPOSITORIES = "\"/external/examples_cc_external\" \"$(SRCROOT)/external\" \"\" \"$(SRCROOT)\"";
+				PROJECT_DIR = "$(INDEXING_PROJECT_DIR__$(INDEX_ENABLE_BUILD_ARENA))";
+				RESOLVED_REPOSITORIES = "\"external/examples_cc_external\" \"$(SRCROOT)/external\" \".\" \"$(SRCROOT)\"";
 				RULES_XCODEPROJ_BUILD_MODE = xcode;
 				SCHEME_TARGET_IDS_FILE = "$(OBJROOT)/scheme_target_ids";
 				SRCROOT = ../../../../..;
@@ -1019,7 +1019,7 @@
 			buildSettings = {
 				ARCHS = x86_64;
 				ASAN_OTHER_CFLAGS__ = "$(ASAN_OTHER_CFLAGS__NO)";
-				ASAN_OTHER_CFLAGS__NO = "-working-directory=$(PROJECT_DIR) -ivfsoverlay $(DERIVED_FILE_DIR)/xcode-overlay.yaml -ivfsoverlay $(OBJROOT)/bazel-out-overlay.yaml @$(DERIVED_FILE_DIR)/c.compile.params";
+				ASAN_OTHER_CFLAGS__NO = "-working-directory $(PROJECT_DIR) -ivfsoverlay $(DERIVED_FILE_DIR)/xcode-overlay.yaml -ivfsoverlay $(OBJROOT)/bazel-out-overlay.yaml @$(DERIVED_FILE_DIR)/c.compile.params";
 				ASAN_OTHER_CFLAGS__YES = (
 					"$(ASAN_OTHER_CFLAGS__NO)",
 					"-Wno-macro-redefined",
@@ -1030,7 +1030,7 @@
 				BAZEL_TARGET_ID = "//lib/impl:lib_impl darwin_x86_64-dbg-STABLE-1";
 				"BAZEL_TARGET_ID[sdk=macosx*]" = "$(BAZEL_TARGET_ID)";
 				COMPILE_TARGET_NAME = lib_impl;
-				C_PARAMS_FILE = "$(CURRENT_EXECUTION_ROOT)/bazel-out/darwin_x86_64-dbg-STABLE-1/bin/lib/impl/lib_impl.rules_xcodeproj.xcodeproj_bwx.c.compile.params";
+				C_PARAMS_FILE = "$(BAZEL_OUT)/darwin_x86_64-dbg-STABLE-1/bin/lib/impl/lib_impl.rules_xcodeproj.c.compile.params";
 				EXECUTABLE_EXTENSION = lo;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
@@ -1047,7 +1047,7 @@
 			buildSettings = {
 				ARCHS = x86_64;
 				ASAN_OTHER_CFLAGS__ = "$(ASAN_OTHER_CFLAGS__NO)";
-				ASAN_OTHER_CFLAGS__NO = "-working-directory=$(PROJECT_DIR) -ivfsoverlay $(DERIVED_FILE_DIR)/xcode-overlay.yaml -ivfsoverlay $(OBJROOT)/bazel-out-overlay.yaml @$(DERIVED_FILE_DIR)/c.compile.params";
+				ASAN_OTHER_CFLAGS__NO = "-working-directory $(PROJECT_DIR) -ivfsoverlay $(DERIVED_FILE_DIR)/xcode-overlay.yaml -ivfsoverlay $(OBJROOT)/bazel-out-overlay.yaml @$(DERIVED_FILE_DIR)/c.compile.params";
 				ASAN_OTHER_CFLAGS__YES = (
 					"$(ASAN_OTHER_CFLAGS__NO)",
 					"-Wno-macro-redefined",
@@ -1059,7 +1059,7 @@
 				"BAZEL_TARGET_ID[sdk=macosx*]" = "$(BAZEL_TARGET_ID)";
 				BUILT_PRODUCTS_DIR = "$(CONFIGURATION_BUILD_DIR)";
 				COMPILE_TARGET_NAME = tool;
-				C_PARAMS_FILE = "$(CURRENT_EXECUTION_ROOT)/bazel-out/darwin_x86_64-dbg-STABLE-1/bin/tool/tool.rules_xcodeproj.xcodeproj_bwx.c.compile.params";
+				C_PARAMS_FILE = "$(BAZEL_OUT)/darwin_x86_64-dbg-STABLE-1/bin/tool/tool.rules_xcodeproj.c.compile.params";
 				DEPLOYMENT_LOCATION = NO;
 				EXECUTABLE_EXTENSION = "";
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1079,7 +1079,7 @@
 			buildSettings = {
 				ARCHS = x86_64;
 				ASAN_OTHER_CFLAGS__ = "$(ASAN_OTHER_CFLAGS__NO)";
-				ASAN_OTHER_CFLAGS__NO = "-working-directory=$(PROJECT_DIR) -ivfsoverlay $(DERIVED_FILE_DIR)/xcode-overlay.yaml -ivfsoverlay $(OBJROOT)/bazel-out-overlay.yaml @$(DERIVED_FILE_DIR)/c.compile.params";
+				ASAN_OTHER_CFLAGS__NO = "-working-directory $(PROJECT_DIR) -ivfsoverlay $(DERIVED_FILE_DIR)/xcode-overlay.yaml -ivfsoverlay $(OBJROOT)/bazel-out-overlay.yaml @$(DERIVED_FILE_DIR)/c.compile.params";
 				ASAN_OTHER_CFLAGS__YES = (
 					"$(ASAN_OTHER_CFLAGS__NO)",
 					"-Wno-macro-redefined",
@@ -1090,7 +1090,7 @@
 				BAZEL_TARGET_ID = "@examples_cc_external//:lib_impl darwin_x86_64-dbg-STABLE-1";
 				"BAZEL_TARGET_ID[sdk=macosx*]" = "$(BAZEL_TARGET_ID)";
 				COMPILE_TARGET_NAME = lib_impl;
-				C_PARAMS_FILE = "$(CURRENT_EXECUTION_ROOT)/bazel-out/darwin_x86_64-dbg-STABLE-1/bin/external/examples_cc_external/lib_impl.rules_xcodeproj.xcodeproj_bwx.c.compile.params";
+				C_PARAMS_FILE = "$(BAZEL_OUT)/darwin_x86_64-dbg-STABLE-1/bin/external/examples_cc_external/lib_impl.rules_xcodeproj.c.compile.params";
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				OTHER_CFLAGS = "$(ASAN_OTHER_CFLAGS__$(CLANG_ADDRESS_SANITIZER))";

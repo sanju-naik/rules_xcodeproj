@@ -49,6 +49,13 @@ extensions or tests having different minimum OS versions than the app, which can
 possibly be fixed by using minimum deployment OS version instead). If you
 need help, reach out to us.
 
+One particular case that you have to watch out for (pun intended) is
+accidentally including a `watchos_application` in `xcodeproj.top_level_targets`
+when it's being embedded in an `ios_application` target. `watchos_application`
+targets should only be included in `xcodeproj.top_level_targets` when they are
+not being embedded by an `ios_application` target, since they will have a
+different configuration applied to them, resulting in multiple Xcode targets.
+
 ## What is `CompileStub.m`?
 
 If you have a top level target, such as `ios_application`, and its primary
@@ -87,15 +94,15 @@ changes (e.g. because of a Bazel configuration change), and generate the project
 without closing and reopening it, or performing a clean build, Xcode will warn
 about the old paths. This seems to be a caching bug in Xcode.
 
-## Do I need to place my custom Xcode scheme declarations in a function like `tools/generator`?
+## Do I need to place my custom Xcode scheme declarations in a function like `tools/generators/legacy`?
 
 No. Unless you are sharing your Xcode declarations with multiple `xcodeproj`
 targets, there is no need to place them in a function. You are encouraged to
 declare them directly in your `BUILD` file.
 
-The Xcode schemes for `tools/generator` are loaded from a function because
-several of the `xcode_schemes` functions must be called on a `BUILD` file
-thread as they resolve and normalize Bazel labels. These functions use
+The Xcode schemes for `tools/generators/legacy` are loaded from a function
+because several of the `xcode_schemes` functions must be called on a `BUILD`
+file thread as they resolve and normalize Bazel labels. These functions use
 `bazel_labels.parse` which, in turn, use `workspace_name_resolvers`
 functions. It is the `workspace_name_resolvers` functions that must be called
 on a BUILD file thread.
@@ -114,6 +121,10 @@ something, the artifacts in Xcode’s Derived Data might cause warnings or error
 on subsequent builds. rules_xcodeproj thus doesn’t officially support this use
 case, and recommends declaring a different [`xcodeproj`](bazel.md#xcodeproj)
 target for each build mode if needed.
+
+## Why I do not see any simulators after generating project using rules_xcodeproj?
+
+This can happen if you have opened Xcode using `rosetta`, the solution is to get native arm simulator support for your app and disable rosetta.
 
 ## Why do I get an error like “Provisioning profile "PROFILE_NAME" is Xcode managed, but signing settings require a manually managed profile”?
 

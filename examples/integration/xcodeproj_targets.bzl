@@ -37,9 +37,11 @@ PROJECT_OPTIONS = project_options(
 XCODE_CONFIGURATIONS = {
     "AppStore": {
         "//command_line_option:compilation_mode": "opt",
+        "@//:flag_to_transition_on": "AAAAAAA",
     },
     "Debug": {
         "//command_line_option:compilation_mode": "dbg",
+        "@//:flag_to_transition_on": "B",
     },
 }
 
@@ -92,6 +94,7 @@ XCODEPROJ_TARGETS = [
         target_environments = ["device", "simulator"],
     ),
     "//Bundle",
+    "//iOSApp/Test/UITests:iOSAppUITests",
     "//iOSApp/Test/ObjCUnitTests:iOSAppObjCUnitTests",
     "//iOSApp/Test/TestingUtils:macos_TestingUtils",
     "//iMessageApp",
@@ -102,6 +105,10 @@ XCODEPROJ_TARGETS = [
     "//tvOSApp/Test/UnitTests:tvOSAppUnitTests",
     "//watchOSApp/Test/UITests:watchOSAppUITests",
     "//watchOSAppExtension/Test/UnitTests:watchOSAppExtensionUnitTests",
+    "//iOSApp/Test:iOSAppTestSuite",
+    "//iOSApp/Test/UITests:iOSAppUITestSuite",
+    "//iOSApp/Test/ObjCUnitTests:iOSAppObjCUnitTestSuite",
+    "//iOSApp/Test/SwiftUnitTests:iOSAppSwiftUnitTestSuite",
 ]
 
 IOS_BUNDLE_ID = "rules-xcodeproj.example"
@@ -146,6 +153,25 @@ def get_xcode_schemes():
                 ],
                 targets = [
                     "//iOSApp/Test/SwiftUnitTests:iOSAppSwiftUnitTests",
+                ],
+            ),
+        ),
+        xcode_schemes.scheme(
+            name = "iOSAppUnitTestSuite_Scheme",
+            test_action = xcode_schemes.test_action(
+                env = {
+                    "IOSAPPSWIFTUNITTESTS_CUSTOMSCHEMEVAR": "TRUE",
+                },
+                targets = [
+                    "//iOSApp/Test/ObjCUnitTests:iOSAppObjCUnitTestSuite",
+                    "//iOSApp/Test/SwiftUnitTests:iOSAppSwiftUnitTestSuite",
+                ],
+                post_actions = [
+                    xcode_schemes.pre_post_action(
+                        name = "Run After Tests",
+                        script = "echo \"Hi\"",
+                        expand_variables_based_on = "//iOSApp/Test/SwiftUnitTests:iOSAppSwiftUnitTestSuite",
+                    ),
                 ],
             ),
         ),

@@ -272,9 +272,10 @@ def process_top_level_target(
         )
         additional_files.append(infoplist)
 
+    is_app_extension = bundle_info and bundle_info.bundle_extension == ".appex"
+
     infoplists_attrs = automatic_target_info.infoplists
-    if (infoplists_attrs and bundle_info and
-        bundle_info.bundle_extension == ".appex"):
+    if infoplists_attrs and is_app_extension:
         extension_infoplists = [
             struct(
                 id = id,
@@ -420,9 +421,9 @@ def process_top_level_target(
         c_params,
         cxx_params,
         swift_params,
+        swift_sub_params,
         c_has_fortify_source,
         cxx_has_fortify_source,
-        clang_opts,
     ) = process_opts(
         ctx = ctx,
         build_mode = build_mode,
@@ -493,10 +494,10 @@ def process_top_level_target(
         )
     swiftmodules = process_swiftmodules(swift_info = swift_info)
     lldb_context = lldb_contexts.collect(
+        framework_includes = framework_includes,
         id = id,
         is_swift = bool(swift_params),
-        clang_opts = clang_opts,
-        framework_includes = framework_includes,
+        swift_sub_params = swift_sub_params,
         swiftmodules = swiftmodules,
         transitive_infos = deps_infos,
     )
@@ -513,7 +514,7 @@ def process_top_level_target(
         extension_infoplists = extension_infoplists,
         hosted_targets = hosted_targets,
         inputs = provider_inputs,
-        is_top_level_target = True,
+        is_top_level_target = not is_app_extension,
         is_xcode_required = True,
         lldb_context = lldb_context,
         mergable_xcode_library_targets = EMPTY_LIST,
