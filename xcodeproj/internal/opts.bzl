@@ -2,7 +2,7 @@
 
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
 load(":collections.bzl", "set_if_true")
-load(":files.bzl", "build_setting_path")
+load(":files.bzl", "build_setting_path", "is_relative_path")
 load(":memory_efficiency.bzl", "EMPTY_LIST")
 
 # Maps Swift compliation mode compiler flags to the corresponding Xcode values
@@ -181,6 +181,11 @@ _get_unprocessed_cc_compiler_opts = (
     _modern_get_unprocessed_cc_compiler_opts if hasattr(apple_common, "link_multi_arch_static_library") else _legacy_get_unprocessed_cc_compiler_opts
 )
 
+_LOAD_PLUGIN_OPTS = {
+    "-load-plugin-executable": None,
+    "-load-plugin-library": None,
+}
+
 _OVERLAY_OPTS = {
     "-explicit-swift-module-map-file": None,
     "-vfsoverlay": None,
@@ -318,19 +323,25 @@ under {}""".format(opt, package_bin_dir))
             build_settings["SWIFT_OBJC_INTERFACE_HEADER_NAME"] = header_name
             continue
 
-        if not is_bwx:
-            if previous_opt == "-I":
-                path = opt
+        if previous_opt == "-I":
+            path = opt
+            if not is_bwx or not is_relative_path(path):
+                # We include non-relative paths in BwX mode to account for
+                # `/Applications/Xcode.app/Contents/Developer/Platforms/PLATFORM/Developer/usr/lib`
                 absolute_opt = build_setting_path(opt)
+                project_set_opts.append(previous_opt)
                 project_set_opts.append(absolute_opt)
                 continue
 
-            if opt.startswith("-I"):
-                path = opt[2:]
+        if opt.startswith("-I"):
+            path = opt[2:]
+            if not is_bwx or not is_relative_path(path):
+                # We include non-relative paths in BwX mode to account for
+                # `/Applications/Xcode.app/Contents/Developer/Platforms/PLATFORM/Developer/usr/lib`
                 if not path:
-                    absolute_opt = opt
-                else:
-                    absolute_opt = "-I" + build_setting_path(path)
+                    # We will add the opt back above
+                    continue
+                absolute_opt = "-I" + build_setting_path(path)
                 project_set_opts.append(absolute_opt)
                 continue
 
@@ -372,6 +383,23 @@ under {}""".format(opt, package_bin_dir))
             if append_previous_opt:
                 project_set_opts.append(previous_opt)
             project_set_opts.append(opt)
+            continue
+
+        if opt in _LOAD_PLUGIN_OPTS:
+            if append_previous_opt:
+                project_set_opts.append(previous_opt)
+            project_set_opts.append(opt)
+            continue
+
+        if previous_opt_to_check in _LOAD_PLUGIN_OPTS:
+            path = opt
+
+            # FIXME: This breaks in BwX mode when the compiler plugin is
+            # unfocused
+            absolute_opt = build_setting_path(path, use_build_dir = is_bwx)
+            if append_previous_opt:
+                project_set_opts.append(previous_opt)
+            project_set_opts.append(absolute_opt)
             continue
 
         if opt.startswith("-vfsoverlay"):

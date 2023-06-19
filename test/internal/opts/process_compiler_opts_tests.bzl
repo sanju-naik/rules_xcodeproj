@@ -523,9 +523,21 @@ $(PROJECT_DIR)\
             "-I",
             ".",
         ],
+        expected_build_settings = {
+            "OTHER_SWIFT_FLAGS": """\
+-I__BAZEL_XCODE_SOMETHING_/path \
+-I$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/usr/lib \
+-I \
+$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/usr/lib \
+-I/absolute/path \
+-I \
+/absolute/path\
+""",
+        },
     )
 
-    # -F, -explicit-swift-module-map-file, and -vfsoverlay
+    # -F, -explicit-swift-module-map-file, -load-plugin-executable,
+    # -load-plugin-library, and -vfsoverlay
 
     _add_test(
         name = "{}_swift_other_paths".format(name),
@@ -556,6 +568,58 @@ $(PROJECT_DIR)\
             "-explicit-swift-module-map-file",
             "-Xfrontend",
             "external/relative/Path.json",
+
+            # -load-plugin-executable
+            "-load-plugin-executable",
+            "/Some/MacroPlugin#MacroPlugin",
+            "-load-plugin-executable",
+            "relative/MacroPlugin#MacroPlugin",
+            "-load-plugin-executable",
+            "bazel-out/relative/MacroPlugin#MacroPlugin",
+            "-load-plugin-executable",
+            "external/relative/MacroPlugin#MacroPlugin",
+            "-Xfrontend",
+            "-load-plugin-executable",
+            "-Xfrontend",
+            "/Some/MacroPlugin#MacroPlugin",
+            "-Xfrontend",
+            "-load-plugin-executable",
+            "-Xfrontend",
+            "relative/MacroPlugin#MacroPlugin",
+            "-Xfrontend",
+            "-load-plugin-executable",
+            "-Xfrontend",
+            "bazel-out/relative/MacroPlugin#MacroPlugin",
+            "-Xfrontend",
+            "-load-plugin-executable",
+            "-Xfrontend",
+            "external/relative/MacroPlugin#MacroPlugin",
+
+            # -load-plugin-library
+            "-load-plugin-library",
+            "/Some/MacroPlugin#MacroPlugin",
+            "-load-plugin-library",
+            "relative/MacroPlugin#MacroPlugin",
+            "-load-plugin-library",
+            "bazel-out/relative/MacroPlugin#MacroPlugin",
+            "-load-plugin-library",
+            "external/relative/MacroPlugin#MacroPlugin",
+            "-Xfrontend",
+            "-load-plugin-library",
+            "-Xfrontend",
+            "/Some/MacroPlugin#MacroPlugin",
+            "-Xfrontend",
+            "-load-plugin-library",
+            "-Xfrontend",
+            "relative/MacroPlugin#MacroPlugin",
+            "-Xfrontend",
+            "-load-plugin-library",
+            "-Xfrontend",
+            "bazel-out/relative/MacroPlugin#MacroPlugin",
+            "-Xfrontend",
+            "-load-plugin-library",
+            "-Xfrontend",
+            "external/relative/MacroPlugin#MacroPlugin",
 
             # -vfsoverlay
             "-vfsoverlay",
@@ -646,6 +710,54 @@ $(BAZEL_OUT)/relative/Path.json \
 -explicit-swift-module-map-file \
 -Xfrontend \
 $(BAZEL_EXTERNAL)/relative/Path.json \
+-load-plugin-executable \
+/Some/MacroPlugin#MacroPlugin \
+-load-plugin-executable \
+$(SRCROOT)/relative/MacroPlugin#MacroPlugin \
+-load-plugin-executable \
+$(BAZEL_OUT)/relative/MacroPlugin#MacroPlugin \
+-load-plugin-executable \
+$(BAZEL_EXTERNAL)/relative/MacroPlugin#MacroPlugin \
+-Xfrontend \
+-load-plugin-executable \
+-Xfrontend \
+/Some/MacroPlugin#MacroPlugin \
+-Xfrontend \
+-load-plugin-executable \
+-Xfrontend \
+$(SRCROOT)/relative/MacroPlugin#MacroPlugin \
+-Xfrontend \
+-load-plugin-executable \
+-Xfrontend \
+$(BAZEL_OUT)/relative/MacroPlugin#MacroPlugin \
+-Xfrontend \
+-load-plugin-executable \
+-Xfrontend \
+$(BAZEL_EXTERNAL)/relative/MacroPlugin#MacroPlugin \
+-load-plugin-library \
+/Some/MacroPlugin#MacroPlugin \
+-load-plugin-library \
+$(SRCROOT)/relative/MacroPlugin#MacroPlugin \
+-load-plugin-library \
+$(BAZEL_OUT)/relative/MacroPlugin#MacroPlugin \
+-load-plugin-library \
+$(BAZEL_EXTERNAL)/relative/MacroPlugin#MacroPlugin \
+-Xfrontend \
+-load-plugin-library \
+-Xfrontend \
+/Some/MacroPlugin#MacroPlugin \
+-Xfrontend \
+-load-plugin-library \
+-Xfrontend \
+$(SRCROOT)/relative/MacroPlugin#MacroPlugin \
+-Xfrontend \
+-load-plugin-library \
+-Xfrontend \
+$(BAZEL_OUT)/relative/MacroPlugin#MacroPlugin \
+-Xfrontend \
+-load-plugin-library \
+-Xfrontend \
+$(BAZEL_EXTERNAL)/relative/MacroPlugin#MacroPlugin \
 -vfsoverlay \
 /Some/Path.yaml \
 -vfsoverlay \

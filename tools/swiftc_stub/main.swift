@@ -101,11 +101,11 @@ func runSubProcess(executable: String, args: [String]) throws -> Int32 {
 func handleSwiftUIPreviewThunk(_ args: [String]) throws {
     guard let sdkPath = findPath(key: "-sdk", from: args)?.path
     else {
-        print("warning: No such argument '-sdk'")
-        try exit(runSubProcess(
-            executable: "swiftc",
-            args: Array(args.dropFirst())
-        ))
+        fputs(
+            "error: No such argument '-sdk'. Using /usr/bin/swiftc.",
+            stderr
+        )
+        exit(1)
     }
 
     // TODO: Make this work with custom toolchains
@@ -117,11 +117,13 @@ func handleSwiftUIPreviewThunk(_ args: [String]) throws {
     guard let match = matches.first,
         let range = Range(match.range(at: 1), in: sdkPath)
     else {
-        print("warning: Failed to parse DEVELOPER_DIR from '-sdk'")
-        try exit(runSubProcess(
-            executable: "swiftc",
-            args: Array(args.dropFirst())
-        ))
+        fputs(
+            """
+error: Failed to parse DEVELOPER_DIR from '-sdk'. Using /usr/bin/swiftc.
+""",
+            stderr
+        )
+        exit(1)
     }
     let developerDir = sdkPath[range]
 
@@ -139,7 +141,28 @@ let args = CommandLine.arguments
 let argsSet = Set(args)
 
 if args.count == 2, args.last == "-v" {
-    try exit(runSubProcess(executable: "swiftc", args: ["-v"]))
+    guard let path = ProcessInfo.processInfo.environment["PATH"] else {
+        fputs("error: PATH not set", stderr)
+        exit(1)
+    }
+
+    // /Applications/Xcode-15.0.0-Beta.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin -> /Applications/Xcode-15.0.0-Beta.app/Contents/Developer/usr/bin
+    let pathComponents = path.split(separator: ":", maxSplits: 1)
+    let xcodeBinPath = pathComponents[0]
+    guard xcodeBinPath.hasSuffix("/Contents/Developer/usr/bin") else {
+        fputs("error: Xcode based bin PATH not set", stderr)
+        exit(1)
+    }
+
+    // /Applications/Xcode-15.0.0-Beta.app/Contents/Developer/usr/bin -> /Applications/Xcode-15.0.0-Beta.app/Contents/Developer
+    let developerDir = xcodeBinPath.dropLast(8)
+
+    // TODO: Make this work with custom toolchains
+    let swiftcPath = """
+\(developerDir)/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc
+"""
+
+    try exit(runSubProcess(executable: swiftcPath, args: ["-v"]))
 }
 
 for arg in args {
