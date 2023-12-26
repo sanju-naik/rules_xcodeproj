@@ -40,7 +40,7 @@ bzl_library(
     name = "xcodeproj",
     srcs = glob(["*.bzl"]),
     visibility = ["//visibility:public"],
-    deps = ["//xcodeproj/internal:xcodeproj_internal"],
+    deps = ["//xcodeproj/internal"],
 )
 
 # Release
@@ -65,7 +65,6 @@ filegroup(
             "**/.*",
             "dev_extensions.bzl",
             "repositories.bzl",
-            "testing.bzl",
         ],
     ) + [
         ":release_repositories.bzl",

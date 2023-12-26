@@ -3,21 +3,21 @@
 load(":bazel_labels.bzl", _bazel_labels = "bazel_labels")
 load(":xcode_schemes_internal.bzl", "xcode_schemes_internal")
 
-def focus_schemes(schemes, focused_targets):
+def focus_schemes(schemes, focused_labels):
     """Filter/adjust a `sequence` of schemes to only include focused targets.
 
     Args:
         schemes: A `sequence` of values returned by `xcode_schemes.scheme`.
-        focused_targets: A `sequence` of `string` values representing Bazel
+        focused_labels: A `sequence` of `string` values representing Bazel
             labels of focused targets.
 
     Returns:
         A `sequence` of values returned by `xcode_schemes.scheme`.
         Will only include schemes that have at least one target in
-        `focused_targets`. Some actions might be removed if they reference
+        `focused_labels`. Some actions might be removed if they reference
         unfocused targets.
     """
-    focused_targets = {label: None for label in focused_targets}
+    focused_labels = {label: None for label in focused_labels}
 
     focused_schemes = []
     for scheme in schemes:
@@ -26,7 +26,7 @@ def focus_schemes(schemes, focused_targets):
             build_targets = [
                 build_target
                 for build_target in build_action.targets
-                if build_target.label in focused_targets
+                if build_target.label in focused_labels
             ]
             if build_targets:
                 build_action = xcode_schemes_internal.build_action(
@@ -36,7 +36,7 @@ def focus_schemes(schemes, focused_targets):
                         for pre_action in build_action.pre_actions
                         if (
                             not pre_action.expand_variables_based_on or
-                            pre_action.expand_variables_based_on in focused_targets
+                            pre_action.expand_variables_based_on in focused_labels
                         )
                     ],
                     post_actions = [
@@ -44,7 +44,7 @@ def focus_schemes(schemes, focused_targets):
                         for post_action in build_action.post_actions
                         if (
                             not post_action.expand_variables_based_on or
-                            post_action.expand_variables_based_on in focused_targets
+                            post_action.expand_variables_based_on in focused_labels
                         )
                     ],
                 )
@@ -58,7 +58,7 @@ def focus_schemes(schemes, focused_targets):
             test_targets = [
                 label
                 for label in test_action.targets
-                if label in focused_targets
+                if label in focused_labels
             ]
             if test_targets:
                 build_configuration = test_action.build_configuration
@@ -73,7 +73,7 @@ def focus_schemes(schemes, focused_targets):
                         for pre_action in test_action.pre_actions
                         if (
                             not pre_action.expand_variables_based_on or
-                            pre_action.expand_variables_based_on in focused_targets
+                            pre_action.expand_variables_based_on in focused_labels
                         )
                     ],
                     post_actions = [
@@ -81,7 +81,7 @@ def focus_schemes(schemes, focused_targets):
                         for post_action in test_action.post_actions
                         if (
                             not post_action.expand_variables_based_on or
-                            post_action.expand_variables_based_on in focused_targets
+                            post_action.expand_variables_based_on in focused_labels
                         )
                     ],
                 )
@@ -91,13 +91,13 @@ def focus_schemes(schemes, focused_targets):
             test_action = None
 
         launch_action = scheme.launch_action
-        if launch_action and launch_action.target in focused_targets:
+        if launch_action and launch_action.target in focused_labels:
             launch_action = scheme.launch_action
         else:
             launch_action = None
 
         profile_action = scheme.profile_action
-        if profile_action and profile_action.target in focused_targets:
+        if profile_action and profile_action.target in focused_labels:
             profile_action = scheme.profile_action
         else:
             profile_action = None
@@ -113,12 +113,12 @@ def focus_schemes(schemes, focused_targets):
 
     return focused_schemes
 
-def unfocus_schemes(schemes, unfocused_targets):
+def unfocus_schemes(schemes, unfocused_labels):
     """Filter/adjust a `sequence` of schemes to exclude unfocused targets.
 
     Args:
         schemes: A `sequence` of values returned by `xcode_schemes.scheme`.
-        unfocused_targets: A `sequence` of `string` values representing Bazel
+        unfocused_labels: A `sequence` of `string` values representing Bazel
             labels of unfocused targets.
 
     Returns:
@@ -127,7 +127,7 @@ def unfocus_schemes(schemes, unfocused_targets):
         `unfocused_targets`. Some actions might be removed if they reference
         unfocused targets.
     """
-    unfocused_targets = {label: None for label in unfocused_targets}
+    unfocused_labels = {label: None for label in unfocused_labels}
 
     focused_schemes = []
     for scheme in schemes:
@@ -136,7 +136,7 @@ def unfocus_schemes(schemes, unfocused_targets):
             build_targets = [
                 build_target
                 for build_target in build_action.targets
-                if build_target.label not in unfocused_targets
+                if build_target.label not in unfocused_labels
             ]
             if build_targets:
                 build_action = xcode_schemes_internal.build_action(
@@ -146,7 +146,7 @@ def unfocus_schemes(schemes, unfocused_targets):
                         for pre_action in build_action.pre_actions
                         if (
                             not pre_action.expand_variables_based_on or
-                            pre_action.expand_variables_based_on not in unfocused_targets
+                            pre_action.expand_variables_based_on not in unfocused_labels
                         )
                     ],
                     post_actions = [
@@ -154,7 +154,7 @@ def unfocus_schemes(schemes, unfocused_targets):
                         for post_action in build_action.post_actions
                         if (
                             not post_action.expand_variables_based_on or
-                            post_action.expand_variables_based_on not in unfocused_targets
+                            post_action.expand_variables_based_on not in unfocused_labels
                         )
                     ],
                 )
@@ -168,7 +168,7 @@ def unfocus_schemes(schemes, unfocused_targets):
             test_targets = [
                 label
                 for label in test_action.targets
-                if label not in unfocused_targets
+                if label not in unfocused_labels
             ]
             if test_targets:
                 build_configuration = test_action.build_configuration
@@ -183,7 +183,7 @@ def unfocus_schemes(schemes, unfocused_targets):
                         for pre_action in test_action.pre_actions
                         if (
                             not pre_action.expand_variables_based_on or
-                            pre_action.expand_variables_based_on not in unfocused_targets
+                            pre_action.expand_variables_based_on not in unfocused_labels
                         )
                     ],
                     post_actions = [
@@ -191,7 +191,7 @@ def unfocus_schemes(schemes, unfocused_targets):
                         for post_action in test_action.post_actions
                         if (
                             not post_action.expand_variables_based_on or
-                            post_action.expand_variables_based_on not in unfocused_targets
+                            post_action.expand_variables_based_on not in unfocused_labels
                         )
                     ],
                 )
@@ -201,13 +201,13 @@ def unfocus_schemes(schemes, unfocused_targets):
             test_action = None
 
         launch_action = scheme.launch_action
-        if launch_action and launch_action.target not in unfocused_targets:
+        if launch_action and launch_action.target not in unfocused_labels:
             launch_action = scheme.launch_action
         else:
             launch_action = None
 
         profile_action = scheme.profile_action
-        if profile_action and profile_action.target not in unfocused_targets:
+        if profile_action and profile_action.target not in unfocused_labels:
             profile_action = scheme.profile_action
         else:
             profile_action = None
@@ -311,7 +311,8 @@ def make_xcode_schemes(bazel_labels):
             address = False,
             thread = False,
             undefined_behavior = False):
-        """Constructs the scheme's sanitizers' default state. The state can also be modified in Xcode.
+        """Constructs the scheme's sanitizers' default state. The state can \
+also be modified in Xcode.
 
         Args:
             address: Optional. A boolean value representing
@@ -319,7 +320,8 @@ def make_xcode_schemes(bazel_labels):
             thread: Optional. A boolean value representing
                 whether the thread sanitizer should be enabled or not.
             undefined_behavior: Optional. A boolean value representing
-                whether the undefined behavior sanitizer should be enabled or not.
+                whether the undefined behavior sanitizer should be enabled or
+                not.
         """
         if address and thread:
             fail("Address Sanitizer cannot be used together with Thread Sanitizer.")
@@ -357,9 +359,10 @@ def make_xcode_schemes(bazel_labels):
             args: Optional. A `list` of `string` arguments that should be passed
                 to the target when executed.
             build_configuration: Optional. The name of the Xcode configuration
-                to use for this action. If not set, then the configuration
-                determined by `xcodeproj.default_xcode_configuration` will be
-                used.
+                to use for this action.
+
+                If not set, then the configuration determined by
+                `xcodeproj.default_xcode_configuration` will be used.
             diagnostics: Optional. A value returned by
                 `xcode_schemes.diagnostics`.
             env: Optional. A `dict` of `string` values that will be set as
@@ -392,19 +395,23 @@ def make_xcode_schemes(bazel_labels):
         Args:
             target: A target label as a `string` value.
             args: Optional. A `list` of `string` arguments that should be passed
-                to the target when executed. If both this and `env` are `None`
-                (not just empty), then the launch action's arguments will be
-                inherited.
+                to the target when executed.
+
+                If both this and `env` are `None` (not just empty), then the
+                launch action's arguments will be inherited.
             build_configuration: Optional. The name of the Xcode configuration
-                to use for this action. If not set, then the configuration
-                determined by `xcodeproj.default_xcode_configuration` will be
-                used.
+                to use for this action.
+
+                If not set, then the configuration determined by
+                `xcodeproj.default_xcode_configuration` will be used.
             env: Optional. A `dict` of `string` values that will be set as
-                environment variables when the target is executed. If both this
-                and `args` are `None` (not just empty), then the launch action's
-                environment variables will be inherited.
+                environment variables when the target is executed.
+
+                If both this and `args` are `None` (not just empty), then the
+                launch action's environment variables will be inherited.
             working_directory: Optional. A `string` that will be set as the
                 custom working directory in the Xcode scheme's launch action.
+
                 Relative paths will be relative to the value of `target`'s
                 `BUILT_PRODUCTS_DIR`, which is unique to it.
 
@@ -433,27 +440,32 @@ def make_xcode_schemes(bazel_labels):
         Args:
             targets: A `sequence` of target labels as `string` values.
             args: Optional. A `list` of `string` arguments that should be passed
-                to the target when executed. If both this and `env` are `None`
-                (not just empty), then the launch action's arguments will be
-                inherited.
+                to the target when executed.
+
+                If both this and `env` are `None` (not just empty), then the
+                launch action's arguments will be inherited.
             build_configuration: Optional. The name of the Xcode configuration
-                to use for this action. If not set, then the configuration
-                determined by `xcodeproj.default_xcode_configuration` will be
-                used.
+                to use for this action.
+
+                If not set, then the configuration determined by
+                `xcodeproj.default_xcode_configuration` will be used.
             diagnostics: Optional. A value returned by
                 `xcode_schemes.diagnostics`.
             env: Optional. A `dict` of `string` values that will be set as
-                environment variables when the target is executed. If both this
-                and `args` are `None` (not just empty), then the launch action's
-                environment variables will be inherited.
+                environment variables when the target is executed.
+
+                If both this and `args` are `None` (not just empty), then the
+                launch action's environment variables will be inherited.
             expand_variables_based_on: Optional. One of the specified test
-                target labels. If no value is provided, one of the test targets
-                will be selected. If no expansion context is desired, use the
-                `string` value `none`.
+                target labels.
+
+                If no value is provided, one of the test targets will be
+                selected. If no expansion context is desired, use the `string`
+                value `none`.
             pre_actions: Optional. A `sequence` of `struct` values as created by
                 `xcode_schemes.pre_post_action`.
-            post_actions: Optional. A `sequence` of `struct` values as created by
-                `xcode_schemes.pre_post_action`.
+            post_actions: Optional. A `sequence` of `struct` values as created
+                by `xcode_schemes.pre_post_action`.
 
         Returns:
             A `struct` representing a test action.

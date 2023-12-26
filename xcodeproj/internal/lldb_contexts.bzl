@@ -1,37 +1,33 @@
 """Module containing functions dealing with the `LLDBContext` DTO."""
 
-load(":memory_efficiency.bzl", "memory_efficient_depset")
+load(":memory_efficiency.bzl", "EMPTY_DEPSET", "memory_efficient_depset")
 
 def _collect_lldb_context(
         *,
+        build_mode,
         id,
         is_swift,
         swift_sub_params = None,
-        framework_includes = None,
         swiftmodules = None,
         transitive_infos):
     """Collects lldb context information for a target.
 
     Args:
+        build_mode: See `xcodeproj.build_mode`.
         id: The unique identifier of the target.
         is_swift: Whether the target compiles Swift code.
         swift_sub_params: A `list` of `File`s of Swift compiler options.
-        framework_includes: A `depset` of framework include paths.
-        swiftmodules: The value returned from `process_swiftmodules`.
+        swiftmodules: A value from `process_swiftmodules`.
         transitive_infos: A `list` of `XcodeProjInfo`s for the transitive
             dependencies of the target.
 
     Returns:
         An opaque `struct` that should be passed to `lldb_contexts.to_dto`.
     """
-    framework_paths = []
     labelled_swift_sub_params = None
     if id and is_swift:
         if swift_sub_params:
             labelled_swift_sub_params = [(id, tuple(swift_sub_params))]
-
-        if framework_includes:
-            framework_paths = [framework_includes]
 
     return struct(
         _labelled_swift_sub_params = memory_efficient_depset(
@@ -50,13 +46,6 @@ def _collect_lldb_context(
             ],
             order = "topological",
         ),
-        _framework_search_paths = memory_efficient_depset(
-            transitive = framework_paths + [
-                info.lldb_context._framework_search_paths
-                for info in transitive_infos
-            ],
-            order = "topological",
-        ),
         _swiftmodules = memory_efficient_depset(
             swiftmodules,
             transitive = [
@@ -64,7 +53,7 @@ def _collect_lldb_context(
                 for info in transitive_infos
             ],
             order = "topological",
-        ),
+        ) if build_mode == "xcode" else EMPTY_DEPSET,
     )
 
 lldb_contexts = struct(

@@ -1,6 +1,6 @@
 import Foundation
-import GeneratorCommon
 import PathKit
+import ToolCommon
 import XcodeProj
 
 /// A class that generates and writes to disk an Xcode project.
@@ -56,7 +56,9 @@ class Generator {
             buildMode,
             forFixtures,
             project,
-            directories
+            directories,
+            project.indexImport,
+            project.minimumXcodeVersion
         )
         guard let pbxProject = pbxProj.rootObject else {
             throw PreconditionError(message: """
@@ -102,7 +104,8 @@ class Generator {
 
         async let disambiguatedTargets = Task {
             try await environment.disambiguateTargets(
-                consolidatedTargetsTask.value
+                consolidatedTargetsTask.value,
+                project.targetNameMode
             )
         }.value
         let createdProductsTask = Task {
@@ -131,7 +134,6 @@ class Generator {
                 project.xcodeConfigurations,
                 project.defaultXcodeConfiguration,
                 project.targetIdsFile,
-                project.indexImport,
                 project.bazelConfig,
                 project.preBuildScript,
                 project.postBuildScript,

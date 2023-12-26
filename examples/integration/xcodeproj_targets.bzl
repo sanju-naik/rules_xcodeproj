@@ -6,9 +6,14 @@ load(
     "top_level_target",
     "top_level_targets",
     "xcode_schemes",
+    "xcschemes",
 )
 
 BAZEL_ENV = {
+    "MULTILINE": """one line
+two line""",
+    # Inheriting any `NOT_SET`, but won't find any
+    "NOT_SET": None,
     # Overriding `PATH`
     "PATH": "/bin:/usr/bin:/sbin:/usr/sbin",
     # Testing escaping (quotes, spaces, newlines, and slashes)
@@ -16,10 +21,6 @@ BAZEL_ENV = {
     "QUOTES_VAR2": 'foo "bar"',
     "QUOTES_VAR3": "foo 'bar'",
     "SLASHES_VAR": "value/with\\slashes",
-    "MULTILINE": """one line
-two line""",
-    # Inheriting any `NOT_SET`, but won't find any
-    "NOT_SET": None,
     # Inheriting any `TERM`
     "TERM": None,
 }
@@ -61,8 +62,8 @@ EXTRA_FILES = [
 FAIL_FOR_INVALID_EXTRA_FILES_TARGETS = True
 
 ASSOCIATED_EXTRA_FILES = {
-    "//iOSApp/Source:iOSApp": ["//iOSApp:ownership.yaml"],
     "//Lib": ["//Lib:README.md"],
+    "//iOSApp/Source:iOSApp": ["//iOSApp:ownership.yaml"],
 }
 
 UNFOCUSED_TARGETS = [
@@ -70,12 +71,17 @@ UNFOCUSED_TARGETS = [
 ]
 
 XCODEPROJ_TARGETS = [
+    "//cc/tool",
     top_level_target(
         label = "//CommandLine/CommandLineTool",
         target_environments = ["device"],
     ),
     top_level_target(
         label = "//CommandLine/CommandLineTool:UniversalCommandLineTool",
+        target_environments = ["device"],
+    ),
+    top_level_target(
+        label = "//CommandLine/Tests:BasicTests",
         target_environments = ["device"],
     ),
     top_level_target(
@@ -94,11 +100,19 @@ XCODEPROJ_TARGETS = [
         target_environments = ["device", "simulator"],
     ),
     "//Bundle",
-    "//iOSApp/Test/UITests:iOSAppUITests",
-    "//iOSApp/Test/ObjCUnitTests:iOSAppObjCUnitTests",
+    top_level_targets(
+        labels = [
+            "//iOSApp/Test/ObjCUnitTests:iOSAppObjCUnitTests",
+            "//iOSApp/Test/UITests:iOSAppUITests",
+        ],
+        target_environments = ["device", "simulator"],
+    ),
     "//iOSApp/Test/TestingUtils:macos_TestingUtils",
     "//iMessageApp",
-    "//iOSApp/Test/SwiftUnitTests:iOSAppSwiftUnitTests",
+    top_level_target(
+        label = "//iOSApp/Test/SwiftUnitTests:iOSAppSwiftUnitTests",
+        target_environments = ["device", "simulator"],
+    ),
     "//macOSApp/Source:macOSApp",
     "//macOSApp/Test/UITests:macOSAppUITests",
     "//tvOSApp/Test/UITests:tvOSAppUITests",
@@ -109,6 +123,9 @@ XCODEPROJ_TARGETS = [
     "//iOSApp/Test/UITests:iOSAppUITestSuite",
     "//iOSApp/Test/ObjCUnitTests:iOSAppObjCUnitTestSuite",
     "//iOSApp/Test/SwiftUnitTests:iOSAppSwiftUnitTestSuite",
+    "//Proto:proto",
+    "//GRPC:echo_client",
+    "//GRPC:echo_server",
 ]
 
 IOS_BUNDLE_ID = "rules-xcodeproj.example"
@@ -142,23 +159,23 @@ def get_xcode_schemes():
             ),
         ),
         xcode_schemes.scheme(
-            name = "iOSAppSwiftUnitTests_CommandLineArgs_Scheme",
+            name = "iOSAppSwiftUnitTests_Scheme",
             test_action = xcode_schemes.test_action(
                 build_configuration = "AppStore",
                 env = {
                     "IOSAPPSWIFTUNITTESTS_CUSTOMSCHEMEVAR": "TRUE",
                 },
-                args = [
-                    "--command_line_args=-AppleLanguages,(en)",
-                ],
                 targets = [
                     "//iOSApp/Test/SwiftUnitTests:iOSAppSwiftUnitTests",
                 ],
             ),
         ),
         xcode_schemes.scheme(
-            name = "iOSAppUnitTestSuite_Scheme",
+            name = "iOSAppUnitTestSuite_CommandLineArgs_Scheme",
             test_action = xcode_schemes.test_action(
+                args = [
+                    "--command_line_args=-AppleLanguages,(en)",
+                ],
                 env = {
                     "IOSAPPSWIFTUNITTESTS_CUSTOMSCHEMEVAR": "TRUE",
                 },
@@ -176,3 +193,62 @@ def get_xcode_schemes():
             ),
         ),
     ]
+
+XCSCHEMES = [
+    xcschemes.scheme(
+        name = "iOSAppUnitTests_Scheme",
+        test = xcschemes.test(
+            env = {
+                "IOSAPPSWIFTUNITTESTS_CUSTOMSCHEMEVAR": "TRUE",
+            },
+            test_targets = [
+                xcschemes.test_target(
+                    "//iOSApp/Test/SwiftUnitTests:iOSAppSwiftUnitTests",
+                    post_actions = [
+                        xcschemes.pre_post_actions.launch_script(
+                            title = "Run After Tests",
+                            script_text = "echo \"Hi\"",
+                        ),
+                    ],
+                ),
+                "//iOSApp/Test/ObjCUnitTests:iOSAppObjCUnitTests",
+            ],
+        ),
+    ),
+    xcschemes.scheme(
+        name = "iOSAppSwiftUnitTests_Scheme",
+        test = xcschemes.test(
+            xcode_configuration = "AppStore",
+            env = {
+                "IOSAPPSWIFTUNITTESTS_CUSTOMSCHEMEVAR": "TRUE",
+            },
+            test_targets = [
+                "//iOSApp/Test/SwiftUnitTests:iOSAppSwiftUnitTests",
+            ],
+        ),
+    ),
+    xcschemes.scheme(
+        name = "iOSAppUnitTestSuite_CommandLineArgs_Scheme",
+        test = xcschemes.test(
+            args = [
+                "-AppleLanguages",
+                "(en)",
+            ],
+            env = {
+                "IOSAPPSWIFTUNITTESTS_CUSTOMSCHEMEVAR": "TRUE",
+            },
+            test_targets = [
+                "//iOSApp/Test/ObjCUnitTests:iOSAppObjCUnitTestSuite",
+                xcschemes.test_target(
+                    "//iOSApp/Test/SwiftUnitTests:iOSAppSwiftUnitTestSuite",
+                    post_actions = [
+                        xcschemes.pre_post_actions.launch_script(
+                            title = "Run After Tests",
+                            script_text = "echo \"Hi\"",
+                        ),
+                    ],
+                ),
+            ],
+        ),
+    ),
+]

@@ -12,9 +12,18 @@ x_templates:
     - &arm64
       arch: "arm64"
 
-    - &bazel_5
+    - &bazel_in_repo_version
+      # No change, uses `.bazelversion`, just used to make it clear
+      env: {}
+    - &bazel_previous_lts
       env:
-        USE_BAZEL_VERSION: 5.4.0
+        USE_BAZEL_VERSION: latest-1
+    - &bazel_lts
+      env:
+        USE_BAZEL_VERSION: latest
+    - &bazel_head
+      env:
+        USE_BAZEL_VERSION: last_green
 
     - &normal_resources
       resource_requests: { memory: 6GB }
@@ -26,24 +35,12 @@ x_templates:
       git_clean_exclude:
         - bazel-output-base
         - setup-bazel-output-base
-    - &examples_cc_workspace
-      bazel_workspace_dir: examples/cc
-      git_clean_exclude:
-        - setup-bazel-output-base
-        - examples/cc/bazel-output-base
-        - examples/cc/setup-bazel-output-base
     - &examples_integration_workspace
       bazel_workspace_dir: examples/integration
       git_clean_exclude:
         - setup-bazel-output-base
         - examples/integration/bazel-output-base
         - examples/integration/setup-bazel-output-base
-    - &examples_sanitizers_workspace
-      bazel_workspace_dir: examples/sanitizers
-      git_clean_exclude:
-        - setup-bazel-output-base
-        - examples/sanitizers/bazel-output-base
-        - examples/sanitizers/setup-bazel-output-base
     - &examples_rules_ios_workspace
       bazel_workspace_dir: examples/rules_ios
       git_clean_exclude:
@@ -52,18 +49,16 @@ x_templates:
         - examples/sanitizers/setup-bazel-output-base
 
   commands:
-    - &set_release_archive_override "--output_base=setup-bazel-output-base run --config=workflows @rules_xcodeproj//tools:set_release_archive_override"
-    - &generate_integration "--output_base=bazel-output-base run --config=workflows --config=fixtures //test/fixtures:update"
-    - &validate_integration "--output_base=bazel-output-base run --config=workflows --config=fixtures //test/fixtures:validate"
-    - &build_all "--output_base=bazel-output-base build --config=workflows --config=fixtures --noexperimental_enable_bzlmod //..."
-    - &test_all "--output_base=bazel-output-base test --config=workflows --noexperimental_enable_bzlmod //..."
-    - &bazel_5_test_all "--output_base=bazel-output-base test --config=workflows --noexperimental_enable_bzlmod //..."
-    - &bzlmod_generate_integration "--output_base=bazel-output-base run --config=workflows --config=fixtures //test/fixtures:update"
-    - &bzlmod_build_all "--output_base=bazel-output-base build --config=workflows //..."
-    - &bzlmod_test_all "--output_base=bazel-output-base test --config=workflows //test/..."
+    - &validate_integration "--output_base=bazel-output-base run --config=workflows //test/fixtures:validate"
+    - &build_all "--output_base=bazel-output-base build --config=workflows //..."
+    - &test_all "--output_base=bazel-output-base test --config=workflows //..."
+    - &nobzlmod_build_all "--output_base=bazel-output-base build --config=workflows --config=nobzlmod //..."
+    - &nobzlmod_test_all "--output_base=bazel-output-base test --config=workflows --config=nobzlmod //..."
+    - &nobzlmod_generate_integration "--output_base=bazel-output-base run --config=workflows --config=nobzlmod //test/fixtures:update"
 
 actions:
   - name: Buildifier Lint
+    <<: *bazel_in_repo_version
     <<: *action_base
     <<: *light_resources
     <<: *root_workspace
@@ -71,6 +66,7 @@ actions:
       - "run --config=workflows //:buildifier.check"
 
   - name: Docs
+    <<: *bazel_in_repo_version
     <<: *action_base
     <<: *light_resources
     <<: *root_workspace
@@ -78,94 +74,84 @@ actions:
       - "test --config=workflows //docs:diff_test"
 
   - name: Test
+    <<: *bazel_in_repo_version
     <<: *arm64
     <<: *normal_resources
     <<: *action_base
     <<: *root_workspace
     bazel_commands:
       - *test_all
-  - name: Test - Bzlmod
+  - name: Test - Bazel Previous LTS
+    <<: *bazel_previous_lts
     <<: *arm64
     <<: *normal_resources
     <<: *action_base
     <<: *root_workspace
     bazel_commands:
-      - *bzlmod_test_all
-  - name: Test - Bazel 5
-    <<: *bazel_5
+      - *test_all
+  - name: Test - Bazel LTS
+    <<: *bazel_lts
+    <<: *arm64
     <<: *normal_resources
     <<: *action_base
     <<: *root_workspace
     bazel_commands:
-      - *bazel_5_test_all
-
-  - name: Integration Test - Root
+      - *test_all
+  - name: Test - Bazel HEAD
+    <<: *bazel_head
     <<: *arm64
-    <<: *action_base
     <<: *normal_resources
+    <<: *action_base
     <<: *root_workspace
     bazel_commands:
-      - *validate_integration
-  - name: Integration Test - Root - Bzlmod
-    <<: *arm64
-    <<: *action_base
-    <<: *normal_resources
-    <<: *root_workspace
-    bazel_commands:
-      - *bzlmod_generate_integration
-
-  - name: Integration Test - "examples/cc"
-    <<: *arm64
-    <<: *action_base
-    <<: *normal_resources
-    <<: *examples_cc_workspace
-    bazel_commands:
-      - *validate_integration
-      - *build_all
-  - name: Integration Test - "examples/cc" - Bzlmod
-    <<: *arm64
-    <<: *action_base
-    <<: *normal_resources
-    <<: *examples_cc_workspace
-    bazel_commands:
-      - *bzlmod_generate_integration
-      - *bzlmod_build_all
-
-  - name: Integration Test - "examples/integration"
-    <<: *arm64
-    <<: *action_base
-    <<: *normal_resources
-    <<: *examples_integration_workspace
-    bazel_commands:
-      - *validate_integration
-      - *build_all
-  - name: Integration Test - "examples/integration" - Bzlmod
-    <<: *arm64
-    <<: *action_base
-    <<: *normal_resources
-    <<: *examples_integration_workspace
-    bazel_commands:
-      - *bzlmod_generate_integration
-      - *bzlmod_build_all
-  - name: Integration Test - "examples/integration" - Bazel 5
-    <<: *bazel_5
-    <<: *action_base
-    <<: *normal_resources
-    <<: *examples_integration_workspace
-    bazel_commands:
-      - *generate_integration
       - *test_all
 
-  - name: Integration Test - "examples/sanitizers"
+  - name: Integration Test - "examples/integration" - Bazel Previous LTS
+    <<: *bazel_previous_lts
     <<: *arm64
     <<: *action_base
     <<: *normal_resources
-    <<: *examples_sanitizers_workspace
+    <<: *examples_integration_workspace
     bazel_commands:
       - *validate_integration
       - *build_all
+  - name: Integration Test - "examples/integration" - Bazel LTS
+    <<: *bazel_lts
+    <<: *arm64
+    <<: *action_base
+    <<: *normal_resources
+    <<: *examples_integration_workspace
+    bazel_commands:
+      - *validate_integration
+      - *build_all
+  - name: Integration Test - "examples/integration" - Bazel LTS using WORKSPACE
+    <<: *bazel_lts
+    <<: *action_base
+    <<: *normal_resources
+    <<: *examples_integration_workspace
+    bazel_commands:
+      - *nobzlmod_generate_integration
+      - *nobzlmod_build_all
+  - name: Integration Test - "examples/integration" - Bazel HEAD
+    <<: *bazel_head
+    <<: *arm64
+    <<: *action_base
+    <<: *normal_resources
+    <<: *examples_integration_workspace
+    bazel_commands:
+      - *validate_integration
+      - *build_all
+  - name: Integration Test - "examples/integration" - Bazel HEAD using WORKSPACE
+    <<: *bazel_head
+    <<: *action_base
+    <<: *normal_resources
+    <<: *examples_integration_workspace
+    bazel_commands:
+      - *nobzlmod_generate_integration
+      - *nobzlmod_build_all
 
-  - name: Integration Test - "examples/rules_ios"
+  - name: Integration Test - "examples/rules_ios" - Bazel Previous LTS
+    <<: *bazel_previous_lts
     <<: *arm64
     <<: *action_base
     <<: *normal_resources
@@ -173,12 +159,30 @@ actions:
     bazel_commands:
       - *validate_integration
       - *build_all
-
-  - name: Validate release.tar.gz
-    <<: *arm64
-    <<: *normal_resources
-    <<: *action_base
-    <<: *examples_cc_workspace
-    bazel_commands:
-      - *set_release_archive_override
-      - run --config=workflows //:xcodeproj
+  ## Uncomment when rules_ios performs ObjcProvider -> CcInfo linking migration
+  # - name: Integration Test - "examples/rules_ios" - Bazel LTS
+  #   <<: *bazel_lts
+  #   <<: *arm64
+  #   <<: *action_base
+  #   <<: *normal_resources
+  #   <<: *examples_rules_ios_workspace
+  #   bazel_commands:
+  #     - *validate_integration
+  #     - *build_all
+  # - name: Integration Test - "examples/rules_ios" - Bazel LTS using WORKSPACE
+  #   <<: *bazel_lts
+  #   <<: *arm64
+  #   <<: *action_base
+  #   <<: *normal_resources
+  #   <<: *examples_rules_ios_workspace
+  #   bazel_commands:
+  #     - *validate_integration
+  #     - *nobzlmod_build_all
+  # - name: Integration Test - "examples/rules_ios" - Bazel HEAD
+  #   <<: *bazel_head
+  #   <<: *action_base
+  #   <<: *normal_resources
+  #   <<: *examples_rules_ios_workspace
+  #   bazel_commands:
+  #     - *validate_integration
+  #     - *build_all

@@ -1,7 +1,7 @@
 import ArgumentParser
 import Foundation
-import GeneratorCommon
 import PBXProj
+import ToolCommon
 
 extension Generator {
     struct Arguments: ParsableArguments {
@@ -12,6 +12,9 @@ Path to where the 'pbxproj_prefix' 'PBXProj' partial should be written.
             transform: { URL(fileURLWithPath: $0, isDirectory: false) }
         )
         var outputPath: URL
+
+        @Argument(help: "Name of the bazelrc config.")
+        var config: String
 
         @Argument(help: "Absolute path to the Bazel workspace.")
         var workspace: String
@@ -30,13 +33,22 @@ Path to a file that contains the absolute path to the Bazel execution root.
         @Argument(help: "Path to the index_import executable.")
         var indexImport: String
 
-        @Argument(help: "`xcodeproj.build_mode`.")
-        var buildMode: BuildMode
+        @Argument(
+            help: """
+Path to a file that contains a string for the `RESOLVED_REPOSITORIES` build \
+setting.
+""",
+            transform: { URL(fileURLWithPath: $0, isDirectory: false) }
+        )
+        var resolvedRepositoriesFile: URL
 
         @Argument(help: """
 Minimum Xcode version that the generated project supports.
 """)
         var minimumXcodeVersion: SemanticVersion
+
+        @Argument(help: "Name of the default Xcode configuration.")
+        var defaultXcodeConfiguration: String
 
         @Argument(help: "Development region for the project.")
         var developmentRegion: String
@@ -57,9 +69,6 @@ Populates the `ORGANIZATIONNAME` attribute for the project.
             help: "Names of the Xcode configurations the project is using."
         )
         var xcodeConfigurations: [String]
-
-        @Option(help: "Name of the default Xcode configuration.")
-        var defaultXcodeConfiguration: String?
 
         @Option(
             help: "Path to a file containing a pre-build script.",

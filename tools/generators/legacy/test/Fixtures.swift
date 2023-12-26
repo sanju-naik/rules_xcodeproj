@@ -1,6 +1,6 @@
 import Foundation
-import GeneratorCommon
 import PathKit
+import ToolCommon
 import XcodeProj
 
 @testable import generator
@@ -42,6 +42,7 @@ enum Fixtures {
         schemeAutogenerationMode: .auto,
         customXcodeSchemes: [],
         targetIdsFile: "/tmp/target_ids",
+        targetNameMode: .auto,
         indexImport: "/tmp/index-import",
         preBuildScript: "./pre-build.sh",
         postBuildScript: "./post-build.sh"
@@ -467,6 +468,7 @@ enum Fixtures {
 
         elements[.generated("A1.swift.compile.params")] = PBXFileReference(
             sourceTree: .group,
+            lastKnownFileType: "file",
             path: "A1.swift.compile.params"
         )
 
@@ -474,6 +476,7 @@ enum Fixtures {
 
         elements[.generated("E1.swift.compile.params")] = PBXFileReference(
             sourceTree: .group,
+            lastKnownFileType: "file",
             path: "E1.swift.compile.params"
         )
 
@@ -481,6 +484,7 @@ enum Fixtures {
 
         elements[.generated("E2.swift.compile.params")] = PBXFileReference(
             sourceTree: .group,
+            lastKnownFileType: "file",
             path: "E2.swift.compile.params"
         )
 
@@ -488,6 +492,7 @@ enum Fixtures {
 
         elements[.generated("T 1.swift.compile.params")] = PBXFileReference(
             sourceTree: .group,
+            lastKnownFileType: "file",
             path: "T 1.swift.compile.params"
         )
 
@@ -495,6 +500,7 @@ enum Fixtures {
 
         elements[.generated("T 2.swift.compile.params")] = PBXFileReference(
             sourceTree: .group,
+            lastKnownFileType: "file",
             path: "T 2.swift.compile.params"
         )
 
@@ -502,6 +508,7 @@ enum Fixtures {
 
         elements[.generated("T 3.swift.compile.params")] = PBXFileReference(
             sourceTree: .group,
+            lastKnownFileType: "file",
             path: "T 3.swift.compile.params"
         )
 
@@ -509,6 +516,7 @@ enum Fixtures {
 
         elements[.generated("B.link.params")] = PBXFileReference(
             sourceTree: .group,
+            lastKnownFileType: "file",
             path: "B.link.params"
         )
 
@@ -516,6 +524,7 @@ enum Fixtures {
 
         elements[.generated("B3.link.params")] = PBXFileReference(
             sourceTree: .group,
+            lastKnownFileType: "file",
             path: "B3.link.params"
         )
 
@@ -523,6 +532,7 @@ enum Fixtures {
 
         elements[.generated("d.link.params")] = PBXFileReference(
             sourceTree: .group,
+            lastKnownFileType: "file",
             path: "d.link.params"
         )
 
@@ -538,6 +548,7 @@ enum Fixtures {
 
         elements[.generated("z/A.link.params")] = PBXFileReference(
             sourceTree: .group,
+            lastKnownFileType: "file",
             path: "A.link.params"
         )
 
@@ -1302,7 +1313,7 @@ $(BAZEL_OUT)/z/A.link.params
 
         if let group = group {
             // The order products are added to a group matters for uuid fixing
-            products.byTarget.sortedLocalizedStandard().forEach { product in
+            products.byTarget.values.forEach { product in
                 group.addChild(product)
             }
         }
@@ -1462,6 +1473,7 @@ perl -pe '
   s/__BAZEL_XCODE_SDKROOT__/\$(SDKROOT)/g;
   s/\$(\()?([a-zA-Z_]\w*)(?(1)\))/$ENV{$2}/gx;
 ' "$SCRIPT_INPUT_FILE_0" > "$SCRIPT_OUTPUT_FILE_0"
+
 """#)
             }
 
@@ -1469,11 +1481,12 @@ perl -pe '
                 outputPaths.append("$(DERIVED_FILE_DIR)/xcode-overlay.yaml")
                 shellScriptComponents.append(#"""
 "$BAZEL_INTEGRATION_DIR/create_xcode_overlay.sh"
+
 """#)
             }
 
             return PBXShellScriptBuildPhase(
-                name: "Create compiling dependencies",
+                name: "Create Compile Dependencies",
                 inputPaths: inputPaths,
                 outputPaths: outputPaths,
                 shellScript: shellScriptComponents.joined(separator: "\n"),
@@ -1507,7 +1520,7 @@ touch "$SCRIPT_OUTPUT_FILE_1"
             }
 
             return PBXShellScriptBuildPhase(
-                name: "Create linking dependencies",
+                name: "Create Link Dependencies",
                 inputPaths: ["$(LINK_PARAMS_FILE)"],
                 outputPaths: outputPaths,
                 shellScript: shellScript,
@@ -1540,6 +1553,18 @@ touch "$SCRIPT_OUTPUT_FILE_1"
                 createGeneratedHeaderShellScript(),
             ],
             "A 2": [
+                PBXCopyFilesBuildPhase(
+                    dstPath: "",
+                    dstSubfolderSpec: .frameworks,
+                    name: "Embed Frameworks",
+                    files: buildFiles([PBXBuildFile(
+                        file: elements["a/Fram.framework"]!,
+                        settings: ["ATTRIBUTES": [
+                            "CodeSignOnCopy",
+                            "RemoveHeadersOnCopy",
+                        ]]
+                    )])
+                ),
                 createCreateLinkingDependenciesShellScript(
                     hasCompileStub: true
                 ),
@@ -1559,18 +1584,6 @@ touch "$SCRIPT_OUTPUT_FILE_1"
                             file: elements[.generated("v", isFolder: true)]!
                         ),
                     ])
-                ),
-                PBXCopyFilesBuildPhase(
-                    dstPath: "",
-                    dstSubfolderSpec: .frameworks,
-                    name: "Embed Frameworks",
-                    files: buildFiles([PBXBuildFile(
-                        file: elements["a/Fram.framework"]!,
-                        settings: ["ATTRIBUTES": [
-                            "CodeSignOnCopy",
-                            "RemoveHeadersOnCopy",
-                        ]]
-                    )])
                 ),
             ],
             "AC": [
@@ -1596,12 +1609,6 @@ touch "$SCRIPT_OUTPUT_FILE_1"
                 ),
             ],
             "B 2": [
-                createCreateLinkingDependenciesShellScript(
-                    hasCompileStub: true
-                ),
-                PBXSourcesBuildPhase(
-                    files: buildFiles([PBXBuildFile(file: compileStub)])
-                ),
                 PBXCopyFilesBuildPhase(
                     dstPath: "",
                     dstSubfolderSpec: .frameworks,
@@ -1613,6 +1620,12 @@ touch "$SCRIPT_OUTPUT_FILE_1"
                             "RemoveHeadersOnCopy",
                         ]]
                     )])
+                ),
+                createCreateLinkingDependenciesShellScript(
+                    hasCompileStub: true
+                ),
+                PBXSourcesBuildPhase(
+                    files: buildFiles([PBXBuildFile(file: compileStub)])
                 ),
             ],
             "B 3": [
@@ -1662,9 +1675,6 @@ touch "$SCRIPT_OUTPUT_FILE_1"
                 ),
             ],
             "I": [
-                PBXSourcesBuildPhase(
-                    files: buildFiles([PBXBuildFile(file: compileStub)])
-                ),
                 PBXCopyFilesBuildPhase(
                     dstPath: "$(CONTENTS_FOLDER_PATH)/Watch",
                     dstSubfolderSpec: .productsDirectory,
@@ -1686,6 +1696,9 @@ touch "$SCRIPT_OUTPUT_FILE_1"
                             "RemoveHeadersOnCopy",
                         ]]
                     )])
+                ),
+                PBXSourcesBuildPhase(
+                    files: buildFiles([PBXBuildFile(file: compileStub)])
                 ),
             ],
             "R 1": [
@@ -2052,7 +2065,6 @@ touch "$SCRIPT_OUTPUT_FILE_1"
                 "BAZEL_TARGET_ID": "A 1",
                 "BAZEL_TARGET_ID[sdk=macosx*]": "$(BAZEL_TARGET_ID)",
                 "COMPILE_TARGET_NAME": targets["A 1"]!.name,
-                "GENERATE_INFOPLIST_FILE": "YES",
                 "MACOSX_DEPLOYMENT_TARGET": "10.0",
                 "OTHER_SWIFT_FLAGS": #"""
 -vfsoverlay $(OBJROOT)/bazel-out-overlay.yaml \#
@@ -2077,7 +2089,6 @@ $(BAZEL_OUT)/A1.swift.compile.params
                 "COMPILE_TARGET_NAME": targets["A 2"]!.name,
                 "DEPLOYMENT_LOCATION": "NO",
                 "EXECUTABLE_NAME": "A_ExecutableName",
-                "GENERATE_INFOPLIST_FILE": "YES",
                 "LINK_PARAMS_FILE": #"$(BAZEL_OUT)/z/A.link.params"#,
                 "MACOSX_DEPLOYMENT_TARGET": "11.0",
                 "OTHER_LDFLAGS": "@$(DERIVED_FILE_DIR)/link.params",
@@ -2095,7 +2106,6 @@ $(BAZEL_OUT)/A1.swift.compile.params
                 "BAZEL_TARGET_ID[sdk=iphoneos*]": "$(BAZEL_TARGET_ID)",
                 "COMPILE_TARGET_NAME": targets["AC"]!.name,
                 "DEPLOYMENT_LOCATION": "NO",
-                "GENERATE_INFOPLIST_FILE": "YES",
                 "IPHONEOS_DEPLOYMENT_TARGET": "11.0",
                 "PRODUCT_NAME": "AC",
                 "SDKROOT": "iphoneos",
@@ -2110,7 +2120,6 @@ $(BAZEL_OUT)/A1.swift.compile.params
                 "BAZEL_TARGET_ID": "B 1",
                 "BAZEL_TARGET_ID[sdk=macosx*]": "$(BAZEL_TARGET_ID)",
                 "COMPILE_TARGET_NAME": targets["B 1"]!.name,
-                "GENERATE_INFOPLIST_FILE": "YES",
                 "MACH_O_TYPE": "staticlib",
                 "MACOSX_DEPLOYMENT_TARGET": "11.0",
                 "PRODUCT_NAME": "b",
@@ -2127,7 +2136,6 @@ $(BAZEL_OUT)/A1.swift.compile.params
                 "BAZEL_TARGET_ID[sdk=macosx*]": "$(BAZEL_TARGET_ID)",
                 "COMPILE_TARGET_NAME": targets["B 2"]!.name,
                 "DEPLOYMENT_LOCATION": "NO",
-                "GENERATE_INFOPLIST_FILE": "YES",
                 "LINK_PARAMS_FILE": #"$(BAZEL_OUT)/B.link.params"#,
                 "MACOSX_DEPLOYMENT_TARGET": "11.0",
                 "OTHER_LDFLAGS": "@$(DERIVED_FILE_DIR)/link.params",
@@ -2152,7 +2160,6 @@ $(BUILD_DIR)/bazel-out/a1b2c/bin/A 2/A.app/A_ExecutableName
                 "CODE_SIGNING_ALLOWED": "YES",
                 "COMPILE_TARGET_NAME": targets["B 3"]!.name,
                 "DEPLOYMENT_LOCATION": "NO",
-                "GENERATE_INFOPLIST_FILE": "YES",
                 "LINK_PARAMS_FILE": #"$(BAZEL_OUT)/B3.link.params"#,
                 "MACOSX_DEPLOYMENT_TARGET": "11.0",
                 "OTHER_LDFLAGS": "@$(DERIVED_FILE_DIR)/link.params",
@@ -2170,7 +2177,6 @@ $(BUILD_DIR)/bazel-out/a1b2c/bin/A 2/A.app/A_ExecutableName
                 "BAZEL_TARGET_ID[sdk=macosx*]": "$(BAZEL_TARGET_ID)",
                 "COMPILE_TARGET_NAME": targets["C 1"]!.name,
                 "EXECUTABLE_EXTENSION": "lo",
-                "GENERATE_INFOPLIST_FILE": "YES",
                 "MACOSX_DEPLOYMENT_TARGET": "11.0",
                 "PRODUCT_NAME": "c",
                 "SDKROOT": "macosx",
@@ -2187,7 +2193,6 @@ $(BUILD_DIR)/bazel-out/a1b2c/bin/A 2/A.app/A_ExecutableName
                 "COMPILE_TARGET_NAME": targets["C 2"]!.name,
                 "DEPLOYMENT_LOCATION": "NO",
                 "EXECUTABLE_EXTENSION": "",
-                "GENERATE_INFOPLIST_FILE": "YES",
                 "LINK_PARAMS_FILE": #"$(BAZEL_OUT)/d.link.params"#,
                 "MACOSX_DEPLOYMENT_TARGET": "11.0",
                 "OTHER_LDFLAGS": "@$(DERIVED_FILE_DIR)/link.params",
@@ -2203,7 +2208,6 @@ $(BUILD_DIR)/bazel-out/a1b2c/bin/A 2/A.app/A_ExecutableName
                 "BAZEL_TARGET_ID": "E1",
                 "BAZEL_TARGET_ID[sdk=watchos*]": "$(BAZEL_TARGET_ID)",
                 "COMPILE_TARGET_NAME": targets["E1"]!.name,
-                "GENERATE_INFOPLIST_FILE": "YES",
                 "OTHER_SWIFT_FLAGS": #"""
 -Xcc -ivfsoverlay -Xcc $(DERIVED_FILE_DIR)/xcode-overlay.yaml \#
 -Xcc -ivfsoverlay -Xcc $(OBJROOT)/bazel-out-overlay.yaml \#
@@ -2226,7 +2230,6 @@ $(BAZEL_OUT)/E1.swift.compile.params
                 "BAZEL_TARGET_ID": "E2",
                 "BAZEL_TARGET_ID[sdk=appletvos*]": "$(BAZEL_TARGET_ID)",
                 "COMPILE_TARGET_NAME": targets["E2"]!.name,
-                "GENERATE_INFOPLIST_FILE": "YES",
                 "OTHER_SWIFT_FLAGS": #"""
 -vfsoverlay $(OBJROOT)/bazel-out-overlay.yaml \#
 @$(DERIVED_FILE_DIR)/swift.compile.params
@@ -2249,7 +2252,6 @@ $(BAZEL_OUT)/E2.swift.compile.params
                 "BAZEL_TARGET_ID[sdk=iphoneos*]": "$(BAZEL_TARGET_ID)",
                 "COMPILE_TARGET_NAME": targets["I"]!.name,
                 "DEPLOYMENT_LOCATION": "NO",
-                "GENERATE_INFOPLIST_FILE": "YES",
                 "IPHONEOS_DEPLOYMENT_TARGET": "12.0",
                 "PRODUCT_NAME": "I",
                 "SDKROOT": "iphoneos",
@@ -2264,7 +2266,6 @@ $(BAZEL_OUT)/E2.swift.compile.params
                 "BAZEL_TARGET_ID": "R 1",
                 "BAZEL_TARGET_ID[sdk=macosx*]": "$(BAZEL_TARGET_ID)",
                 "COMPILE_TARGET_NAME": targets["R 1"]!.name,
-                "GENERATE_INFOPLIST_FILE": "YES",
                 "MACOSX_DEPLOYMENT_TARGET": "11.0",
                 "PRODUCT_NAME": "R 1",
                 "SDKROOT": "macosx",
@@ -2291,7 +2292,6 @@ bazel-out/a1b2c/bin/T 2
                 "EXCLUDED_SOURCE_FILE_NAMES": """
 $(IPHONEOS_FILES) $(IPHONESIMULATOR_FILES) $(MACOSX_FILES)
 """,
-                "GENERATE_INFOPLIST_FILE": "YES",
                 "INCLUDED_SOURCE_FILE_NAMES": "",
                 "INCLUDED_SOURCE_FILE_NAMES[sdk=iphoneos*]": """
 $(IPHONEOS_FILES)
@@ -2339,11 +2339,8 @@ $(BAZEL_OUT)/T 2.swift.compile.params
                 "BUILT_PRODUCTS_DIR": "$(CONFIGURATION_BUILD_DIR)",
                 "BAZEL_TARGET_ID": "W",
                 "BAZEL_TARGET_ID[sdk=watchos*]": "$(BAZEL_TARGET_ID)",
-                "BAZEL_HOST_LABEL_0": "@//some/package:I",
-                "BAZEL_HOST_TARGET_ID_0": "I",
                 "COMPILE_TARGET_NAME": targets["W"]!.name,
                 "DEPLOYMENT_LOCATION": "NO",
-                "GENERATE_INFOPLIST_FILE": "YES",
                 "PRODUCT_NAME": "W",
                 "SDKROOT": "watchos",
                 "SUPPORTED_PLATFORMS": "watchos",
@@ -2357,11 +2354,8 @@ $(BAZEL_OUT)/T 2.swift.compile.params
                 "BUILT_PRODUCTS_DIR": "$(CONFIGURATION_BUILD_DIR)",
                 "BAZEL_TARGET_ID": "WDKE",
                 "BAZEL_TARGET_ID[sdk=iphoneos*]": "$(BAZEL_TARGET_ID)",
-                "BAZEL_HOST_LABEL_0": "@//some/package:I",
-                "BAZEL_HOST_TARGET_ID_0": "I",
                 "COMPILE_TARGET_NAME": targets["WDKE"]!.name,
                 "DEPLOYMENT_LOCATION": "NO",
-                "GENERATE_INFOPLIST_FILE": "YES",
                 "IPHONEOS_DEPLOYMENT_TARGET": "11.0",
                 "PRODUCT_NAME": "WDKE",
                 "SDKROOT": "iphoneos",
@@ -2376,11 +2370,8 @@ $(BAZEL_OUT)/T 2.swift.compile.params
                 "BUILT_PRODUCTS_DIR": "$(CONFIGURATION_BUILD_DIR)",
                 "BAZEL_TARGET_ID": "WKE",
                 "BAZEL_TARGET_ID[sdk=watchos*]": "$(BAZEL_TARGET_ID)",
-                "BAZEL_HOST_LABEL_0": "@//some/package:W",
-                "BAZEL_HOST_TARGET_ID_0": "W",
                 "COMPILE_TARGET_NAME": targets["WKE"]!.name,
                 "DEPLOYMENT_LOCATION": "NO",
-                "GENERATE_INFOPLIST_FILE": "YES",
                 "PRODUCT_NAME": "WKE",
                 "SDKROOT": "watchos",
                 "SUPPORTED_PLATFORMS": "watchos",

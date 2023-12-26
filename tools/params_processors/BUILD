@@ -1,3 +1,5 @@
+load("@rules_python//python:defs.bzl", "py_binary", "py_library", "py_test")
+
 py_library(
     name = "cc_compiler_params_processor_library",
     srcs = ["cc_compiler_params_processor.py"],
@@ -26,8 +28,17 @@ py_test(
 )
 
 py_binary(
-    name = "link_params_processor",
-    srcs = ["link_params_processor.py"],
+    name = "incremental_link_params_processor",
+    srcs = ["incremental_link_params_processor.py"],
+    python_version = "PY3",
+    srcs_version = "PY3",
+    # TODO: Restrict visibility
+    visibility = ["//visibility:public"],
+)
+
+py_binary(
+    name = "legacy_link_params_processor",
+    srcs = ["legacy_link_params_processor.py"],
     python_version = "PY3",
     srcs_version = "PY3",
     # TODO: Restrict visibility

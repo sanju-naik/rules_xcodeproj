@@ -1,5 +1,5 @@
 import Foundation
-import GeneratorCommon
+import ToolCommon
 
 extension URL {
     /// Reads the file at `self`, returning the absolute path to the Bazel
@@ -9,14 +9,16 @@ extension URL {
         do {
             lines = try String(contentsOf: self).split(separator: "\n")
         } catch {
-            throw PreconditionError(message: error.localizedDescription)
+            throw PreconditionError(
+                message: prefixMessage(error.localizedDescription)
+            )
         }
 
         guard lines.count == 1 else {
-            throw PreconditionError(message: """
+            throw PreconditionError(message: prefixMessage("""
 The execution_root_file must contain one line: the absolute path to the Bazel \
 execution root.
-""")
+"""))
         }
 
         return String(lines[0])

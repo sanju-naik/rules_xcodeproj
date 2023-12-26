@@ -26,7 +26,6 @@ struct Generator {
         let bazelDependenciesPartial = environment.bazelDependenciesPartial(
             /*buildSettings:*/ environment
                 .bazelDependenciesBuildSettings(
-                    /*indexImport:*/ arguments.indexImport,
                     /*platforms:*/ arguments.platforms,
                     /*targetIdsFile:*/ arguments.targetIdsFile
                 ),
@@ -49,11 +48,19 @@ struct Generator {
 
         let pbxProjectPrefixPartial = environment.pbxProjectPrefixPartial(
             /*buildSettings:*/ environment.pbxProjectBuildSettings(
-                /*buildMode:*/ arguments.buildMode,
+                /*config:*/ arguments.config,
+                /*indexImport:*/ arguments.indexImport,
                 /*indexingProjectDir:*/ environment.indexingProjectDir(
                     /*projectDir:*/ projectDir
                 ),
-                /*workspace:*/ arguments.workspace
+                /*projectDir:*/ projectDir,
+                /*resolvedRepositories:*/
+                    try environment.readResolvedRepositoriesFile(
+                        arguments.resolvedRepositoriesFile
+                    ),
+                    /*workspace:*/ arguments.workspace,
+                    /*createBuildSettingsAttribute:*/
+                        environment.createBuildSettingsAttribute
             ),
             /*compatibilityVersion:*/ environment.compatibilityVersion(
                 arguments.minimumXcodeVersion
@@ -70,9 +77,10 @@ struct Generator {
         try environment.write(
             environment.pbxProjPrefixPartial(
                 /*bazelDependenciesPartial:*/ bazelDependenciesPartial,
-                /*pbxProjectPrefixPartial:*/ pbxProjectPrefixPartial
+                /*pbxProjectPrefixPartial:*/ pbxProjectPrefixPartial,
+                /*minimumXcodeVersion:*/ arguments.minimumXcodeVersion
             ),
-            /*to:*/ arguments.outputPath
+            to: arguments.outputPath
         )
     }
 }

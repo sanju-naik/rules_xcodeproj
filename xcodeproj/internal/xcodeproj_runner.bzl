@@ -1,7 +1,7 @@
 """Implementation of the `xcodeproj_runner` rule."""
 
-load("@bazel_skylib//rules:common_settings.bzl", "BuildSettingInfo")
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@bazel_skylib//rules:common_settings.bzl", "BuildSettingInfo")
 load(":collections.bzl", "uniq")
 load(":execution_root.bzl", "write_execution_root_file")
 load(":providers.bzl", "XcodeProjRunnerOutputInfo")
@@ -134,7 +134,8 @@ def _write_generator_defz_bzl(
         is_fixture,
         name,
         repo,
-        template):
+        template,
+        use_incremental):
     output = actions.declare_file("{}.generator.defs.bzl".format(name))
 
     build_mode = attr.build_mode
@@ -150,14 +151,8 @@ def _write_generator_defz_bzl(
         """\
 # buildifier: disable=bzl-visibility
 load(
-    "{repo}//xcodeproj/internal:xcodeproj_aspect.bzl",
-    "make_xcodeproj_aspect",
-)
-
-# buildifier: disable=bzl-visibility
-load(
-    "{repo}//xcodeproj/internal:xcodeproj_rule.bzl",
-    "make_xcodeproj_rule",
+    "{repo}//xcodeproj/internal:xcodeproj_factory.bzl",
+    "xcodeproj_factory",
 )
 
 # buildifier: disable=bzl-visibility
@@ -209,10 +204,14 @@ _target_transitions = make_xcodeproj_target_transitions(
         output = output,
         substitutions = {
             "%build_mode%": build_mode,
+            "%focused_labels%": str(attr.focused_labels),
             "%generator_name%": name,
             "%is_fixture%": str(is_fixture),
             "%loads%": "\n".join(loads),
+            "%owned_extra_files%": str(attr.owned_extra_files),
             "%target_transitions%": target_transitions,
+            "%unfocused_labels%": str(attr.unfocused_labels),
+            "%use_incremental%": str(use_incremental),
             "%xcodeproj_transitions%": (
                 "fixtures_transition" if is_fixture else "None"
             ),
@@ -244,31 +243,34 @@ def _write_generator_build_file(
             "%adjust_schemes_for_swiftui_previews%": (
                 str(attr.adjust_schemes_for_swiftui_previews)
             ),
+            # TODO: Remove after dropping legacy generation mode
             "%build_mode%": attr.build_mode,
             "%colorize%": str(attr._colorize[BuildSettingInfo].value),
             "%config%": attr.config,
             "%default_xcode_configuration%": (
                 _serialize_nullable_string(attr.default_xcode_configuration)
             ),
+            # TODO: Remove after dropping legacy generation mode
             "%fail_for_invalid_extra_files_targets%": (
                 str(attr.fail_for_invalid_extra_files_targets)
             ),
-            "%focused_targets%": str(attr.focused_targets),
+            "%generation_shard_count%": str(attr.generation_shard_count),
             "%install_directory%": attr.install_directory,
             "%install_path%": install_path,
             "%ios_device_cpus%": attr.ios_device_cpus,
             "%ios_simulator_cpus%": attr.ios_simulator_cpus,
             "%minimum_xcode_version%": attr.minimum_xcode_version,
             "%name%": name,
-            "%owned_extra_files%": str(attr.owned_extra_files),
             "%post_build%": attr.post_build,
             "%pre_build%": attr.pre_build,
+            # TODO: Remove after dropping legacy generation mode
             "%project_name%": attr.project_name,
             "%project_options%": str(attr.project_options),
             "%runner_build_file%": build_file_path,
             "%runner_label%": runner_label,
             "%scheme_autogeneration_mode%": attr.scheme_autogeneration_mode,
             "%tags%": tags,
+            "%target_name_mode%": attr.target_name_mode,
             "%testonly%": str(attr.testonly),
             "%top_level_device_targets%": str(attr.top_level_device_targets),
             "%top_level_simulator_targets%": str(
@@ -276,12 +278,12 @@ def _write_generator_build_file(
             ),
             "%tvos_device_cpus%": attr.tvos_device_cpus,
             "%tvos_simulator_cpus%": attr.tvos_simulator_cpus,
-            "%unfocused_targets%": str(attr.unfocused_targets),
             "%unowned_extra_files%": str(attr.unowned_extra_files),
             "%visibility%": "{repo}//xcodeproj:__pkg__".format(repo = repo),
             "%watchos_device_cpus%": attr.watchos_device_cpus,
             "%watchos_simulator_cpus%": attr.watchos_simulator_cpus,
             "%xcode_configuration_map%": str(attr.xcode_configuration_map),
+            "%xcschemes_json%": attr.xcschemes_json.replace("\\", "\\\\"),
         },
     )
 
@@ -387,9 +389,9 @@ def_env+='}}'""".format(
             "%execution_root_file%": execution_root_file.short_path,
             "%extra_flags_bazelrc%": extra_flags_bazelrc.short_path,
             "%extra_generator_flags%": extra_generator_flags,
-            "%generator_label%": generator_label,
             "%generator_build_file%": generator_build_file.short_path,
             "%generator_defs_bzl%": generator_defs_bzl.short_path,
+            "%generator_label%": generator_label,
             "%generator_package_name%": generator_package_name,
             "%install_path%": install_path,
             "%is_bazel_6%": "1" if is_bazel_6 else "0",
@@ -415,6 +417,7 @@ def _xcodeproj_runner_impl(ctx):
         "@"
     )
     runner_label = str(ctx.label)
+    use_incremental = ctx.attr.generation_mode == "incremental"
 
     install_path = paths.join(
         ctx.attr.install_directory,
@@ -447,6 +450,25 @@ def _xcodeproj_runner_impl(ctx):
         name = name,
         schemes_json = ctx.attr.schemes_json,
     )
+    generator_defs_bzl = _write_generator_defz_bzl(
+        actions = actions,
+        attr = attr,
+        is_fixture = is_fixture,
+        name = name,
+        repo = repo,
+        template = ctx.file._generator_defs_bzl_template,
+        use_incremental = use_incremental,
+    )
+
+    if use_incremental:
+        build_file_template = (
+            ctx.file._generator_incremental_build_file_template
+        )
+    else:
+        build_file_template = (
+            ctx.file._generator_legacy_build_file_template
+        )
+
     generator_build_file = _write_generator_build_file(
         actions = actions,
         attr = attr,
@@ -455,15 +477,7 @@ def _xcodeproj_runner_impl(ctx):
         name = name,
         runner_label = runner_label,
         repo = repo,
-        template = ctx.file._generator_package_contents_template,
-    )
-    generator_defs_bzl = _write_generator_defz_bzl(
-        actions = actions,
-        attr = attr,
-        is_fixture = is_fixture,
-        name = name,
-        repo = repo,
-        template = ctx.file._generator_defs_bzl_template,
+        template = build_file_template,
     )
 
     runner = _write_runner(
@@ -516,74 +530,52 @@ xcodeproj_runner = rule(
             default = True,
             mandatory = True,
         ),
+        "bazel_env": attr.string_dict(mandatory = True),
+        "bazel_path": attr.string(mandatory = True),
         "build_mode": attr.string(
             mandatory = True,
             values = ["xcode", "bazel"],
         ),
-        "bazel_path": attr.string(
-            mandatory = True,
-        ),
-        "bazel_env": attr.string_dict(
-            mandatory = True,
-        ),
-        "config": attr.string(
-            mandatory = True,
-        ),
+        "config": attr.string(mandatory = True),
         "default_xcode_configuration": attr.string(),
-        "fail_for_invalid_extra_files_targets": attr.bool(
-            default = True,
-        ),
-        "focused_targets": attr.string_list(
-            default = [],
-        ),
-        "install_directory": attr.string(
+        "fail_for_invalid_extra_files_targets": attr.bool(default = True),
+        "focused_labels": attr.string_list(default = []),
+        "generation_mode": attr.string(
+            values = ["incremental", "legacy"],
             mandatory = True,
         ),
-        "is_fixture": attr.bool(
-            mandatory = True,
-        ),
+        "generation_shard_count": attr.int(mandatory = True),
+        "install_directory": attr.string(mandatory = True),
+        "ios_device_cpus": attr.string(mandatory = True),
+        "ios_simulator_cpus": attr.string(),
+        "is_fixture": attr.bool(mandatory = True),
         "minimum_xcode_version": attr.string(),
         "owned_extra_files": attr.string_dict(),
         "post_build": attr.string(),
         "pre_build": attr.string(),
-        "project_options": attr.string_dict(
-            mandatory = True,
-        ),
-        "project_name": attr.string(
-            mandatory = True,
-        ),
+        "project_name": attr.string(mandatory = True),
+        "project_options": attr.string_dict(mandatory = True),
         "scheme_autogeneration_mode": attr.string(
             default = "auto",
             values = ["auto", "none", "all"],
         ),
         "schemes_json": attr.string(),
+        "target_name_mode": attr.string(
+            default = "auto",
+            values = ["auto", "label"],
+        ),
         "top_level_device_targets": attr.string_list(),
         "top_level_simulator_targets": attr.string_list(),
-        "unfocused_targets": attr.string_list(
-            default = [],
-        ),
-        "unowned_extra_files": attr.string_list(),
-        "xcode_configuration_flags": attr.string_list(
-            mandatory = True,
-        ),
-        "xcode_configuration_map": attr.string_list_dict(
-            mandatory = True,
-        ),
-        "xcode_configurations": attr.string(
-            mandatory = True,
-        ),
-        "ios_device_cpus": attr.string(
-            mandatory = True,
-        ),
-        "ios_simulator_cpus": attr.string(),
-        "tvos_device_cpus": attr.string(
-            mandatory = True,
-        ),
+        "tvos_device_cpus": attr.string(mandatory = True),
         "tvos_simulator_cpus": attr.string(),
-        "watchos_device_cpus": attr.string(
-            mandatory = True,
-        ),
+        "unfocused_labels": attr.string_list(default = []),
+        "unowned_extra_files": attr.string_list(),
+        "watchos_device_cpus": attr.string(mandatory = True),
         "watchos_simulator_cpus": attr.string(),
+        "xcode_configuration_flags": attr.string_list(mandatory = True),
+        "xcode_configuration_map": attr.string_list_dict(mandatory = True),
+        "xcode_configurations": attr.string(mandatory = True),
+        "xcschemes_json": attr.string(),
         "_bazelrc_template": attr.label(
             allow_single_file = True,
             default = Label("//xcodeproj/internal/templates:xcodeproj.bazelrc"),
@@ -614,10 +606,16 @@ xcodeproj_runner = rule(
                 "//xcodeproj/internal/templates:generator.defs.bzl",
             ),
         ),
-        "_generator_package_contents_template": attr.label(
+        "_generator_incremental_build_file_template": attr.label(
             allow_single_file = True,
             default = Label(
-                "//xcodeproj/internal/templates:generator.BUILD.bazel",
+                "//xcodeproj/internal/templates:generator.incremental.BUILD.bazel",
+            ),
+        ),
+        "_generator_legacy_build_file_template": attr.label(
+            allow_single_file = True,
+            default = Label(
+                "//xcodeproj/internal/templates:generator.legacy.BUILD.bazel",
             ),
         ),
         "_runner_template": attr.label(

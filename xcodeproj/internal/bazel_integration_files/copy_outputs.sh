@@ -3,53 +3,32 @@
 set -euo pipefail
 
 # readonly forced_swift_compile_file="$1"
-readonly product_basename="$2"
-readonly exclude_list="$3"
+readonly exclude_list="$2"
 
 # # Touching this file on an error allows indexing to work better
 # trap 'echo "private let touch = \"$(date +%s)\"" > "$DERIVED_FILE_DIR/$forced_swift_compile_file"' ERR
 
-if [[ "$ACTION" == indexbuild ]]; then
-  # Write to "$SCHEME_TARGET_IDS_FILE" to allow next index to catch up
-  echo "$BAZEL_LABEL,$BAZEL_TARGET_ID" > "$SCHEME_TARGET_IDS_FILE"
-else
+readonly test_frameworks=(
+  "libXCTestBundleInject.dylib"
+  "libXCTestSwiftSupport.dylib"
+  "IDEBundleInjection.framework"
+  "XCTAutomationSupport.framework"
+  "XCTest.framework"
+  "XCTestCore.framework"
+  "XCTestSupport.framework"
+  "XCUIAutomation.framework"
+  "XCUnit.framework"
+)
+
+if [[ "$ACTION" != indexbuild ]]; then
   # Copy product
   if [[ -n ${BAZEL_OUTPUTS_PRODUCT:-} ]]; then
-    if [[ "$BAZEL_OUTPUTS_PRODUCT" = *.ipa ]]; then
-      suffix=/Payload
-    fi
+    cd "${BAZEL_OUTPUTS_PRODUCT%/*}"
 
-    if [[ "$BAZEL_OUTPUTS_PRODUCT" = *.ipa ]] || [[ "$BAZEL_OUTPUTS_PRODUCT" = *.zip ]]; then
-      # Extract archive first
-      readonly archive="$BAZEL_OUTPUTS_PRODUCT"
-      readonly expanded_dest="$DERIVED_FILE_DIR/expanded_archive"
-      readonly product_parent_dir="$expanded_dest${suffix:-}"
-      readonly sha_output="$DERIVED_FILE_DIR/archive.sha256"
-
-      existing_sha=$(cat "$sha_output" 2>/dev/null || true)
-      sha=$(shasum -a 256 "$archive")
-
-      if [[ \
-        "$existing_sha" != "$sha" || \
-        ! -d "$product_parent_dir/$product_basename" \
-      ]]; then
-        mkdir -p "$expanded_dest"
-        rm -rf "${expanded_dest:?}/"
-        echo "Extracting $archive to $expanded_dest"
-        # Set timestamps (-DD) to allow rsync to work properly, since Bazel
-        # zeroes out timestamps in the archive
-        unzip -q -DD "$archive" -d "$expanded_dest"
-        echo "$sha" > "$sha_output"
-      fi
-      cd "$product_parent_dir"
-    else
-      cd "${BAZEL_OUTPUTS_PRODUCT%/*}"
-    fi
-
-    if [[ -f "$product_basename" ]]; then
+    if [[ -f "$BAZEL_OUTPUTS_PRODUCT_BASENAME" ]]; then
       # Product is a binary, so symlink instead of rsync, to allow for Bazel-set
       # rpaths to work
-      ln -sfh "$PWD/$product_basename" "$TARGET_BUILD_DIR/$PRODUCT_NAME"
+      ln -sfh "$PWD/$BAZEL_OUTPUTS_PRODUCT_BASENAME" "$TARGET_BUILD_DIR/$PRODUCT_NAME"
     else
       # Product is a bundle
       rsync \
@@ -60,8 +39,31 @@ else
         ${exclude_list:+--exclude-from="$exclude_list"} \
         --chmod=u+w \
         --out-format="%n%L" \
-        "$product_basename" \
+        "$BAZEL_OUTPUTS_PRODUCT_BASENAME" \
         "$TARGET_BUILD_DIR"
+
+      if [[ -n "${TEST_HOST:-}" ]]; then
+        # We need to re-sign test frameworks that Xcode placed into the test
+        # host un-signed
+        readonly test_host_app="${TEST_HOST%/*}"
+
+        # Only engage signing workflow if the test host is signed
+        if [[ -f "$test_host_app/embedded.mobileprovision" ]]; then
+          codesigning_authority=$(codesign -dvv "$TEST_HOST"  2>&1 >/dev/null | /usr/bin/sed -n  -E 's/^Authority=(.*)/\1/p'| head -n 1)
+
+          for framework in "${test_frameworks[@]}"; do
+            framework="$test_host_app/Frameworks/$framework"
+            if [[ -e "$framework" ]]; then
+              codesign -f \
+                --preserve-metadata=identifier,entitlements,flags \
+                --timestamp=none \
+                --generate-entitlement-der \
+                -s "$codesigning_authority" \
+                "$framework"
+            fi
+          done
+        fi
+      fi
 
       # Incremental installation can fail if an embedded bundle is recompiled but
       # the Info.plist is not updated. This causes the delta bundle that Xcode

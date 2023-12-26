@@ -1,6 +1,6 @@
-import GeneratorCommon
 import OrderedCollections
 import PathKit
+import ToolCommon
 import XcodeProj
 
 extension Generator {
@@ -297,7 +297,9 @@ $(BAZEL_OUT)\#(linkParams.path.string.dropFirst(9))
         if target.compileTargets.count > 0 {
             buildSettings.set(
                 "BAZEL_COMPILE_TARGET_IDS",
-                to: target.compileTargets.map(\.id.rawValue)
+                to: target.compileTargets
+                    .map(\.id.rawValue)
+                    .joined(separator: " ")
             )
         }
 
@@ -334,31 +336,13 @@ $(BAZEL_OUT)\#(linkParams.path.string.dropFirst(9))
             buildSettings.set("EXECUTABLE_NAME", to: executableName)
         }
 
-        for (index, id) in hostIDs.enumerated() {
-            let hostTarget = try targets.value(
-                for: id,
-                context: "looking up host target"
-            )
-            buildSettings.set(
-                "BAZEL_HOST_LABEL_\(index)",
-                to: hostTarget.label.description
-            )
-            buildSettings.set("BAZEL_HOST_TARGET_ID_\(index)", to: id.rawValue)
-        }
-
-        if target.product.type.isLaunchable {
+        if buildMode == .xcode && target.product.type.isLaunchable {
             // We need `BUILT_PRODUCTS_DIR` to point to where the
             // binary/bundle is actually at, for running from scheme to work
             buildSettings["BUILT_PRODUCTS_DIR"] = """
 $(CONFIGURATION_BUILD_DIR)
 """
             buildSettings["DEPLOYMENT_LOCATION"] = false
-        }
-
-        if !buildSettings.keys.contains("INFOPLIST_FILE") &&
-            buildMode.allowsGeneratedInfoPlists
-        {
-            buildSettings["GENERATE_INFOPLIST_FILE"] = true
         }
 
         if buildSettings.keys.contains("CODE_SIGN_ENTITLEMENTS") &&
@@ -490,19 +474,18 @@ $(BAZEL_OUT)\#(swiftParams.path.string.dropFirst(9))
                     "-vfsoverlay",
                     "$(OBJROOT)/bazel-out-overlay.yaml",
                 ])
-            } else {
-                if !cFlags.isEmpty {
-                    cFlagsPrefix.append(contentsOf: [
-                        "-ivfsoverlay",
-                        "$(OBJROOT)/bazel-out-overlay.yaml",
-                    ])
-                }
-                if !cxxFlags.isEmpty {
-                    cxxFlagsPrefix.append(contentsOf: [
-                        "-ivfsoverlay",
-                        "$(OBJROOT)/bazel-out-overlay.yaml",
-                    ])
-                }
+            }
+            if !cFlags.isEmpty {
+                cFlagsPrefix.append(contentsOf: [
+                    "-ivfsoverlay",
+                    "$(OBJROOT)/bazel-out-overlay.yaml",
+                ])
+            }
+            if !cxxFlags.isEmpty {
+                cxxFlagsPrefix.append(contentsOf: [
+                    "-ivfsoverlay",
+                    "$(OBJROOT)/bazel-out-overlay.yaml",
+                ])
             }
         }
 
@@ -521,11 +504,9 @@ $(BAZEL_OUT)\#(swiftParams.path.string.dropFirst(9))
         if target.cHasFortifySource {
             buildSettings["ASAN_OTHER_CFLAGS__"] = "$(ASAN_OTHER_CFLAGS__NO)"
             buildSettings.set("ASAN_OTHER_CFLAGS__NO", to: cFlagsString)
-            buildSettings["ASAN_OTHER_CFLAGS__YES"] = [
-                "$(ASAN_OTHER_CFLAGS__NO)",
-                "-Wno-macro-redefined",
-                "-D_FORTIFY_SOURCE=0",
-            ]
+            buildSettings["ASAN_OTHER_CFLAGS__YES"] = #"""
+$(ASAN_OTHER_CFLAGS__NO) -Wno-macro-redefined -D_FORTIFY_SOURCE=0
+"""#
             cFlagsString = "$(ASAN_OTHER_CFLAGS__$(CLANG_ADDRESS_SANITIZER))"
         }
         if target.cxxHasFortifySource {
@@ -535,11 +516,9 @@ $(BAZEL_OUT)\#(swiftParams.path.string.dropFirst(9))
                 "ASAN_OTHER_CPLUSPLUSFLAGS__NO",
                 to: cxxFlagsString
             )
-            buildSettings["ASAN_OTHER_CPLUSPLUSFLAGS__YES"] = [
-                "$(ASAN_OTHER_CPLUSPLUSFLAGS__NO)",
-                "-Wno-macro-redefined",
-                "-D_FORTIFY_SOURCE=0",
-            ]
+            buildSettings["ASAN_OTHER_CPLUSPLUSFLAGS__YES"] = #"""
+$(ASAN_OTHER_CPLUSPLUSFLAGS__NO) -Wno-macro-redefined -D_FORTIFY_SOURCE=0
+"""#
             cxxFlagsString = """
 $(ASAN_OTHER_CPLUSPLUSFLAGS__$(CLANG_ADDRESS_SANITIZER))
 """
@@ -777,6 +756,13 @@ private let iPhonePlatforms: Set<String> = [
     "iphonesimulator",
 ]
 
+private let nonInheritableKeys: Set<String> = [
+    "IPHONEOS_DEPLOYMENT_TARGET",
+    "MACOSX_DEPLOYMENT_TARGET",
+    "TVOS_DEPLOYMENT_TARGET",
+    "WATCHOS_DEPLOYMENT_TARGET",
+]
+
 private extension Dictionary
 where Key == BuildSettingConditional, Value == [String: BuildSetting] {
     func asBuildSettingDictionary() throws -> [String: Any] {
@@ -826,43 +812,75 @@ where Key == BuildSettingConditional, Value == [String: BuildSetting] {
         // TODO: If we ever add support for Universal targets we need to
         //   consolidate "ARCHS" to an `.any` conditional
 
+        let baseConditions = Set(keys.filter { $0 != .any })
+
         var buildSettings: [String: BuildSetting] = [:]
         for (key, conditionalBuildSetting) in conditionalBuildSettings {
             let sortedConditionalBuildSettings = conditionalBuildSetting
                 .sorted(by: { $0.key < $1.key })
             var remainingConditionalBuildSettings =
-                sortedConditionalBuildSettings[
-                    sortedConditionalBuildSettings.indices
-                ]
+                ArraySlice(sortedConditionalBuildSettings)
 
-            guard
-                let (firstCondition, first) = remainingConditionalBuildSettings
-                    .popFirst()
-            else {
-                continue
+            let firstCondition = sortedConditionalBuildSettings.first!.key
+
+            var remainingConditions: Set<Key>
+            let setBaseValue: Bool
+            if firstCondition == .any || nonInheritableKeys.contains(key) {
+                remainingConditions = []
+                setBaseValue = true
+            } else {
+                remainingConditions = baseConditions
+
+                // We only set a base value if none of the conditions want to
+                // inherit defaults (since they would inherit the base value
+                // instead of the default)
+                setBaseValue = remainingConditions
+                    .subtracting(conditionalBuildSetting.keys).isEmpty
             }
 
-            // Set the base value to `.any` or the most preferable condition
-            // (i.e. Simulator or Apple Silicon)
-            buildSettings[key] = first
+            let baseValue: BuildSetting?
+            if setBaseValue {
+                let (_, firstValue) =
+                    remainingConditionalBuildSettings.popFirst()!
+                baseValue = firstValue
 
-            // Set `BAZEL_{COMPILE_,}TARGET_ID` for first condition, for
-            // buildRequest handling
-            if Set(["BAZEL_TARGET_ID", "BAZEL_COMPILE_TARGET_IDS"])
-                .contains(key)
-            {
-                buildSettings.set(
-                    firstCondition.conditionalize(key),
-                    to: "$(\(key))"
-                )
+                // Set the base value to `.any` or the most preferable condition
+                // (i.e. Simulator or Apple Silicon)
+                buildSettings[key] = firstValue
+
+                // Set `BAZEL_{COMPILE_,}TARGET_ID` for first condition, for
+                // buildRequest handling
+                if Set(["BAZEL_TARGET_ID", "BAZEL_COMPILE_TARGET_IDS"])
+                    .contains(key)
+                {
+                    buildSettings.set(
+                        firstCondition.conditionalize(key),
+                        to: "$(\(key))"
+                    )
+                }
+
+                remainingConditions.remove(firstCondition)
+            } else {
+                baseValue = nil
+
+                // Not setting a base value will cause it to inherit defaults.
+                // We remove all `remainingConditions` because we don't need
+                // to explicitly set them to inherit defaults either.
+                remainingConditions.removeAll()
             }
 
             for (condition, buildSetting) in remainingConditionalBuildSettings {
-                guard buildSetting != first else {
+                remainingConditions.remove(condition)
+
+                guard buildSetting != baseValue else {
                     // Don't set redundant settings
                     continue
                 }
                 buildSettings[condition.conditionalize(key)] = buildSetting
+            }
+
+            for condition in remainingConditions {
+                buildSettings[condition.conditionalize(key)] = "$(inherited)"
             }
         }
 

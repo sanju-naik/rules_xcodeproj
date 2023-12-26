@@ -1,6 +1,5 @@
-import GeneratorCommon
-import OrderedCollections
 import PathKit
+import ToolCommon
 import XcodeProj
 import XCTest
 
@@ -243,22 +242,5 @@ extension FilePath: ExpressibleByStringLiteral {
 
     public init(stringLiteral value: StringLiteralType) {
         self = .project(Path(value))
-    }
-}
-
-extension SemanticVersion: ExpressibleByStringLiteral {
-    public typealias ExtendedGraphemeClusterLiteralType = StringLiteralType
-    public typealias UnicodeScalarLiteralType = StringLiteralType
-
-    public init(extendedGraphemeClusterLiteral id: StringLiteralType) {
-        self.init(stringLiteral: id)
-    }
-
-    public init(unicodeScalarLiteral id: StringLiteralType) {
-        self.init(stringLiteral: id)
-    }
-
-    public init(stringLiteral value: StringLiteralType) {
-        self.init(version: value)!
     }
 }

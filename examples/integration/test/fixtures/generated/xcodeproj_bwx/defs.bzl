@@ -2,33 +2,31 @@
 
 # buildifier: disable=bzl-visibility
 load(
-    "@rules_xcodeproj//xcodeproj/internal:xcodeproj_aspect.bzl",
-    "make_xcodeproj_aspect",
+    "@@rules_xcodeproj~override//xcodeproj/internal:xcodeproj_factory.bzl",
+    "xcodeproj_factory",
 )
 
 # buildifier: disable=bzl-visibility
 load(
-    "@rules_xcodeproj//xcodeproj/internal:xcodeproj_rule.bzl",
-    "make_xcodeproj_rule",
-)
-
-# buildifier: disable=bzl-visibility
-load(
-    "@rules_xcodeproj//xcodeproj/internal:xcodeproj_transitions.bzl",
+    "@@rules_xcodeproj~override//xcodeproj/internal:xcodeproj_transitions.bzl",
     "make_xcodeproj_target_transitions",
 )
 
 # buildifier: disable=bzl-visibility
 load(
-    "@rules_xcodeproj//xcodeproj/internal:fixtures.bzl",
+    "@@rules_xcodeproj~override//xcodeproj/internal:fixtures.bzl",
     "fixtures_transition",
 )
+
+_FOCUSED_LABELS = []
+_OWNED_EXTRA_FILES = {"@@//Lib:README.md": "@@//Lib:Lib", "@@//iOSApp:ownership.yaml": "@@//iOSApp/Source:iOSApp"}
+_UNFOCUSED_LABELS = ["@@//Lib:LibFramework.iOS"]
 
 # Transition
 
 _INPUTS = {}
 
-_XCODE_CONFIGURATIONS = {"AppStore": {"//command_line_option:compilation_mode": "opt", "@//:flag_to_transition_on": "AAAAAAA"}, "Debug": {"//command_line_option:compilation_mode": "dbg", "@//:flag_to_transition_on": "B"}}
+_XCODE_CONFIGURATIONS = {"AppStore": {"//command_line_option:compilation_mode": "opt", "@@//:flag_to_transition_on": "AAAAAAA"}, "Debug": {"//command_line_option:compilation_mode": "dbg", "@@//:flag_to_transition_on": "B"}}
 
 def _target_transition_implementation(settings, _attr):
     outputs = {}
@@ -47,22 +45,30 @@ def _target_transition_implementation(settings, _attr):
 _target_transitions = make_xcodeproj_target_transitions(
     implementation = _target_transition_implementation,
     inputs = _INPUTS.keys(),
-    outputs = ["//command_line_option:compilation_mode", "@//:flag_to_transition_on"],
+    outputs = ["//command_line_option:compilation_mode", "@@//:flag_to_transition_on"],
 )
 
 # Aspect
 
-_aspect = make_xcodeproj_aspect(
+_aspect = xcodeproj_factory.make_aspect(
     build_mode = "xcode",
+    focused_labels = _FOCUSED_LABELS,
     generator_name = "xcodeproj_bwx",
+    owned_extra_files = _OWNED_EXTRA_FILES,
+    unfocused_labels = _UNFOCUSED_LABELS,
+    use_incremental = False,
 )
 
 # Rule
 
-xcodeproj = make_xcodeproj_rule(
-    xcodeproj_aspect = _aspect,
+xcodeproj = xcodeproj_factory.make_rule(
+    focused_labels = _FOCUSED_LABELS,
     is_fixture = True,
+    owned_extra_files = _OWNED_EXTRA_FILES,
     target_transitions = _target_transitions,
+    unfocused_labels = _UNFOCUSED_LABELS,
+    use_incremental = False,
+    xcodeproj_aspect = _aspect,
     xcodeproj_transition = fixtures_transition,
 )
 

@@ -5,7 +5,7 @@ extension Generator {
     static func pbxProjectPrefixPartial(
         buildSettings: String,
         compatibilityVersion: String,
-        defaultXcodeConfiguration: String?,
+        defaultXcodeConfiguration: String,
         developmentRegion: String,
         organizationName: String?,
         projectDir: String,
@@ -26,11 +26,7 @@ extension Generator {
 
         // Build configurations
 
-        let sortedXcodeConfigurations = Set(xcodeConfigurations).sorted()
-        let defaultXcodeConfiguration = defaultXcodeConfiguration ??
-            sortedXcodeConfigurations.first!
-
-        let buildConfigurations =  sortedXcodeConfigurations
+        let buildConfigurations =  xcodeConfigurations
             .enumerated()
             .map { index, name in
                 let id = Identifiers.Project
@@ -49,7 +45,7 @@ extension Generator {
 
         // Final form
 
-        // This is a `PBXProj` partial for `PBXProject` related elements and
+        // This is a `PBXProj` partial for `PBXProject` related objects and
         // _part of_ the `PBXProject` element. Different generators will
         // generate the remaining parts of the `PBXProject` element. Because of
         // this, it's intentional that the element isn't terminated, and

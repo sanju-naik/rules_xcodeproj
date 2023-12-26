@@ -1,5 +1,5 @@
-import GeneratorCommon
 import PathKit
+import ToolCommon
 import XcodeProj
 
 extension Generator {
@@ -11,9 +11,13 @@ extension Generator {
         buildMode: BuildMode,
         forFixtures: Bool,
         project: Project,
-        directories: Directories
+        directories: Directories,
+        indexImport: String,
+        minimumXcodeVersion: SemanticVersion
     ) -> PBXProj {
-        let pbxProj = PBXProj()
+        let pbxProj = PBXProj(
+            objectVersion: minimumXcodeVersion.pbxProjObjectVersion
+        )
 
         let nonRelativeProjectDir = directories.executionRoot
         let options = project.options
@@ -78,42 +82,25 @@ extension Generator {
             "BUILD_DIR": """
 $(SYMROOT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
 """,
+            "BUILD_MARKER_FILE": "$(OBJROOT)/build_marker",
             "BUILD_WORKSPACE_DIRECTORY": "$(SRCROOT)",
-            // `BUILT_PRODUCTS_DIR` isn't actually used by the build, since
-            // `DEPLOYMENT_LOCATION` is set. It does prevent `DYLD_LIBRARY_PATH`
-            // from being modified though.
-            "BUILT_PRODUCTS_DIR": """
-$(INDEXING_BUILT_PRODUCTS_DIR__$(INDEX_ENABLE_BUILD_ARENA))
-""",
             "CLANG_ENABLE_OBJC_ARC": true,
             "CLANG_MODULES_AUTOLINK": false,
             "CONFIGURATION_BUILD_DIR": "$(BUILD_DIR)/$(BAZEL_PACKAGE_BIN_DIR)",
             "COPY_PHASE_STRIP": false,
             "DEBUG_INFORMATION_FORMAT": "dwarf",
-            "DEPLOYMENT_LOCATION": """
-$(INDEXING_DEPLOYMENT_LOCATION__$(INDEX_ENABLE_BUILD_ARENA)),
-""",
             "DSTROOT": "$(PROJECT_TEMP_DIR)",
             "ENABLE_DEFAULT_SEARCH_PATHS": "NO",
             // Xcode's default for `ENABLE_STRICT_OBJC_MSGSEND` doesn't match
             // its new project default, so we need to set it explicitly
             "ENABLE_STRICT_OBJC_MSGSEND": true,
+            "ENABLE_USER_SCRIPT_SANDBOXING": false,
             "GCC_OPTIMIZATION_LEVEL": "0",
+            "INDEX_DATA_STORE_DIR": "$(INDEX_DATA_STORE_DIR)",
             "INDEX_FORCE_SCRIPT_EXECUTION": true,
-            "INDEXING_BUILT_PRODUCTS_DIR__": """
-$(INDEXING_BUILT_PRODUCTS_DIR__NO)
-""",
-            "INDEXING_BUILT_PRODUCTS_DIR__NO": "$(BUILD_DIR)",
-            // Index Build doesn't respect `DEPLOYMENT_LOCATION`, but we also
-            // don't need the `DYLD_LIBRARY_PATH` fix for it
-            "INDEXING_BUILT_PRODUCTS_DIR__YES": "$(CONFIGURATION_BUILD_DIR)",
-            "INDEXING_DEPLOYMENT_LOCATION__": """
-$(INDEXING_DEPLOYMENT_LOCATION__NO)
-""",
-            "INDEXING_DEPLOYMENT_LOCATION__NO": true,
-            "INDEXING_DEPLOYMENT_LOCATION__YES": false,
+            "INDEX_IMPORT": indexImport,
             "INDEXING_PROJECT_DIR__": "$(INDEXING_PROJECT_DIR__NO)",
-            "INDEXING_PROJECT_DIR__NO": "$(PROJECT_DIR)",
+            "INDEXING_PROJECT_DIR__NO": absoluteProjectDirPath,
             "INDEXING_PROJECT_DIR__YES": indexingProjectDirPath,
             "INSTALL_PATH": "$(BAZEL_PACKAGE_BIN_DIR)/$(TARGET_NAME)/bin",
             "INTERNAL_DIR": """
@@ -123,15 +110,12 @@ $(PROJECT_FILE_PATH)/\(directories.internalDirectoryName)
             "LD_DYLIB_INSTALL_NAME": "",
             // We don't want Xcode to set any search paths, since we set them in
             // `link.params`
-            "LD_RUNPATH_SEARCH_PATHS": [] as [String],
+            "LD_RUNPATH_SEARCH_PATHS": "",
             "ONLY_ACTIVE_ARCH": true,
             "PROJECT_DIR": """
 $(INDEXING_PROJECT_DIR__$(INDEX_ENABLE_BUILD_ARENA))
 """,
             "RULES_XCODEPROJ_BUILD_MODE": buildMode.rawValue,
-            "SCHEME_TARGET_IDS_FILE": """
-$(OBJROOT)/scheme_target_ids
-""",
             "SRCROOT": srcRoot,
             // Bazel currently doesn't support Catalyst
             "SUPPORTS_MACCATALYST": false,
@@ -155,6 +139,7 @@ $(PROJECT_TEMP_DIR)/$(BAZEL_PACKAGE_BIN_DIR)/$(COMPILE_TARGET_NAME)
 
         if buildMode.usesBazelModeBuildScripts {
             buildSettings.merge([
+                "ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS": false,
                 "CC": "$(BAZEL_INTEGRATION_DIR)/clang.sh",
                 "CXX": "$(BAZEL_INTEGRATION_DIR)/clang.sh",
                 "CODE_SIGNING_ALLOWED": false,
@@ -163,6 +148,31 @@ $(PROJECT_TEMP_DIR)/$(BAZEL_PACKAGE_BIN_DIR)/$(COMPILE_TARGET_NAME)
                 "LIBTOOL": "$(BAZEL_INTEGRATION_DIR)/libtool.sh",
                 "SWIFT_EXEC": "$(BAZEL_INTEGRATION_DIR)/swiftc",
                 "SWIFT_USE_INTEGRATED_DRIVER": false,
+                "TAPI_EXEC": "/usr/bin/true",
+            ], uniquingKeysWith: { _, r in r })
+        } else {
+            buildSettings.merge([
+            // `BUILT_PRODUCTS_DIR` isn't actually used by the build, since
+            // `DEPLOYMENT_LOCATION` is set. It does prevent `DYLD_LIBRARY_PATH`
+            // from being modified though.
+            "BUILT_PRODUCTS_DIR": """
+$(INDEXING_BUILT_PRODUCTS_DIR__$(INDEX_ENABLE_BUILD_ARENA))
+""",
+            "DEPLOYMENT_LOCATION": """
+$(INDEXING_DEPLOYMENT_LOCATION__$(INDEX_ENABLE_BUILD_ARENA)),
+""",
+            // Index Build doesn't respect `DEPLOYMENT_LOCATION`, but we also
+            // don't need the `DYLD_LIBRARY_PATH` fix for it
+            "INDEXING_BUILT_PRODUCTS_DIR__": """
+$(INDEXING_BUILT_PRODUCTS_DIR__NO)
+""",
+            "INDEXING_BUILT_PRODUCTS_DIR__NO": "$(BUILD_DIR)",
+            "INDEXING_BUILT_PRODUCTS_DIR__YES": "$(CONFIGURATION_BUILD_DIR)",
+            "INDEXING_DEPLOYMENT_LOCATION__": """
+$(INDEXING_DEPLOYMENT_LOCATION__NO)
+""",
+            "INDEXING_DEPLOYMENT_LOCATION__NO": true,
+            "INDEXING_DEPLOYMENT_LOCATION__YES": false,
             ], uniquingKeysWith: { _, r in r })
         }
 
@@ -197,7 +207,7 @@ $(PROJECT_TEMP_DIR)/$(BAZEL_PACKAGE_BIN_DIR)/$(COMPILE_TARGET_NAME)
             name: project.name,
             buildConfigurationList: buildConfigurationList,
             compatibilityVersion: """
-Xcode \(min(project.minimumXcodeVersion.major, 14)).0
+Xcode \(min(project.minimumXcodeVersion.major, 15)).0
 """,
             mainGroup: mainGroup,
             developmentRegion: options.developmentRegion,
@@ -208,5 +218,15 @@ Xcode \(min(project.minimumXcodeVersion.major, 14)).0
         pbxProj.rootObject = pbxProject
 
         return pbxProj
+    }
+}
+
+private extension SemanticVersion {
+    var pbxProjObjectVersion: UInt {
+        switch major {
+            case 15...: return 60
+            case 14: return 56
+            default: return 55 // Xcode 13
+        }
     }
 }

@@ -19,8 +19,8 @@ swift_library(
     srcs = glob(["src/**/*.swift"]),
     module_name = "pbxproj_prefix",
     deps = [
-        "//tools/generators/lib/GeneratorCommon",
         "//tools/generators/lib/PBXProj",
+        "//tools/lib/ToolCommon",
         "@com_github_apple_swift_argument_parser//:ArgumentParser",
         "@com_github_apple_swift_collections//:OrderedCollections",
     ],
@@ -35,7 +35,7 @@ swift_library(
 # fix that for us.
 macos_command_line_application(
     name = "pbxproj_prefix",
-    minimum_os_version = "12.0",
+    minimum_os_version = "13.0",
     visibility = ["//visibility:public"],
     deps = [":pbxproj_prefix.library"],
 )
@@ -52,7 +52,7 @@ apple_universal_binary(
         "x86_64",
         "arm64",
     ],
-    minimum_os_version = "12.0",
+    minimum_os_version = "13.0",
     platform_type = "macos",
     visibility = ["//visibility:public"],
 )
@@ -72,7 +72,7 @@ swift_library(
 
 macos_unit_test(
     name = "pbxproj_prefix_tests",
-    minimum_os_version = "12.0",
+    minimum_os_version = "13.0",
     visibility = [
         "//test:__subpackages__",
         "@rules_xcodeproj//xcodeproj:generated",

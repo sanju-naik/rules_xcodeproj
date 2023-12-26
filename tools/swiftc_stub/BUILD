@@ -26,6 +26,7 @@ macos_command_line_application(
 swift_library(
     name = "swiftc_stub.library",
     srcs = ["main.swift"],
+    module_name = "swiftc_stub",
 )
 
 swift_binary(

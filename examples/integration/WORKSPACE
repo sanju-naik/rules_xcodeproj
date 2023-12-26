@@ -10,6 +10,10 @@ load(
 
 xcodeproj_rules_dependencies()
 
+load("@bazel_features//:deps.bzl", "bazel_features_deps")
+
+bazel_features_deps()
+
 load(
     "@build_bazel_rules_apple//apple:repositories.bzl",
     "apple_rules_dependencies",
@@ -38,26 +42,16 @@ load(
 
 apple_support_dependencies()
 
-# rules_apple_linker used for testing using a different linker
-
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-
-http_archive(
-    name = "rules_apple_linker",
-    sha256 = "b9d6bdf4b1c8e0107bbdb3f71d4b59ba5a16029e438e23d2c4d448b04693d72e",
-    strip_prefix = "rules_apple_linker-0.3.1",
-    url = "https://github.com/keith/rules_apple_linker/archive/refs/tags/0.3.1.tar.gz",
-)
-
-load("@rules_apple_linker//:deps.bzl", "rules_apple_linker_deps")
-
-rules_apple_linker_deps()
-
 # Used for testing shared cache between Intel and Apple silicon
 
 register_execution_platforms("@build_bazel_apple_support//platforms:macos_x86_64")
 
 # External repos for examples
+
+local_repository(
+    name = "examples_cc_external",
+    path = "cc/external",
+)
 
 local_repository(
     name = "examples_ios_app_external",
@@ -66,7 +60,7 @@ local_repository(
 
 new_local_repository(
     name = "examples_command_line_external",
-    build_file = "CommandLine/external/BUILD.tpl",
+    build_file = "//CommandLine/external:BUILD.tpl",
     path = "CommandLine/external",
 )
 

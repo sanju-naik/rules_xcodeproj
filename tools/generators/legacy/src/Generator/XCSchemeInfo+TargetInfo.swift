@@ -1,4 +1,4 @@
-import GeneratorCommon
+import ToolCommon
 import XcodeProj
 
 extension XCSchemeInfo {
@@ -139,29 +139,14 @@ Cannot access `selectedHostInfo` until host resolution has occurred.
 // MARK: `buildableReferences`
 
 extension XCSchemeInfo.TargetInfo {
-    /// Returns the target buildable reference along with any additionally
-    /// required buildable references (e.g. the selected host, or SwiftUI
-    /// Preview dependencies).
-    var buildableReferences: [XCScheme.BuildableReference] {
+    /// Returns the target buildable reference along with the the selected host.
+    var selfAndHostBuildableReferences: [XCScheme.BuildableReference] {
         var results = [buildableReference]
         // Only include the selected host, not all of the hosts.
         if case let .selected(selectedHostInfo) = hostResolution {
             results.append(selectedHostInfo.buildableReference)
         }
-        results.append(contentsOf: additionalBuildableReferences)
         return results
-    }
-}
-
-// MARK: `bazelBuildPreActions`
-
-extension XCSchemeInfo.TargetInfo {
-    func buildPreAction() throws -> XCScheme.ExecutionAction {
-        return try .init(
-            buildFor: buildableReference,
-            name: pbxTarget.name,
-            hostIndex: selectedHostInfo?.index
-        )
     }
 }
 
@@ -220,12 +205,10 @@ extension Sequence where Element == XCSchemeInfo.TargetInfo {
             return []
         }
 
-        let preActions = try targetInfos.compactMap { try $0.buildPreAction() }
-
         return [
             .initBazelBuildOutputGroupsFile(
                 buildableReference: buildableReference
             ),
-        ] + preActions
+        ]
     }
 }

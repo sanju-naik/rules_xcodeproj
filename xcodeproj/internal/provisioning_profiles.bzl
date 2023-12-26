@@ -5,14 +5,54 @@ load(
     "AppleProvisioningProfileInfo",
 )
 load(":collections.bzl", "set_if_true")
-load(":providers.bzl", "XcodeProjProvisioningProfileInfo")
 
-def _process_attr(*, ctx, automatic_target_info, build_settings):
+def _incremental_process_attr(
+        *,
+        automatic_target_info,
+        objc_fragment,
+        rule_attr):
     attr = automatic_target_info.provisioning_profile
-    if not attr or not hasattr(ctx.rule.attr, attr):
+    if attr and hasattr(rule_attr, attr):
+        provisioning_profile_target = getattr(rule_attr, attr, None)
+        is_missing_profile = not provisioning_profile_target
+    else:
+        is_missing_profile = False
+        provisioning_profile_target = None
+
+    if (not provisioning_profile_target or
+        XcodeProjProvisioningProfileInfo not in provisioning_profile_target):
+        return struct(
+            certificate_name = None,
+            is_missing_profile = is_missing_profile,
+            is_xcode_managed = False,
+            name = None,
+            team_id = None,
+        )
+
+    info = provisioning_profile_target[XcodeProjProvisioningProfileInfo]
+
+    is_xcode_managed = info.is_xcode_managed
+
+    return struct(
+        certificate_name = objc_fragment.signing_certificate_name,
+        is_missing_profile = is_missing_profile,
+        is_xcode_managed = is_xcode_managed,
+        # We need to not set the profile name if the profile is managed by Xcode
+        name = info.profile_name if not is_xcode_managed else None,
+        team_id = info.team_id,
+    )
+
+def _legacy_process_attr(
+        *,
+        automatic_target_info,
+        build_settings,
+        objc_fragment,
+        rule_attr):
+    attr = automatic_target_info.provisioning_profile
+    if not attr or not hasattr(rule_attr, attr):
         return
 
-    provisioning_profile_target = getattr(ctx.rule.attr, attr)
+    provisioning_profile_target = getattr(rule_attr, attr)
     if (provisioning_profile_target and
         XcodeProjProvisioningProfileInfo in provisioning_profile_target):
         info = provisioning_profile_target[XcodeProjProvisioningProfileInfo]
@@ -42,8 +82,23 @@ def _process_attr(*, ctx, automatic_target_info, build_settings):
     set_if_true(
         build_settings,
         "CODE_SIGN_IDENTITY",
-        ctx.fragments.objc.signing_certificate_name,
+        objc_fragment.signing_certificate_name,
     )
+
+# Provider
+
+XcodeProjProvisioningProfileInfo = provider(
+    "Provides information about a provisioning profile.",
+    fields = {
+        "is_xcode_managed": "Whether the profile is managed by Xcode.",
+        "profile_name": """\
+The profile name (e.g. "iOS Team Provisioning Profile: com.example.app").
+""",
+        "team_id": """\
+The Team ID the profile is associated with (e.g. "V82V4GQZXM").
+""",
+    },
+)
 
 def _create_profileinfo(
         *,
@@ -63,6 +118,7 @@ def _create_profileinfo(
     )
 
 provisioning_profiles = struct(
-    create_profileinfo = _create_profileinfo,
-    process_attr = _process_attr,
+    create_provider = _create_profileinfo,
+    incremental_process_attr = _incremental_process_attr,
+    legacy_process_attr = _legacy_process_attr,
 )

@@ -11,6 +11,7 @@ _DOC_COMPONENTS = [
     "xcode_build_settings",
     "xcode_schemes",
     "xcodeproj",
+    "xcschemes",
 ]
 
 [
@@ -18,8 +19,8 @@ _DOC_COMPONENTS = [
         name = component,
         out = "{}.md".format(component),
         input = "//xcodeproj/internal/docs:{}.bzl".format(component),
-        tags = ["no-sandbox"],  # https://github.com/bazelbuild/stardoc/issues/112
-        deps = ["//xcodeproj/internal:xcodeproj_internal"],
+        tags = ["manual"],
+        deps = ["//xcodeproj/internal"],
     )
     for component in _DOC_COMPONENTS
 ]
@@ -31,6 +32,7 @@ genrule(
         ":xcodeproj",
         ":top_level_target",
         ":project_options",
+        ":xcschemes",
         ":xcode_schemes",
         ":xcode_build_settings",
         ":providers",
@@ -75,10 +77,12 @@ write_file(
         )
         for doc in _DOCS
     ],
+    tags = ["manual"],
 )
 
 sh_binary(
     name = "update",
     srcs = ["update.sh"],
     data = ["{}.generated.md".format(doc) for doc in _DOCS],
+    tags = ["manual"],
 )

@@ -2,16 +2,13 @@ import PBXProj
 
 extension Generator {
     /// Calculates the `buildSettings` attribute of the `XCBuildConfiguration`
-    /// elements used by the `BazelDependencies` target.
+    /// objects used by the `BazelDependencies` target.
     ///
     /// - Parameters:
-    ///   - indexImport: The Bazel execution root relative path to the
-    ///     `index_import` executable.
     ///   - platforms: The platforms that the project builds for.
     ///   - targetIdsFile: The Bazel execution root relative path to the
     ///     target IDs list file.
     static func bazelDependenciesBuildSettings(
-        indexImport: String,
         platforms: [Platform],
         targetIdsFile: String
     ) -> String {
@@ -28,6 +25,8 @@ extension Generator {
 {
 				BAZEL_PACKAGE_BIN_DIR = rules_xcodeproj;
 				CALCULATE_OUTPUT_GROUPS_SCRIPT = "$(BAZEL_INTEGRATION_DIR)/calculate_output_groups.py";
+				CC = "";
+				CXX = "";
 				INDEXING_SUPPORTED_PLATFORMS__ = "$(INDEXING_SUPPORTED_PLATFORMS__NO)";
 				INDEXING_SUPPORTED_PLATFORMS__NO = \#(
                     sortedPlatforms
@@ -38,15 +37,14 @@ extension Generator {
 				INDEXING_SUPPORTED_PLATFORMS__YES = \#(
                     indexingSupportedPlatform.rawValue.pbxProjEscaped
                 );
-				INDEX_DATA_STORE_DIR = "$(INDEX_DATA_STORE_DIR)";
 				INDEX_DISABLE_SCRIPT_EXECUTION = YES;
-				INDEX_IMPORT = \#(
-                    indexImport
-                        .executionRootBasedBuildSettingPath
-                        .pbxProjEscaped
-				);
+				LD = "";
+				LDPLUSPLUS = "";
+				LIBTOOL = libtool;
 				SUPPORTED_PLATFORMS = "$(INDEXING_SUPPORTED_PLATFORMS__$(INDEX_ENABLE_BUILD_ARENA))";
 				SUPPORTS_MACCATALYST = YES;
+				SWIFT_EXEC = swiftc;
+				TAPI_EXEC = "";
 				TARGET_IDS_FILE = \#(
                     targetIdsFile
                         .executionRootBasedBuildSettingPath

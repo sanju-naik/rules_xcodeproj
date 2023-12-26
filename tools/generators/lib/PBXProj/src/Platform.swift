@@ -1,6 +1,13 @@
 import ArgumentParser
 
 public enum Platform: String, ExpressibleByArgument {
+    public enum OS: Comparable {
+        case macOS
+        case iOS
+        case tvOS
+        case watchOS
+    }
+
     case macOS = "macosx"
     case iOSDevice = "iphoneos"
     case iOSSimulator = "iphonesimulator"
@@ -9,6 +16,34 @@ public enum Platform: String, ExpressibleByArgument {
     case watchOSDevice = "watchos"
     case watchOSSimulator = "watchsimulator"
 }
+
+extension Platform {
+    private static let deviceEnvironment = "Device"
+    private static let simulatorEnvironment = "Simulator"
+
+    public var environment: String {
+        switch self {
+        case .macOS: return Self.deviceEnvironment
+        case .iOSDevice: return Self.deviceEnvironment
+        case .iOSSimulator: return Self.simulatorEnvironment
+        case .tvOSDevice: return Self.deviceEnvironment
+        case .tvOSSimulator: return Self.simulatorEnvironment
+        case .watchOSDevice: return Self.deviceEnvironment
+        case .watchOSSimulator: return Self.simulatorEnvironment
+        }
+    }
+
+    public var os: OS {
+        switch self {
+        case .macOS: return .macOS
+        case .iOSDevice, .iOSSimulator: return .iOS
+        case .tvOSDevice, .tvOSSimulator: return .tvOS
+        case .watchOSDevice, .watchOSSimulator: return .watchOS
+        }
+    }
+}
+
+// MARK: - Comparable
 
 extension Platform: Comparable {
     public static func < (lhs: Platform, rhs: Platform) -> Bool {

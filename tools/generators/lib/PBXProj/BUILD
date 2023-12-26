@@ -9,8 +9,9 @@ swift_library(
     module_name = "PBXProj",
     visibility = ["//tools/generators:__subpackages__"],
     deps = [
-        "//tools/generators/lib/GeneratorCommon",
+        "//tools/lib/ToolCommon",
         "@com_github_apple_swift_argument_parser//:ArgumentParser",
+        "@com_github_apple_swift_collections//:OrderedCollections",
     ],
 )
 
@@ -29,7 +30,7 @@ swift_library(
 
 macos_unit_test(
     name = "PBXProjTests",
-    minimum_os_version = "12.0",
+    minimum_os_version = "13.0",
     visibility = [
         "//test:__subpackages__",
         "@rules_xcodeproj//xcodeproj:generated",

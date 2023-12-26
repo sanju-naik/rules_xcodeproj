@@ -9,10 +9,10 @@ rules, then you will use these providers to communicate between them.
 """
 
 load(
-    "//xcodeproj/internal:providers.bzl",
+    "//xcodeproj/internal:automatic_target_info.bzl",
     _XcodeProjAutomaticTargetProcessingInfo = "XcodeProjAutomaticTargetProcessingInfo",
-    _XcodeProjInfo = "XcodeProjInfo",
 )
+load("//xcodeproj/internal:xcodeprojinfo.bzl", _XcodeProjInfo = "XcodeProjInfo")
 
 XcodeProjAutomaticTargetProcessingInfo = _XcodeProjAutomaticTargetProcessingInfo
 XcodeProjInfo = _XcodeProjInfo

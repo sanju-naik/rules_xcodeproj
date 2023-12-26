@@ -10,23 +10,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Initialize Bazel Build Output Groups File"
-               scriptText = "mkdir -p &quot;${SCHEME_TARGET_IDS_FILE%/*}&quot;&#10;if [[ -s &quot;$SCHEME_TARGET_IDS_FILE&quot; ]]; then&#10;    rm &quot;$SCHEME_TARGET_IDS_FILE&quot;&#10;fi&#10;">
-               <EnvironmentBuildable>
-                  <BuildableReference
-                     BuildableIdentifier = "primary"
-                     BlueprintIdentifier = "D72E91668AA84CA0E91BC0E9"
-                     BuildableName = "watchOSAppExtensionUnitTests.xctest"
-                     BlueprintName = "watchOSAppExtensionUnitTests"
-                     ReferencedContainer = "container:../../../../../test/fixtures/bwb.xcodeproj">
-                  </BuildableReference>
-               </EnvironmentBuildable>
-            </ActionContent>
-         </ExecutionAction>
-         <ExecutionAction
-            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
-            <ActionContent
-               title = "Set Bazel Build Output Groups for watchOSAppExtensionUnitTests"
-               scriptText = "echo &quot;$BAZEL_LABEL,$BAZEL_TARGET_ID&quot; &gt;&gt; &quot;$SCHEME_TARGET_IDS_FILE&quot;&#10;">
+               scriptText = "mkdir -p &quot;${BUILD_MARKER_FILE%/*}&quot;&#10;touch &quot;$BUILD_MARKER_FILE&quot;&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
@@ -64,6 +48,20 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "D72E91668AA84CA0E91BC0E9"
+               BuildableName = "watchOSAppExtensionUnitTests.xctest"
+               BlueprintName = "watchOSAppExtensionUnitTests"
+               ReferencedContainer = "container:../../../../../test/fixtures/bwb.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "1EF2B99D58C7884FED2A0769"
                BuildableName = "LibFramework.watchOS.framework"
                BlueprintName = "LibFramework.watchOS"
@@ -81,20 +79,6 @@
                BlueprintIdentifier = "F619A1189B9E946F6BE02A2F"
                BuildableName = "UIFramework.watchOS.framework"
                BlueprintName = "UIFramework.watchOS"
-               ReferencedContainer = "container:../../../../../test/fixtures/bwb.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D72E91668AA84CA0E91BC0E9"
-               BuildableName = "watchOSAppExtensionUnitTests.xctest"
-               BlueprintName = "watchOSAppExtensionUnitTests"
                ReferencedContainer = "container:../../../../../test/fixtures/bwb.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>

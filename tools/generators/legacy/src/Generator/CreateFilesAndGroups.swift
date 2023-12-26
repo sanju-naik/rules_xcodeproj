@@ -1,8 +1,8 @@
 // swiftlint:disable file_length
 import Foundation
-import GeneratorCommon
 import OrderedCollections
 import PathKit
+import ToolCommon
 import XcodeProj
 
 /// Wrapper for files (`PBXFileReference`, `PBXVariantGroup`, and
@@ -235,7 +235,7 @@ extension Generator {
                 } else {
                     lastKnownFileType = ext.flatMap { ext in
                         return Xcode.filetype(extension: ext)
-                    }
+                    } ?? "file"
                 }
                 isFileLike = true
             }
@@ -253,7 +253,8 @@ extension Generator {
                 sourceTree: sourceTree,
                 name: name,
                 explicitFileType: explicitFileType,
-                lastKnownFileType: lastKnownFileType,
+                lastKnownFileType: explicitFileType == nil ?
+                    lastKnownFileType : nil,
                 path: path
             )
             pbxProj.add(object: file)
@@ -318,7 +319,7 @@ extension Generator {
                 sourceTree: .group,
                 name: language,
                 lastKnownFileType: ext
-                    .flatMap { Xcode.filetype(extension: $0) },
+                    .flatMap { Xcode.filetype(extension: $0) } ?? "file",
                 path: "\(parentPath)/\(node.name)"
             )
             pbxProj.add(object: file)
@@ -791,9 +792,13 @@ extension Generator {
             guard
                 let xcVerisonGroup = xcVersionGroups[xccurrentversion.container]
             else {
-                throw PreconditionError(message: """
-"\(xccurrentversion.container.path)" `XCVersionGroup` not found in `elements`
-""")
+                // We can get `.xccurrentversion` files for `.xcdatamodel`
+                // bundles that are uncategorized (e.g.
+                // `rules_ios_apple_framework.resource_bundles`). If no
+                // downstream target is focused, we won't have an
+                // `xcVersionGroups` for this `xccurrentversion`. We can safely
+                // ignore these.
+                continue
             }
 
             guard

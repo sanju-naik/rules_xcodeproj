@@ -11,7 +11,6 @@ def project_options(
 
     Args:
         development_region: Optional. The development region for the project.
-            Defaults to `"en"`.
         indent_width: Optional. The number of spaces to use for indentation.
         organization_name: Optional. Populates the `ORGANIZATIONNAME` attribute
             for the project.
@@ -19,7 +18,7 @@ def project_options(
         uses_tabs: Optional. Whether to use tabs for indentation.
 
     Returns:
-        A `struct` containing fields for the provided arguments.
+        A `dict` containing fields for the provided arguments.
     """
     if not development_region:
         fail("`project_options.development_region` must be specified")

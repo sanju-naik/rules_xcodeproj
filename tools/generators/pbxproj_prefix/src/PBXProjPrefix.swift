@@ -1,6 +1,6 @@
 import ArgumentParser
 import Foundation
-import GeneratorCommon
+import ToolCommon
 
 @main
 struct PBXProjPrefix: ParsableCommand {
@@ -13,6 +13,10 @@ struct PBXProjPrefix: ParsableCommand {
 
     @Flag(help: "Whether to colorize console output.")
     var colorize = false
+
+    static func main() async {
+        await parseAsRootSupportingParamsFile()
+    }
 
     func run() throws {
         let logger = DefaultLogger(

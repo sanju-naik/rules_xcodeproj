@@ -1,5 +1,5 @@
-import GeneratorCommon
 import PathKit
+import ToolCommon
 import XcodeProj
 
 extension Generator {
@@ -11,7 +11,6 @@ extension Generator {
         xcodeConfigurations: Set<String>,
         defaultXcodeConfiguration: String,
         targetIdsFile: String,
-        indexImport: String,
         bazelConfig _: String,
         preBuildScript: String?,
         postBuildScript: String?,
@@ -39,8 +38,6 @@ extension Generator {
             "CALCULATE_OUTPUT_GROUPS_SCRIPT": """
 $(BAZEL_INTEGRATION_DIR)/calculate_output_groups.py
 """,
-            "INDEX_DATA_STORE_DIR": "$(INDEX_DATA_STORE_DIR)",
-            "INDEX_IMPORT": indexImport,
             "INDEXING_SUPPORTED_PLATFORMS__": """
 $(INDEXING_SUPPORTED_PLATFORMS__NO)
 """,
@@ -57,6 +54,15 @@ $(INDEXING_SUPPORTED_PLATFORMS__$(INDEX_ENABLE_BUILD_ARENA))
             "SUPPORTS_MACCATALYST": true,
             "TARGET_IDS_FILE": targetIdsFile,
             "TARGET_NAME": "BazelDependencies",
+
+            // Unset our tool overrides, so scripts can use the correct versions
+            "CC": "",
+            "CXX": "",
+            "LD": "",
+            "LDPLUSPLUS": "",
+            "LIBTOOL": "libtool",
+            "SWIFT_EXEC": "swiftc",
+            "TAPI_EXEC": "",
         ]
 
         if buildMode.usesBazelModeBuildScripts {

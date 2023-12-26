@@ -1,4 +1,4 @@
-import GeneratorCommon
+import ToolCommon
 import XCTest
 
 @testable import pbxproj_prefix
@@ -64,11 +64,11 @@ class CompatibilityVersionTests: XCTestCase {
         )
     }
 
-    func test_tooLargeXcode() {
+    func test_xcode15() {
         // Arrange
 
-        let minimumXcodeVersion: SemanticVersion = "42.3.1"
-        let expectedCompatibilityVersion = "Xcode 14.0"
+        let minimumXcodeVersion: SemanticVersion = "15.0.1"
+        let expectedCompatibilityVersion = "Xcode 15.0"
 
         // Act
 
@@ -83,21 +83,24 @@ class CompatibilityVersionTests: XCTestCase {
             expectedCompatibilityVersion
         )
     }
-}
 
-extension SemanticVersion: ExpressibleByStringLiteral {
-    public typealias ExtendedGraphemeClusterLiteralType = StringLiteralType
-    public typealias UnicodeScalarLiteralType = StringLiteralType
+    func test_tooLargeXcode() {
+        // Arrange
 
-    public init(extendedGraphemeClusterLiteral id: StringLiteralType) {
-        self.init(stringLiteral: id)
-    }
+        let minimumXcodeVersion: SemanticVersion = "42.3.1"
+        let expectedCompatibilityVersion = "Xcode 15.0"
 
-    public init(unicodeScalarLiteral id: StringLiteralType) {
-        self.init(stringLiteral: id)
-    }
+        // Act
 
-    public init(stringLiteral value: StringLiteralType) {
-        self.init(version: value)!
+        let compatibilityVersion = Generator.compatibilityVersion(
+            minimumXcodeVersion: minimumXcodeVersion
+        )
+
+        // Assert
+
+        XCTAssertEqual(
+            compatibilityVersion,
+            expectedCompatibilityVersion
+        )
     }
 }

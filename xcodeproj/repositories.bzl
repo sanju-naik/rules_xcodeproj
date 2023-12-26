@@ -111,27 +111,47 @@ def xcodeproj_rules_dependencies(
     if include_bzlmod_ready_dependencies:
         _maybe(
             http_archive,
+            name = "bazel_features",
+            sha256 = "62c26e427e5cbc751024446927622e398a9dcdf32c64325238815709d11c11a8",
+            strip_prefix = "bazel_features-1.1.1",
+            url = "https://github.com/bazel-contrib/bazel_features/releases/download/v1.1.1/bazel_features-v1.1.1.tar.gz",
+            ignore_version_differences = ignore_version_differences,
+        )
+
+        _maybe(
+            http_archive,
             name = "bazel_skylib",
-            sha256 = "74d544d96f4a5bb630d465ca8bbcfe231e3594e5aae57e1edbf17a6eb3ca2506",
-            url = "https://github.com/bazelbuild/bazel-skylib/releases/download/1.3.0/bazel-skylib-1.3.0.tar.gz",
+            sha256 = "66ffd9315665bfaafc96b52278f57c7e2dd09f5ede279ea6d39b2be471e7e3aa",
+            url = "https://github.com/bazelbuild/bazel-skylib/releases/download/1.4.2/bazel-skylib-1.4.2.tar.gz",
             ignore_version_differences = ignore_version_differences,
         )
 
         _maybe(
             http_archive,
             name = "build_bazel_rules_swift",
-            sha256 = "bf2861de6bf75115288468f340b0c4609cc99cc1ccc7668f0f71adfd853eedb3",
-            url = "https://github.com/bazelbuild/rules_swift/releases/download/1.7.1/rules_swift.1.7.1.tar.gz",
+            sha256 = "28a66ff5d97500f0304f4e8945d936fe0584e0d5b7a6f83258298007a93190ba",
+            url = "https://github.com/bazelbuild/rules_swift/releases/download/1.13.0/rules_swift.1.13.0.tar.gz",
             ignore_version_differences = ignore_version_differences,
         )
 
         is_bazel_6 = hasattr(apple_common, "link_multi_arch_static_library")
         if is_bazel_6:
-            rules_apple_sha256 = "9e26307516c4d5f2ad4aee90ac01eb8cd31f9b8d6ea93619fc64b3cbc81b0944"
-            rules_apple_version = "2.2.0"
+            rules_apple_sha256 = "34c41bfb59cdaea29ac2df5a2fa79e5add609c71bb303b2ebb10985f93fa20e7"
+            rules_apple_version = "3.1.1"
         else:
             rules_apple_sha256 = "f94e6dddf74739ef5cb30f000e13a2a613f6ebfa5e63588305a71fce8a8a9911"
             rules_apple_version = "1.1.3"
+
+            # Without manually specifying apple_support version, we get the old
+            # one set by rules_apple 1.1.3. We need a newer one for the newer
+            # rules_swift.
+            _maybe(
+                http_archive,
+                name = "build_bazel_apple_support",
+                sha256 = "cf4d63f39c7ba9059f70e995bf5fe1019267d3f77379c2028561a5d7645ef67c",
+                url = "https://github.com/bazelbuild/apple_support/releases/download/1.11.1/apple_support.1.11.1.tar.gz",
+                ignore_version_differences = ignore_version_differences,
+            )
 
         _maybe(
             http_archive,
@@ -159,8 +179,8 @@ native_binary(
     visibility = ["//visibility:public"],
 )
 """,
-        sha256 = "9e26765efd7cda24dbe91965dfb1ff8abcaa9ac7bafc3afa7fc1d081dea47d7f",
-        url = "https://github.com/MobileNativeFoundation/index-import/releases/download/5.7.0.1/index-import.tar.gz",
+        sha256 = "28c1ffa39d99e74ed70623899b207b41f79214c498c603915aef55972a851a15",
+        url = "https://github.com/MobileNativeFoundation/index-import/releases/download/5.8.0.1/index-import.tar.gz",
         ignore_version_differences = ignore_version_differences,
     )
 
@@ -195,9 +215,9 @@ swift_library(
     deps = [":ArgumentParserToolInfo"],
 )
 """,
-        sha256 = "44782ba7180f924f72661b8f457c268929ccd20441eac17301f18eff3b91ce0c",
-        strip_prefix = "swift-argument-parser-1.2.2",
-        url = "https://github.com/apple/swift-argument-parser/archive/refs/tags/1.2.2.tar.gz",
+        sha256 = "4a10bbef290a2167c5cc340b39f1f7ff6a8cf4e1b5433b68548bf5f1e542e908",
+        strip_prefix = "swift-argument-parser-1.2.3",
+        url = "https://github.com/apple/swift-argument-parser/archive/refs/tags/1.2.3.tar.gz",
         ignore_version_differences = ignore_version_differences,
     )
 
@@ -363,9 +383,10 @@ swift_library(
     visibility = ["//visibility:public"],
 )
 """,
-        sha256 = "d9e4c8a91c60fb9c92a04caccbb10ded42f4cb47b26a212bc6b39cc390a4b096",
-        strip_prefix = "swift-collections-1.0.4",
-        url = "https://github.com/apple/swift-collections/archive/refs/tags/1.0.4.tar.gz",
+        sha256 = "1a2ec8cc6c63c383a9dd4eb975bf83ce3bc7a2ac21a0289a50dae98a576327d6",
+        strip_prefix = "swift-collections-4cab1c1c417855b90e9cfde40349a43aff99c536",
+        # TODO: Change to 1.0.5 when it's released
+        url = "https://github.com/apple/swift-collections/archive/4cab1c1c417855b90e9cfde40349a43aff99c536.tar.gz",
         ignore_version_differences = ignore_version_differences,
     )
 
@@ -409,8 +430,8 @@ swift_library(
             # Custom for our tests
             Label("//third_party/com_github_pointfreeco_swift_custom_dump:type_name.patch"),
         ],
-        sha256 = "a45e8f275794960651043623e23abb8365f0455b4ad5976bc56a4fa00c5efb31",
-        strip_prefix = "swift-custom-dump-0.5.0",
-        url = "https://github.com/pointfreeco/swift-custom-dump/archive/refs/tags/0.5.0.tar.gz",
+        sha256 = "9aec23538c2d050e3829200cd73ecb3c402d3922366ed2f6abb4f748f7582533",
+        strip_prefix = "swift-custom-dump-0.11.1",
+        url = "https://github.com/pointfreeco/swift-custom-dump/archive/refs/tags/0.11.1.tar.gz",
         ignore_version_differences = ignore_version_differences,
     )

@@ -1,5 +1,5 @@
 import CustomDump
-import GeneratorCommon
+import ToolCommon
 import XcodeProj
 import XCTest
 
@@ -112,8 +112,9 @@ extension XCSchemeInfoTestActionInfoTests {
             targetResolver: targetResolver,
             targetIDsByLabelAndConfiguration: xcodeScheme.resolveTargetIDs(
                 targetResolver: targetResolver,
-                xcodeConfigurations: targetResolver.targets["B 2"]!
-                    .xcodeConfigurations,
+                xcodeConfigurations: Set(
+                    targetResolver.targets["B 2"]!.xcodeConfigurations
+                ),
                 runnerLabel: runnerLabel
             ),
             args: [:],

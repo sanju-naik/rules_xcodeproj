@@ -114,20 +114,29 @@ extension XCSchemeInfoTargetInfoTests {
     }
 }
 
-// MARK: - `buildableReferences` Tests
+// MARK: - `selfAndHostBuildableReferences` Tests
 
 extension XCSchemeInfoTargetInfoTests {
     func test_buildableReferences_noHost() throws {
-        let buildableReferences = libraryTargetInfo.buildableReferences
-        XCTAssertEqual(buildableReferences, [libraryTargetInfo.buildableReference])
+        let buildableReferences =
+            libraryTargetInfo.selfAndHostBuildableReferences
+        XCTAssertEqual(
+            buildableReferences,
+            [libraryTargetInfo.buildableReference]
+        )
     }
 
     func test_buildableReferences_withHost() throws {
-        let buildableReferences = libraryTargetInfoWithHosts.buildableReferences
-        XCTAssertEqual(buildableReferences, [
-            libraryTargetInfo.buildableReference,
-            try libraryTargetInfoWithHosts.selectedHostInfo!.buildableReference,
-        ])
+        let buildableReferences =
+            libraryTargetInfoWithHosts.selfAndHostBuildableReferences
+        XCTAssertEqual(
+            buildableReferences,
+            [
+                libraryTargetInfo.buildableReference,
+                try libraryTargetInfoWithHosts.selectedHostInfo!
+                    .buildableReference,
+            ]
+        )
     }
 }
 
@@ -156,30 +165,6 @@ extension XCSchemeInfoTargetInfoTests {
 
     func test_macroExpansion_noHostIsNotTestable() throws {
         XCTAssertNil(try appTargetInfo.macroExpansion)
-    }
-}
-
-// MARK: - `bazelBuildPreAction` Tests
-
-extension XCSchemeInfoTargetInfoTests {
-    func test_bazelBuildPreAction_nativeTarget_noHost() throws {
-        let preAction = try libraryTargetInfo.buildPreAction()
-        XCTAssertEqual(preAction, .init(
-            buildFor: libraryTargetInfo.buildableReference,
-            name: libraryTargetInfo.pbxTarget.name,
-            hostIndex: nil
-        ))
-    }
-
-    func test_bazelBuildPreAction_nativeTarget_withHost() throws {
-        let preAction = try libraryTargetInfoWithHosts.buildPreAction()
-        let expectedHostIndex = try libraryTargetInfoWithHosts.selectedHostInfo?.index
-        XCTAssertNotNil(expectedHostIndex)
-        XCTAssertEqual(preAction, .init(
-            buildFor: libraryTargetInfoWithHosts.buildableReference,
-            name: libraryTargetInfoWithHosts.pbxTarget.name,
-            hostIndex: expectedHostIndex
-        ))
     }
 }
 
@@ -212,8 +197,6 @@ extension XCSchemeInfoTargetInfoTests {
             .initBazelBuildOutputGroupsFile(
                 buildableReference: libraryTargetInfo.buildableReference
             ),
-            try libraryTargetInfo.buildPreAction(),
-            try appTargetInfo.buildPreAction(),
         ]
         XCTAssertEqual(try targetInfos.buildPreActions(), expected)
     }

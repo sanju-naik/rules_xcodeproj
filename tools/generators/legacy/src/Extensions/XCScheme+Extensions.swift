@@ -1,5 +1,5 @@
-import GeneratorCommon
 import OrderedCollections
+import ToolCommon
 import XcodeProj
 
 enum XCSchemeConstants {
@@ -192,44 +192,11 @@ extension XCScheme.ExecutionAction {
     ) -> XCScheme.ExecutionAction {
         return .init(
             scriptText: #"""
-mkdir -p "${SCHEME_TARGET_IDS_FILE%/*}"
-if [[ -s "$SCHEME_TARGET_IDS_FILE" ]]; then
-    rm "$SCHEME_TARGET_IDS_FILE"
-fi
+mkdir -p "${BUILD_MARKER_FILE%/*}"
+touch "$BUILD_MARKER_FILE"
 
 """#,
             title: "Initialize Bazel Build Output Groups File",
-            environmentBuildable: buildableReference
-        )
-    }
-
-    /// Create an `ExecutionAction` that builds with Bazel.
-    convenience init(
-        buildFor buildableReference: XCScheme.BuildableReference,
-        name: String,
-        hostIndex: Int?
-    ) {
-        let hostTargetOutputGroup: String
-        if let hostIndex = hostIndex {
-            // The extra blank line at the end of this string literal is purposeful. It ensures that
-            // a newline is added to the resulting string, if the host information is added to the
-            // script.
-            hostTargetOutputGroup = #"""
-echo "$BAZEL_HOST_LABEL_\#(hostIndex),$BAZEL_HOST_TARGET_ID_\#(hostIndex)" \#
->> "$SCHEME_TARGET_IDS_FILE"
-
-"""#
-        } else {
-            hostTargetOutputGroup = ""
-        }
-
-        let scriptText = #"""
-echo "$BAZEL_LABEL,$BAZEL_TARGET_ID" >> "$SCHEME_TARGET_IDS_FILE"
-\#(hostTargetOutputGroup)
-"""#
-        self.init(
-            scriptText: scriptText,
-            title: "Set Bazel Build Output Groups for \(name)",
             environmentBuildable: buildableReference
         )
     }

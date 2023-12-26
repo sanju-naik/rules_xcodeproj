@@ -1,5 +1,5 @@
-import GeneratorCommon
 import OrderedCollections
+import ToolCommon
 import XcodeProj
 
 extension XCSchemeInfo {
@@ -22,7 +22,7 @@ extension XCSchemeInfo {
             guard targetInfo.productType.isLaunchable else {
                 throw PreconditionError(message: """
 An `XCSchemeInfo.LaunchActionInfo` should have a launchable \
-`XCSchemeInfo.TargetInfo` value.
+`XCSchemeInfo.TargetInfo` value: "\(targetInfo.label)".
 """)
             }
             self.buildConfigurationName = buildConfigurationName

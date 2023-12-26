@@ -14,6 +14,7 @@ load(
     "UNFOCUSED_TARGETS",
     "XCODEPROJ_TARGETS",
     "XCODE_CONFIGURATIONS",
+    "XCSCHEMES",
     "get_xcode_schemes",
 )
 
@@ -43,26 +44,27 @@ string_flag(
 # 5. Run each of the following commands to produce a cache for each macOS host
 #    platform. This can be run from an Intel or Apple silicon Mac.
 #
-#      bazel run --config=cache //:xcodeproj-x86_64 \
+#      bazel run --config=cache //:xcodeproj-incremental-bazel-x86_64 \
 #        -- \
 #        --generator_output_groups=all_targets \
 #        'build --remote_download_minimal'
 #
-#      bazel run --config=cache //:xcodeproj-sim_arm64 \
+#      bazel run --config=cache //:xcodeproj-incremental-bazel-sim_arm64 \
 #        -- \
 #        --generator_output_groups=all_targets \
 #        'build --remote_download_minimal'
 #
 [
     xcodeproj(
-        name = "xcodeproj-{}".format(simulator_cpu),
+        name = "xcodeproj-{}-{}-{}".format(generation_mode, build_mode, simulator_cpu),
         associated_extra_files = ASSOCIATED_EXTRA_FILES,
         bazel_env = BAZEL_ENV,
-        build_mode = "xcode",
+        build_mode = build_mode,
         config = CONFIG,
         default_xcode_configuration = DEFAULT_XCODE_CONFIGURATION,
         extra_files = EXTRA_FILES,
         fail_for_invalid_extra_files_targets = FAIL_FOR_INVALID_EXTRA_FILES_TARGETS,
+        generation_mode = generation_mode,
         ios_simulator_cpus = simulator_cpu,
         pre_build = PRE_BUILD,
         project_name = "Integration",
@@ -76,9 +78,19 @@ string_flag(
         # watchOS Simulator CPU on Apple silicon doesn't have 'sim_' prefix
         watchos_simulator_cpus = simulator_cpu.removeprefix("sim_"),
         xcode_configurations = XCODE_CONFIGURATIONS,
+        xcschemes = XCSCHEMES,
     )
+    for build_mode in [
+        "bazel",
+        "xcode",
+    ]
     for simulator_cpu in [
         "sim_arm64",
         "x86_64",
     ]
+    for generation_mode in [
+        "legacy",
+        "incremental",
+    ]
+    if build_mode == "bazel" or generation_mode == "legacy"
 ]

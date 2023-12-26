@@ -116,6 +116,32 @@ extension PBXProductType {
         }
     }
 
+    var isRunnable: Bool {
+        switch self {
+        case .application,
+             .appExtension,
+             .extensionKitExtension,
+             .commandLineTool,
+             .watchApp,
+             .watch2App,
+             .watch2AppContainer,
+             .watchExtension,
+             .watch2Extension,
+             .tvExtension,
+             .messagesApplication,
+             .messagesExtension,
+             .xpcService,
+             .xcodeExtension,
+             .intentsServiceExtension,
+             .onDemandInstallCapableApplication,
+             .driverExtension,
+             .systemExtension:
+            return true
+        default:
+            return false
+        }
+    }
+
     var isTestBundle: Bool {
         switch self {
         case .unitTestBundle,
@@ -219,7 +245,7 @@ extension PBXProductType {
         case .uiTestBundle: return "UI Tests"
         case .appExtension: return "App Extension"
         case .extensionKitExtension: return "ExtensionKit Extension"
-        case .commandLineTool: return "Command Line Tool"
+        case .commandLineTool: return "Tool"
         case .watchApp: return "watchOS 1.0 App"
         case .watch2App: return "App"
         case .watch2AppContainer: return "App Container"
@@ -245,7 +271,7 @@ extension PBXProductType {
     var setsAssociatedProduct: Bool {
         // We remove the association for non-bundle products to allow the
         // correct path to be shown in the project navigator
-        return isLaunchable || isBundle
+        return isRunnable || isBundle
     }
 
     var forXcode: Self {
@@ -279,9 +305,9 @@ extension PBXProductType {
     }
 
     var isTopLevel: Bool {
-        return isLaunchable || isTestBundle
+        return isRunnable || isTestBundle
     }
-    
+
     var sortOrder: Int {
         switch self {
         // Applications

@@ -6,8 +6,6 @@ cd "$SRCROOT"
 
 # Calculate Bazel `--output_groups`
 
-readonly base_outputs_regex='.*\.a$|.*\.swiftdoc$|.*\.swiftmodule$|.*\.swiftsourceinfo$'
-
 if [ "$ACTION" == "indexbuild" ]; then
   if [[ "$RULES_XCODEPROJ_BUILD_MODE" == "xcode" ]]; then
     # Inputs for compiling
@@ -19,9 +17,6 @@ if [ "$ACTION" == "indexbuild" ]; then
         >&2
     exit 1
   fi
-
-  # We don't need to download the indexstore data during Index Build
-  readonly remote_download_regex="$base_outputs_regex"
 else
   if [[ "$RULES_XCODEPROJ_BUILD_MODE" == "xcode" ]]; then
     # Inputs for compiling, inputs for linking, and index store data
@@ -36,9 +31,6 @@ else
     readonly output_group_prefixes="bc,bp,bi"
   fi
 
-  readonly indexstores_regex='.*\.indexstore/.*'
-  readonly remote_download_regex="$indexstores_regex|$base_outputs_regex"
-
   # In Xcode 14 the "Index" directory was renamed to "Index.noindex".
   # `$INDEX_DATA_STORE_DIR` is set to `$OBJROOT/INDEX_DIR/DataStore`, so we can
   # use it to determine the name of the directory regardless of Xcode version.
@@ -49,18 +41,17 @@ else
   # previews. So we need to look in the non-preview build directory for this file.
   readonly non_preview_objroot="${OBJROOT/\/Intermediates.noindex\/Previews\/*//Intermediates.noindex}"
   readonly base_objroot="${non_preview_objroot/\/$index_dir_name\/Build\/Intermediates.noindex//Build/Intermediates.noindex}"
-  readonly scheme_target_ids_file="$non_preview_objroot/scheme_target_ids"
+  readonly build_marker_file="$non_preview_objroot/build_marker"
 
   # We need to read from `$output_groups_file` as soon as possible, as concurrent
   # writes to it can happen during indexing, which breaks the off-by-one-by-design
   # nature of it
   IFS=$'\n' read -r -d '' -a labels_and_output_groups < \
     <( "$CALCULATE_OUTPUT_GROUPS_SCRIPT" \
-        "$ACTION" \
         "$XCODE_VERSION_ACTUAL" \
         "$non_preview_objroot" \
         "$base_objroot" \
-        "$scheme_target_ids_file" \
+        "$build_marker_file" \
         $output_group_prefixes \
         && printf '\0' )
 
@@ -68,7 +59,7 @@ else
 
   raw_labels=()
   raw_target_ids=()
-  output_groups=("target_ids_list")
+  output_groups=("index_import" "target_ids_list")
   indexstores_filelists=()
   for (( i=0; i<${#labels_and_output_groups[@]}; i+=2 )); do
     raw_labels+=("${labels_and_output_groups[i]}")
@@ -117,7 +108,7 @@ fi
 # Build
 
 build_pre_config_flags=(
-  "--experimental_remote_download_regex=$remote_download_regex"
+  "--experimental_remote_download_regex=.*\.indexstore/.*|.*\.a$|.*\.swiftdoc$|.*\.swiftmodule$|.*\.swiftsourceinfo$|.*\.swift$"
 )
 
 apply_sanitizers=1
@@ -191,8 +182,8 @@ done
 
 # Import indexes
 if [ -n "${indexstores_filelists:-}" ]; then
-  "$BAZEL_INTEGRATION_DIR/import_indexstores.sh" \
-    "$PROJECT_DIR" \
+  "$BAZEL_INTEGRATION_DIR/import_indexstores" \
+    "$INDEXING_PROJECT_DIR__NO" \
     "${indexstores_filelists[@]/#/$output_path/}" \
     >"$log_dir/import_indexstores.async.log" 2>&1 &
 fi

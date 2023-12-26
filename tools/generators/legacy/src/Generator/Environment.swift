@@ -1,5 +1,5 @@
-import GeneratorCommon
 import PathKit
+import ToolCommon
 import XcodeProj
 
 /// Provides `Generator`'s dependencies.
@@ -11,7 +11,9 @@ struct Environment {
         _ buildMode: BuildMode,
         _ forFixtures: Bool,
         _ project: Project,
-        _ directories: Directories
+        _ directories: Directories,
+        _ indexImport: String,
+        _ minimumXcodeVersion: SemanticVersion
     ) -> PBXProj
 
     let calculateXcodeGeneratedFiles: (
@@ -61,7 +63,8 @@ struct Environment {
     ) -> Void
 
     let disambiguateTargets: (
-        _ consolidatedTargets: ConsolidatedTargets
+        _ consolidatedTargets: ConsolidatedTargets,
+        _ targetNameMode: TargetNameMode
     ) -> DisambiguatedTargets
 
     let addBazelDependenciesTarget: (
@@ -71,7 +74,6 @@ struct Environment {
         _ xcodeConfigurations: Set<String>,
         _ defaultXcodeConfiguration: String,
         _ target_ids_file: String,
-        _ indexImport: String,
         _ bazelConfig: String,
         _ preBuildScript: String?,
         _ postBuildScript: String?,

@@ -1,5 +1,5 @@
-import GeneratorCommon
 import OrderedCollections
+import ToolCommon
 import XcodeProj
 
 extension Generator {
@@ -289,6 +289,7 @@ struct ConsolidatedTarget: Equatable {
 
     let name: String
     let label: BazelLabel
+    let moduleName: String
     let product: ConsolidatedTargetProduct
     let isSwift: Bool
     let inputs: ConsolidatedTargetInputs
@@ -320,6 +321,18 @@ struct ConsolidatedTarget: Equatable {
     /// value (i.e. the one most likely to be built), so we store the sorted
     /// targets as an optimization.
     let sortedTargets: [Target]
+
+    let distinguisherKey: DistinguisherKey
+    let targetDistinguisherKeys: [Target.DistinguisherKey]
+}
+
+extension Target {
+    struct DistinguisherKey: Equatable, Hashable {
+        fileprivate let arch: String
+        fileprivate let platform: Platform.Variant
+        fileprivate let minimumOsVersion: SemanticVersion
+        fileprivate let xcodeConfiguration: String
+    }
 }
 
 extension ConsolidatedTarget.Key {
@@ -347,6 +360,16 @@ Target \(key)'s dependency on "\(targetID)" not found in `keys`
 }
 
 extension ConsolidatedTarget {
+    struct DistinguisherKey: Equatable, Hashable {
+        typealias Archs = Set<String>
+        typealias Environments = [String: Archs]
+        typealias OSes = [Platform.OS: OSVersions]
+        typealias OSVersions = [SemanticVersion: Environments]
+
+        let components: OSes
+        let xcodeConfigurations: Set<String>
+    }
+
     init(
         targets: [TargetID: Target],
         xcodeGeneratedFiles: [FilePath: FilePath]
@@ -392,6 +415,15 @@ extension ConsolidatedTarget {
                     rhsTarget.buildSettingConditional
             }
             .map { $1 }
+
+        if let moduleName = aTarget.product.moduleName, sortedTargets
+            .first(where: { $0.product.moduleName != moduleName }) == nil
+        {
+            self.moduleName = moduleName
+        } else {
+            self.moduleName = name
+        }
+
         inputs = Self.consolidateInputs(targets: sortedTargets)
         linkerInputs = Self.consolidateLinkerInputs(targets: sortedTargets)
         hasLinkParams = aTarget.linkParams != nil
@@ -425,11 +457,35 @@ extension ConsolidatedTarget {
 
         allDependencies = aTarget.allDependencies
         outputs = ConsolidatedTargetOutputs(
-            hasOutputs: self.targets.values.contains { $0.outputs.hasOutputs },
             hasSwiftOutputs: self.targets.values
-                .contains { $0.outputs.hasSwiftOutputs },
-            productBasename: aTarget.outputs.productBasename
+                .contains { $0.outputs.hasSwiftOutputs }
         )
+
+        distinguisherKey = DistinguisherKey(
+            components: sortedTargets.reduce(into: [:]) { components, target in
+                let platform = target.platform
+                components[
+                    platform.os, default: [:]
+                ][
+                    platform.minimumOsVersion, default: [:]
+                ][
+                    platform.variant.environment, default: []
+                ]
+                    .insert(platform.arch)
+            },
+            xcodeConfigurations:
+                Set(sortedTargets.flatMap(\.xcodeConfigurations))
+        )
+        targetDistinguisherKeys = sortedTargets.flatMap { target in
+            target.xcodeConfigurations.map { xcodeConfiguration in
+                return .init(
+                    arch: target.platform.arch,
+                    platform: target.platform.variant,
+                    minimumOsVersion: target.platform.minimumOsVersion,
+                    xcodeConfiguration: xcodeConfiguration
+                )
+            }
+        }
     }
 
     private static func consolidateInputs(
@@ -534,9 +590,7 @@ struct ConsolidatedTargetLinkerInputs: Equatable {
 }
 
 struct ConsolidatedTargetOutputs: Equatable {
-    let hasOutputs: Bool
     let hasSwiftOutputs: Bool
-    let productBasename: String?
 }
 
 // MARK: - Private extensions

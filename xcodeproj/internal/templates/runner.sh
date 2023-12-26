@@ -47,10 +47,6 @@ while (("$#")); do
       config="${1#*=}"
       shift 1
       ;;
-    --collect_specs=*)
-      specs_archive_path="${1#*=}"
-      shift 1
-      ;;
     -v|--verbose)
       verbose=1
       shift 1
@@ -64,11 +60,6 @@ while (("$#")); do
       ;;
   esac
 done
-
-if [[ -n "${specs_archive_path:-}" ]]; then
-  installer_flags+=(--collect_specs "$specs_archive_path")
-  original_arg_count=0
-fi
 
 if [[ $original_arg_count -gt 0 ]]; then
   if [[ $# -eq 0 ]]; then
@@ -160,10 +151,6 @@ pre_config_flags=(
   "--repo_env=XCODE_VERSION=%xcode_version%"
 )
 
-if [[ %is_fixture% -eq 1 ]]; then
-  pre_config_flags+=("--config=fixtures")
-fi
-
 bazel_cmd=(
   env
   "${envs[@]}"
@@ -211,18 +198,8 @@ else
   cmd="${cmd_args[0]}"
 
   if [[ $cmd == "build" && -n "${generator_output_groups:-}" ]]; then
-    # `--experimental_remote_download_regex`
-    readonly base_outputs_regex='.*\.a$|.*\.swiftdoc$|.*\.swiftmodule$|.*\.swiftsourceinfo$'
-
-    if [[ "$config" == "indexbuild" ]]; then
-      readonly remote_download_regex="$base_outputs_regex"
-    else
-      readonly indexstores_regex='.*\.indexstore/.*'
-      readonly remote_download_regex="$indexstores_regex|$base_outputs_regex"
-    fi
-
     pre_config_flags+=(
-      "--experimental_remote_download_regex=$remote_download_regex"
+      "--experimental_remote_download_regex=.*\.indexstore/.*|.*\.a$|.*\.swiftdoc$|.*\.swiftmodule$|.*\.swiftsourceinfo$|.*\.swift$"
       "--config=$bazel_config"
     )
 
@@ -233,7 +210,7 @@ else
       "%generator_label%"
     )
   else
-    if [[ $cmd == "dump" || $cmd == "shutdown" ]]; then
+    if [[ $cmd == "dump" || $cmd == "shutdown" || $cmd == "sync" ]]; then
       pre_config_flags=()
     else
       pre_config_flags=("--config=$bazel_config")

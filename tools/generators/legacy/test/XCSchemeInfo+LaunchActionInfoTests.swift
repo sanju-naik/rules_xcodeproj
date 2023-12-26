@@ -1,4 +1,4 @@
-import GeneratorCommon
+import ToolCommon
 import XcodeProj
 import XCTest
 
@@ -38,7 +38,8 @@ extension XCSchemeInfoLaunchActionInfoTests {
             return
         }
         XCTAssertEqual(preconditionError.message, """
-An `XCSchemeInfo.LaunchActionInfo` should have a launchable `XCSchemeInfo.TargetInfo` value.
+An `XCSchemeInfo.LaunchActionInfo` should have a launchable \
+`XCSchemeInfo.TargetInfo` value: "\(libraryTargetInfo.label)".
 """)
     }
 }
@@ -233,8 +234,9 @@ extension XCSchemeInfoLaunchActionInfoTests {
             targetResolver: targetResolver,
             targetIDsByLabelAndConfiguration: xcodeScheme.resolveTargetIDs(
                 targetResolver: targetResolver,
-                xcodeConfigurations: targetResolver.targets["A 2"]!
-                    .xcodeConfigurations,
+                xcodeConfigurations: Set(
+                    targetResolver.targets["A 2"]!.xcodeConfigurations
+                ),
                 runnerLabel: runnerLabel
             )
         )
