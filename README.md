@@ -185,3 +185,5 @@ The generated project will be in the workspace next to the `BUILD` file at
 [logo]: https://user-images.githubusercontent.com/158658/161647598-223361dc-030d-431a-b4fe-d92592ed5530.png
 [tulsi]: https://github.com/bazelbuild/tulsi
 [XcodeProj]: https://github.com/tuist/XcodeProj
+
+## Testing
